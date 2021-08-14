@@ -1,0 +1,23 @@
+USUARIO("jgranados","miPassword",1)  
+UsuArio("aguare","contraseña",2)
+PIEZA("Pata cuadrada",15.50)
+MUEBLE("Mesa rustica", 150.00)
+MUEBLE("Cabecera",150)
+ENSAMBLE_PIEZAS("Mesa rustica","Pata cuadrada",4)
+ENSAMBLAR_MUEBLE("Mesa rustica", jgranados,"21/04/2018")
+
+linea 1 
+linea 2
+linea 3
+esto es una prueba
+para 
+saber si
+se leen las 
+líneas como quiero
+
+campeón 
+"" '' \¿*
+
+------AQUI SE ACABA EL MIOO----------
+usuariousuario("april","mipassword3",1)
+USUARIO("jgranados","miPassword",1) USUARIO("jgranados","miPassword",1)
