@@ -1,5 +1,8 @@
 package SQL;
 
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 
 /**
@@ -8,15 +11,29 @@ import java.util.ArrayList;
  */
 public class InsertarArchivo {
 
-    private ArrayList<String[]> noInsertados = new ArrayList<String[]>();
+    private ArrayList<String> noInsertados = new ArrayList<String>();
     private Conexion conexion;
 
     public InsertarArchivo(Conexion conexion) {
         this.conexion = conexion;
     }
 
-    private void insertarUsuarios(ArrayList<String[]> usuarios) {
-        
+    private void recepcionUsuario(ArrayList<String[]> usuarios) {
+
+    }
+
+    private void insertarUsuario(String usuario, String password, int departamento) {
+        String query = "INSERT INTO Usuario VALUES(?,?,?)";
+        try {
+            PreparedStatement prepared = conexion.obtenerConexion().prepareStatement(query);
+            prepared.setString(1, usuario);
+            prepared.setString(2, password);
+            prepared.setInt(3, departamento);
+            prepared.executeQuery();
+            
+        } catch (SQLException ex) {
+            noInsertados.add(usuario + " " + password + " " + departamento);
+        }
     }
 
 }
