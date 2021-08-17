@@ -16,13 +16,13 @@ import java.util.regex.Pattern;
 public class LecturaArchivo extends Thread {
 
     private final String[] condiciones = {"Usuario" + '(', "Pieza" + '(', "Mueble" + '(', "Ensamble_Piezas" + '(', "Ensamblar_Mueble" + '('};
-    private ArrayList<String> lineas = new ArrayList<String>();
-    public ArrayList<String[]> usuarios = new ArrayList<String[]>();
-    public ArrayList<String[]> pieza = new ArrayList<String[]>();
-    public ArrayList<String[]> mueble = new ArrayList<String[]>();
-    public ArrayList<String[]> ensamble_pieza = new ArrayList<String[]>();
-    public ArrayList<String[]> ensamblar_mueble = new ArrayList<String[]>();
-    public ArrayList<String> no_reconocido = new ArrayList<String>();
+    private ArrayList<String> lineas = new ArrayList<>();
+    public ArrayList<String[]> usuarios = new ArrayList<>();
+    public ArrayList<String[]> pieza = new ArrayList<>();
+    public ArrayList<String[]> mueble = new ArrayList<>();
+    public ArrayList<String[]> ensamble_pieza = new ArrayList<>();
+    public ArrayList<String[]> ensamblar_mueble = new ArrayList<>();
+    public ArrayList<String> no_reconocido = new ArrayList<>();
 
     @Override
     public void run() {

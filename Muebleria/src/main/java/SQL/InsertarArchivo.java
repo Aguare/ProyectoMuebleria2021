@@ -11,7 +11,7 @@ import java.util.ArrayList;
  */
 public class InsertarArchivo {
 
-    private ArrayList<String> noInsertados = new ArrayList<String>();
+    private ArrayList<String> noInsertados = new ArrayList<>();
     private Conexion conexion;
 
     public InsertarArchivo(Conexion conexion) {
