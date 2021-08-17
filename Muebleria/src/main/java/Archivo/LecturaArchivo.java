@@ -6,6 +6,8 @@ import java.io.FileInputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  *
@@ -15,11 +17,11 @@ public class LecturaArchivo extends Thread {
 
     private final String[] condiciones = {"Usuario" + '(', "Pieza" + '(', "Mueble" + '(', "Ensamble_Piezas" + '(', "Ensamblar_Mueble" + '('};
     private ArrayList<String> lineas = new ArrayList<String>();
-    public ArrayList<String> usuarios = new ArrayList<String>();
-    public ArrayList<String> pieza = new ArrayList<String>();
-    public ArrayList<String> mueble = new ArrayList<String>();
-    public ArrayList<String> ensamble_pieza = new ArrayList<String>();
-    public ArrayList<String> ensamblar_mueble = new ArrayList<String>();
+    public ArrayList<String[]> usuarios = new ArrayList<String[]>();
+    public ArrayList<String[]> pieza = new ArrayList<String[]>();
+    public ArrayList<String[]> mueble = new ArrayList<String[]>();
+    public ArrayList<String[]> ensamble_pieza = new ArrayList<String[]>();
+    public ArrayList<String[]> ensamblar_mueble = new ArrayList<String[]>();
     public ArrayList<String> no_reconocido = new ArrayList<String>();
 
     @Override
@@ -46,7 +48,6 @@ public class LecturaArchivo extends Thread {
     }
 
     private void separacion() {
-
         for (int i = 0; i < lineas.size(); i++) {
             String line = lineas.get(i).trim();
             char[] caracteres = line.toCharArray();
@@ -59,40 +60,62 @@ public class LecturaArchivo extends Thread {
                 } else if (j == caracteres.length - 2) {
                     no_reconocido.add((i + 1) + "| " + line);
                 }
-
             }
         }
     }
 
     private boolean ubicar(String parteLinea, String linea) {
         int ubicado = coincidencia(parteLinea);
-        linea = quitarParte(linea, parteLinea);
-        switch (ubicado) {
-            case 0:
-                usuarios.add(linea);
-                return true;
-            case 1:
-                pieza.add(linea);
-                return true;
-            case 2:
-                mueble.add(linea);
-                return true;
-            case 3:
-                ensamble_pieza.add(linea);
-                return true;
-            case 4:
-                ensamblar_mueble.add(linea);
-                return true;
-            default:
-                return false;
+        if (ubicado != -1) {
+            linea = quitarParte(linea, parteLinea);
+            String[] partes = separarDatos(linea);
+            switch (ubicado) {
+                case 0:
+                    usuarios.add(partes);
+                    return true;
+                case 1:
+                    pieza.add(partes);
+                    return true;
+                case 2:
+                    mueble.add(partes);
+                    return true;
+                case 3:
+                    ensamble_pieza.add(partes);
+                    return true;
+                case 4:
+                    ensamblar_mueble.add(partes);
+                    return true;
+                default:
+                    return false;
+            }
         }
+        return false;
     }
 
     private String quitarParte(String linea, String parte) {
         String devolver = "";
         int cantidad = parte.length();
-        devolver = linea.substring(cantidad, linea.length());
+        devolver = linea.substring(cantidad, linea.length() - 1);
         return devolver;
+    }
+
+    private String[] separarDatos(String linea) {
+        String[] partes;
+        partes = linea.split(",");
+        if (partes != null) {
+            for (int i = 0; i < partes.length; i++) {
+                String pedazo = partes[i];
+                char[] caracteres = pedazo.toCharArray();
+                if (caracteres[caracteres.length - 1] == '"' && caracteres[0] == '"') {
+                    String extraccion = "";
+                    extraccion = pedazo.substring(1, pedazo.length() - 1);
+                    partes[i] = extraccion;
+                } else {
+                    partes[i] = pedazo.trim();
+                }
+            }
+        }
+        return partes;
     }
 
     private int coincidencia(String parteLinea) {
@@ -107,27 +130,34 @@ public class LecturaArchivo extends Thread {
     private void escribirDatos() {
         System.out.println("-----USUARIOS -> " + usuarios.size());
         for (int i = 0; i < usuarios.size(); i++) {
-            System.out.println(usuarios.get(i).toString());
+            imprimirAdentro(usuarios.get(i));
         }
         System.out.println("\n-----PIEZAS -> " + pieza.size());
         for (int i = 0; i < pieza.size(); i++) {
-            System.out.println(pieza.get(i).toString());
+            imprimirAdentro(pieza.get(i));
         }
         System.out.println("\n-----MUEBLES -> " + mueble.size());
         for (int i = 0; i < mueble.size(); i++) {
-            System.out.println(mueble.get(i).toString());
+            imprimirAdentro(mueble.get(i));
         }
         System.out.println("\n-----PIEZAS DE ENSAMBLE -> " + ensamble_pieza.size());
         for (int i = 0; i < ensamble_pieza.size(); i++) {
-            System.out.println(ensamble_pieza.get(i).toString());
+            imprimirAdentro(ensamble_pieza.get(i));
         }
         System.out.println("\n-----MUEBLES ENSAMBLADOS -> " + ensamble_pieza.size());
         for (int i = 0; i < ensamblar_mueble.size(); i++) {
-            System.out.println(ensamblar_mueble.get(i).toString());
+            imprimirAdentro(ensamblar_mueble.get(i));
         }
         System.out.println("\n*********NO RECONOCIDOS -> " + no_reconocido.size());
         for (int i = 0; i < no_reconocido.size(); i++) {
             System.out.println(no_reconocido.get(i).toString());
         }
+    }
+
+    private void imprimirAdentro(String[] partes) {
+        for (int i = 0; i < partes.length; i++) {
+            System.out.print("|" + partes[i] + "|");
+        }
+        System.out.println("\n");
     }
 }

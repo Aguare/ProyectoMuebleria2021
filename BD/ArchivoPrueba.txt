@@ -1,4 +1,4 @@
-USUARIO("jgranados","miPassword",1)  
+USUARIO("jgranados","miPassword",              1)  
 UsuArio("aguare","contraseña",2)
 PIEZA("Pata cuadrada",15.50)
 MUEBLE("Mesa rustica", 150.00)
@@ -21,3 +21,4 @@ campeón
 ------AQUI SE ACABA EL MIOO----------
 usuariousuario("april","mipassword3",1)
 USUARIO("jgranados","miPassword",1) USUARIO("jgranados","miPassword",1)
+pablo1(es un gay)
