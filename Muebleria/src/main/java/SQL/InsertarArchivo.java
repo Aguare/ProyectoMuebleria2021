@@ -8,12 +8,15 @@ import java.util.ArrayList;
  */
 public class InsertarArchivo {
 
-    private ArrayList<String> usuarios;
-    private ArrayList<String> pieza;
-    private ArrayList<String> mueble;
-    private ArrayList<String> ensamble_pieza;
-    private ArrayList<String> ensamblar_mueble;
+    private ArrayList<String[]> noInsertados = new ArrayList<String[]>();
     private Conexion conexion;
 
-    
+    public InsertarArchivo(Conexion conexion) {
+        this.conexion = conexion;
+    }
+
+    private void insertarUsuarios(ArrayList<String[]> usuarios) {
+        
+    }
+
 }

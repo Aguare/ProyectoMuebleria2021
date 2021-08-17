@@ -58,7 +58,7 @@ public class LecturaArchivo extends Thread {
                 if (ubicar(formado, line)) {
                     break;
                 } else if (j == caracteres.length - 2) {
-                    no_reconocido.add((i + 1) + "| " + line);
+                    no_reconocido.add((i + 1) + "|" + line);
                 }
             }
         }
