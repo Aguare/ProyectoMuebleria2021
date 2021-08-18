@@ -2,6 +2,7 @@ package SQL;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.SQLException;
 
 /**
  *
@@ -11,13 +12,13 @@ public class Conexion {
 
     private static final String USER = "root";
     private static final String PASSWORD = "74ef6a14";
-    private static final String MYSQL = "jdbc:mysql://localhost:3306/ControlNotas";
-    private Connection conecta = null;
+    private static final String MYSQL = "jdbc:mysql://localhost:3306/Muebleria";
+    private static Connection conecta;
 
-    public void conetarBD() {
+    public Conexion() {
         try {
             conecta = DriverManager.getConnection(MYSQL, USER, PASSWORD);
-        } catch (Exception e) {
+        } catch (SQLException e) {
             System.out.println("Error al Conectar a la BD");
         }
     }

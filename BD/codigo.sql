@@ -1,3 +1,4 @@
+DROP DATABASE IF EXISTS Muebleria ;
 CREATE DATABASE Muebleria;
 USE Muebleria;
 
@@ -23,19 +24,29 @@ CREATE TABLE TipoPieza(
 );
 
 CREATE TABLE Pieza(
-	idPieza INT NOT NULL,
+	idPieza INT NOT NULL AUTO_INCREMENT,
 	precio DOUBLE NOT NULL,
 	TPnombre_pieza VARCHAR(50) NOT NULL,
 	PRIMARY KEY (idPieza),
 	FOREIGN KEY (TPnombre_pieza) REFERENCES TipoPieza(nombre_pieza)
 );
 
+CREATE TABLE TipoMueble(
+	nombre_mueble VARCHAR(50) NOT NULL,
+	precio_venta DOUBLE NOT NULL,
+	cantidad INT NOT NULL,
+	detalles VARCHAR(100),
+	PRIMARY KEY (nombre_mueble)
+);
+
 CREATE TABLE Ensamble(
 	idEnsamble INT NOT NULL AUTO_INCREMENT,
 	fecha DATE NOT NULL,
 	nombre_usuario VARCHAR(20) NOT NULL,
+	TipoMueble VARCHAR(50) NOT NULL,
 	PRIMARY KEY (idEnsamble),
-	FOREIGN KEY (nombre_usuario) REFERENCES Usuario(nombre_usuario)
+	FOREIGN KEY (nombre_usuario) REFERENCES Usuario(nombre_usuario),
+	FOREIGN KEY (TipoMueble) REFERENCES TipoMueble(nombre_mueble)
 );
 
 CREATE TABLE PiezaEnsamble(
@@ -47,13 +58,7 @@ CREATE TABLE PiezaEnsamble(
 	FOREIGN KEY (TPnombre_pieza) REFERENCES TipoPieza(nombre_pieza)
 );
 
-CREATE TABLE TipoMueble(
-	nombre_mueble VARCHAR(50) NOT NULL,
-	precio_venta DOUBLE NOT NULL,
-	cantidad INT NOT NULL,
-	detalles VARCHAR(100),
-	PRIMARY KEY (nombre_mueble)
-);
+
 
 CREATE TABLE PiezasTipoMueble(
 	TMnombre_mueble VARCHAR(50) NOT NULL,
@@ -113,3 +118,7 @@ CREATE TABLE Devolucion(
 	FOREIGN KEY (no_factura) REFERENCES Factura(no_factura),
 	FOREIGN KEY (Cliente_NIT) REFERENCES Cliente(NIT)
 );
+
+INSERT INTO Departamento VALUES (1,"Fábrica");
+INSERT INTO Departamento VALUES (2,"Punto de Venta");
+INSERT INTO Departamento VALUES (3,"Financiero");

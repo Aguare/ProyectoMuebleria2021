@@ -10,6 +10,6 @@ public class Main {
 
     public static void main(String[] args) throws IOException {
         LecturaArchivo leer = new LecturaArchivo();
-        leer.start();
+        leer.Leer("/home/aguare/Documentos/ProyectoMuebleria2021/BD/ArchivoPrueba.txt");
     }
 }

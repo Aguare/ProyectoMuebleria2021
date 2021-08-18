@@ -6,28 +6,23 @@ import java.io.FileInputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 /**
  *
  * @author aguare
  */
-public class LecturaArchivo extends Thread {
+public class LecturaArchivo {
 
-    private final String[] condiciones = {"Usuario" + '(', "Pieza" + '(', "Mueble" + '(', "Ensamble_Piezas" + '(', "Ensamblar_Mueble" + '('};
+    private final String[] condiciones = {"USUARIO" + '(', "PIEZA" + '(', "MUEBLE" + '(', "ENSAMBLE_PIEZAS" + '(',
+        "ENSAMBLAR_MUEBLE" + '(', "CLIENTE" + '('};
     private ArrayList<String> lineas = new ArrayList<>();
     public ArrayList<String[]> usuarios = new ArrayList<>();
+    public ArrayList<String[]> clientes = new ArrayList<>();
     public ArrayList<String[]> pieza = new ArrayList<>();
     public ArrayList<String[]> mueble = new ArrayList<>();
     public ArrayList<String[]> ensamble_pieza = new ArrayList<>();
     public ArrayList<String[]> ensamblar_mueble = new ArrayList<>();
     public ArrayList<String> no_reconocido = new ArrayList<>();
-
-    @Override
-    public void run() {
-        Leer("/home/aguare/Documentos/ProyectoMuebleria2021/BD/ArchivoPrueba.txt");
-    }
 
     public void Leer(String path) {
         File fichero = new File(path);
@@ -44,7 +39,8 @@ public class LecturaArchivo extends Thread {
             System.out.println("ERROR EN LA LECTURA -> " + path);
         }
         separacion();
-        escribirDatos();
+        ExtraccionDatos extraccion = new ExtraccionDatos(usuarios, clientes, pieza, mueble, ensamble_pieza, ensamblar_mueble, no_reconocido);
+        extraccion.insertar();
     }
 
     private void separacion() {
@@ -85,6 +81,9 @@ public class LecturaArchivo extends Thread {
                 case 4:
                     ensamblar_mueble.add(partes);
                     return true;
+                case 5:
+                    clientes.add(partes);
+                    return true;
                 default:
                     return false;
             }
@@ -120,44 +119,11 @@ public class LecturaArchivo extends Thread {
 
     private int coincidencia(String parteLinea) {
         for (int i = 0; i < condiciones.length; i++) {
-            if (parteLinea.equalsIgnoreCase(condiciones[i])) {
+            if (parteLinea.equals(condiciones[i])) {
                 return i;
             }
         }
         return -1;
     }
 
-    private void escribirDatos() {
-        System.out.println("-----USUARIOS -> " + usuarios.size());
-        for (int i = 0; i < usuarios.size(); i++) {
-            imprimirAdentro(usuarios.get(i));
-        }
-        System.out.println("\n-----PIEZAS -> " + pieza.size());
-        for (int i = 0; i < pieza.size(); i++) {
-            imprimirAdentro(pieza.get(i));
-        }
-        System.out.println("\n-----MUEBLES -> " + mueble.size());
-        for (int i = 0; i < mueble.size(); i++) {
-            imprimirAdentro(mueble.get(i));
-        }
-        System.out.println("\n-----PIEZAS DE ENSAMBLE -> " + ensamble_pieza.size());
-        for (int i = 0; i < ensamble_pieza.size(); i++) {
-            imprimirAdentro(ensamble_pieza.get(i));
-        }
-        System.out.println("\n-----MUEBLES ENSAMBLADOS -> " + ensamble_pieza.size());
-        for (int i = 0; i < ensamblar_mueble.size(); i++) {
-            imprimirAdentro(ensamblar_mueble.get(i));
-        }
-        System.out.println("\n*********NO RECONOCIDOS -> " + no_reconocido.size());
-        for (int i = 0; i < no_reconocido.size(); i++) {
-            System.out.println(no_reconocido.get(i).toString());
-        }
-    }
-
-    private void imprimirAdentro(String[] partes) {
-        for (int i = 0; i < partes.length; i++) {
-            System.out.print("|" + partes[i] + "|");
-        }
-        System.out.println("\n");
-    }
 }
