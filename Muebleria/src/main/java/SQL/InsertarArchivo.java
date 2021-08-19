@@ -1,4 +1,4 @@
-package Archivo;
+package SQL;
 
 import SQL.Conexion;
 import java.sql.PreparedStatement;
@@ -168,7 +168,36 @@ public class InsertarArchivo {
             prepared.setString(2, idEnsamble);
             prepared.setString(3, tipoMueble);
             prepared.executeUpdate();
+            aumentarMuebles(obtenerCantidadExistenteMuebles(tipoMueble), tipoMueble);
         } catch (SQLException ex) {
+        }
+    }
+
+    private void aumentarMuebles(int cantidadExistente, String tipoMueble) {
+        cantidadExistente++;
+        String query = "UPDATE TipoMueble SET cantidad = ? WHERE nombre_mueble = ?";
+        try {
+            PreparedStatement prepared = conexion.obtenerConexion().prepareStatement(query);
+            prepared.setInt(1, cantidadExistente);
+            prepared.setString(2, tipoMueble);
+            prepared.executeUpdate();
+        } catch (Exception e) {
+        }
+    }
+
+    public int obtenerCantidadExistenteMuebles(String tipoMueble) {
+        String query = "SELECT cantidad FROM TipoMueble WHERE nombre_mueble = ?";
+        try {
+            PreparedStatement prepared = conexion.obtenerConexion().prepareStatement(query);
+            prepared.setString(1, tipoMueble);
+            ResultSet resultado = prepared.executeQuery();
+            int num = -1;
+            while (resultado.next()) {
+                num = resultado.getInt("cantidad");
+            }
+            return num;
+        } catch (Exception e) {
+            return -1;
         }
     }
 

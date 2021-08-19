@@ -1,5 +1,6 @@
 package Archivo;
 
+import SQL.InsertarArchivo;
 import java.util.ArrayList;
 
 /**
@@ -35,6 +36,7 @@ public class ExtraccionDatos {
         recepcionEnsamblePiezas();
         recepcionEnsambleMueble();
         recepcionClientes();
+        escribirNoReconocido();
         insertar.escribirNoInsertados();
     }
 
@@ -51,7 +53,12 @@ public class ExtraccionDatos {
     private void recepcionClientes() {
         for (String[] cliente : clientes) {
             try {
-                insertar.insertarCliente(cliente[0], cliente[1], cliente[2]);
+                if (cliente.length == 5) {
+                    insertar.insertarCliente(cliente[0], cliente[1], cliente[2] + cliente[3] + cliente[4]);
+                } else {
+                    insertar.insertarCliente(cliente[0], cliente[1], cliente[2]);
+                }
+
             } catch (Exception e) {
                 insertar.errorAlInsertar(cliente);
             }
@@ -97,6 +104,13 @@ public class ExtraccionDatos {
             } catch (Exception e) {
                 insertar.errorAlInsertar(mueble);
             }
+        }
+    }
+
+    private void escribirNoReconocido() {
+        System.out.println("--------PARAMETROS NO RECONOCIDOS---------");
+        for (String string : no_reconocido) {
+            System.out.println(string);
         }
     }
 

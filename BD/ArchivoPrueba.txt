@@ -9,7 +9,7 @@ PIEZA("PatA cuadRada",21)
 PIEZA("Tabla", 200)
 MUEBLE("Mesa rustica", 150.00)
 MUEBLE("Cabecera",150)
-MUEBLE("Cabecera",150)
+MUEBLE("",150)
 MUEBLE("Silla",100)
 MUEBLE("Sofa",300)
 MUEBLE("Tablero",150)
@@ -17,25 +17,15 @@ ENSAMBLE_PIEZAS("Mesa rustica","Pata cuadrada",4)
 ENSAMBLE_PIEZAS("Mesa rustica","Tabla",1)
 ENSAMBLAR_MUEBLE("Mesa rustica", jgranados,"21/04/2018")
 ENSAMBLAR_MUEBLE("Cabecera", jgranados,"21/04/2018")
-CLIENTE("José Granados", "578964k", "Ciudad")
+ENSAMBLAR_MUEBLE("Cabecera", jgranados,"21/04/2018")
+ENSAMBLAR_MUEBLE("Cabecera", jgranados,"21/04/2018")
+CLIENTE(“José Granados”, “578964k”, ”5av 7-25 zona 1”, “Quetzaltenango”, “Quetzaltenango”)
 CLIENTE("Pablo González", "1810714-1", "Ciudad")
 CLIENTE("Henry Bravo", "4525876Q", "San Marcos")
 CLIENTE("Marcos Aguare", "330038-20", "San Marcos")
 
 
-linea 1 
-linea 2
-linea 3
-esto es una prueba
-para 
-saber si
-se leen las 
-líneas como quiero
-
-campeón 
-"" '' \¿*
-
-------AQUI SE ACABA EL MIOO----------
-usuariousuario("april","mipassword3",1)
+----------------ERRORES----------------------
+uariousuario("april","mipassword3",1)
 USUARIO("jgranados","miPassword",1) USUARIO("jgranados","miPassword",1)
-pablo1(es un gay)
+ENSAMBLAR_MUEB("",69)
