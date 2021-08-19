@@ -54,7 +54,7 @@ public class ExtraccionDatos {
         for (String[] cliente : clientes) {
             try {
                 if (cliente.length == 5) {
-                    insertar.insertarCliente(cliente[0], cliente[1], cliente[2] + cliente[3] + cliente[4]);
+                    insertar.insertarCliente(cliente[0], cliente[1], cliente[2] + " " + cliente[3] + " " + cliente[4]);
                 } else {
                     insertar.insertarCliente(cliente[0], cliente[1], cliente[2]);
                 }

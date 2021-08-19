@@ -103,7 +103,7 @@ public class LecturaArchivo {
         partes = linea.split(",");
         if (partes != null) {
             for (int i = 0; i < partes.length; i++) {
-                String pedazo = partes[i];
+                String pedazo = partes[i].trim();
                 char[] caracteres = pedazo.toCharArray();
                 if (caracteres[caracteres.length - 1] == '"' && caracteres[0] == '"') {
                     String extraccion = "";

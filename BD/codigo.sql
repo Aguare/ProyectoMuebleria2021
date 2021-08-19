@@ -11,6 +11,7 @@ CREATE TABLE Departamento(
 CREATE TABLE Usuario(
 	nombre_usuario VARCHAR(20) NOT NULL,
 	password VARCHAR(30) NOT NULL,
+	acceso TINYINT NOT NULL,
 	idDepartamento INT NOT NULL,
 	PRIMARY KEY (nombre_usuario),
 	FOREIGN KEY (idDepartamento) REFERENCES Departamento(idDepartamento)
@@ -26,6 +27,7 @@ CREATE TABLE TipoPieza(
 CREATE TABLE Pieza(
 	idPieza INT NOT NULL AUTO_INCREMENT,
 	precio DOUBLE NOT NULL,
+	usada TINYINT NOT NULL,
 	TPnombre_pieza VARCHAR(50) NOT NULL,
 	PRIMARY KEY (idPieza),
 	FOREIGN KEY (TPnombre_pieza) REFERENCES TipoPieza(nombre_pieza)
@@ -57,8 +59,6 @@ CREATE TABLE PiezaEnsamble(
 	FOREIGN KEY (P_idPieza) REFERENCES Pieza(idPieza),
 	FOREIGN KEY (TPnombre_pieza) REFERENCES TipoPieza(nombre_pieza)
 );
-
-
 
 CREATE TABLE PiezasTipoMueble(
 	TMnombre_mueble VARCHAR(50) NOT NULL,
@@ -122,3 +122,4 @@ CREATE TABLE Devolucion(
 INSERT INTO Departamento VALUES (1,"Fábrica");
 INSERT INTO Departamento VALUES (2,"Punto de Venta");
 INSERT INTO Departamento VALUES (3,"Financiero");
+

@@ -21,12 +21,13 @@ public class InsertarArchivo {
     }
 
     public void insertarUsuario(String usuario, String password, String departamento) {
-        String query = "INSERT INTO Usuario VALUES(?,?,?);";
+        String query = "INSERT INTO Usuario VALUES(?,?,?,?);";
         try {
             PreparedStatement prepared = conexion.obtenerConexion().prepareStatement(query);
             prepared.setString(1, usuario);
             prepared.setString(2, password);
-            prepared.setString(3, departamento);
+            prepared.setString(3, "1");
+            prepared.setString(4, departamento);
             prepared.executeUpdate();
 
         } catch (SQLException ex) {
@@ -49,11 +50,12 @@ public class InsertarArchivo {
     }
 
     public void InsertarPieza(String tipoPieza, String precio) {
-        String query = "INSERT INTO Pieza (precio,TPnombre_pieza) VALUES (?,?);";
+        String query = "INSERT INTO Pieza (precio,usada,TPnombre_pieza) VALUES (?,?,?);";
         try {
             PreparedStatement prepared = conexion.obtenerConexion().prepareStatement(query);
             prepared.setString(1, precio);
-            prepared.setString(2, tipoPieza);
+            prepared.setString(2, "0");
+            prepared.setString(3, tipoPieza);
             prepared.executeUpdate();
 
         } catch (SQLException ex) {
