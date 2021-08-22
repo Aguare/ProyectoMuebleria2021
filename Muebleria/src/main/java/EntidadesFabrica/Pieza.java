@@ -1,4 +1,4 @@
-package EFabrica;
+package EntidadesFabrica;
 
 /**
  *
@@ -11,6 +11,13 @@ public class Pieza {
     private boolean usada;
     private String tipoPieza;
 
+    /**
+     *
+     * @param idPieza
+     * @param precio
+     * @param usada
+     * @param tipoPieza
+     */
     public Pieza(int idPieza, double precio, boolean usada, String tipoPieza) {
         this.idPieza = idPieza;
         this.precio = precio;
@@ -50,4 +57,7 @@ public class Pieza {
         this.tipoPieza = tipoPieza;
     }
 
+    public void imprimir() {
+        System.out.println("ID:" + idPieza + " Precio:" + precio + " Usada:" + usada + " Tipo Pieza:" + tipoPieza);
+    }
 }

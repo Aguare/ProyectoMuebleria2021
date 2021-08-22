@@ -1,4 +1,4 @@
-package EFabrica;
+package EntidadesFabrica;
 
 import java.util.ArrayList;
 
@@ -13,10 +13,11 @@ public class TipoPiezas {
     private String detalles;
     private ArrayList<Pieza> piezas;
 
-    public TipoPiezas(String nombrePieza, int cantidad, String detalles) {
+    public TipoPiezas(String nombrePieza, int cantidad, String detalles, ArrayList<Pieza> piezas) {
         this.nombrePieza = nombrePieza;
         this.cantidad = cantidad;
         this.detalles = detalles;
+        this.piezas = piezas;
     }
 
     public String getNombrePieza() {
@@ -50,6 +51,11 @@ public class TipoPiezas {
     public void setPiezas(ArrayList<Pieza> piezas) {
         this.piezas = piezas;
     }
-    
-    
+
+    public void imprimir() {
+        System.out.println("Nombre: " + nombrePieza + " Cantidad: " + cantidad);
+        for (Pieza pieza : piezas) {
+            pieza.imprimir();
+        }
+    }
 }

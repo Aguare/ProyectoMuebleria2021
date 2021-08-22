@@ -1,4 +1,4 @@
-package EFabrica;
+package EntidadesFabrica;
 
 import java.util.ArrayList;
 

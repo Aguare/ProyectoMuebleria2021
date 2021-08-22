@@ -1,4 +1,4 @@
-package EFabrica;
+package EntidadesFabrica;
 
 import java.sql.Date;
 import java.util.ArrayList;

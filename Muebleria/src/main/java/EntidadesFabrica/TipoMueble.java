@@ -1,6 +1,6 @@
-package EFabrica;
+package EntidadesFabrica;
 
-import EVenta.Mueble;
+import EntidadesVenta.Mueble;
 import java.util.ArrayList;
 
 /**

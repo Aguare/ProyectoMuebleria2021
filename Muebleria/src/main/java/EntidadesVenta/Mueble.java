@@ -1,7 +1,7 @@
-package EVenta;
+package EntidadesVenta;
 
-import EFabrica.Ensamble;
-import EFabrica.TipoMueble;
+import EntidadesFabrica.Ensamble;
+import EntidadesFabrica.TipoMueble;
 
 /**
  *
@@ -13,12 +13,17 @@ public class Mueble {
     private double precioCosto;
     private Ensamble ensamble;
     private TipoMueble tipoMueble;
+    private boolean devuelto = false;
 
     public Mueble(int idMueble, double precioCosto, Ensamble ensamble, TipoMueble tipoMueble) {
         this.idMueble = idMueble;
         this.precioCosto = precioCosto;
         this.ensamble = ensamble;
         this.tipoMueble = tipoMueble;
+    }
+
+    public void seDevolvio() {
+        devuelto = true;
     }
 
     public int getIdMueble() {
@@ -51,6 +56,14 @@ public class Mueble {
 
     public void setTipoMueble(TipoMueble tipoMueble) {
         this.tipoMueble = tipoMueble;
+    }
+
+    public boolean isDevuelto() {
+        return devuelto;
+    }
+
+    public void setDevuelto(boolean devuelto) {
+        this.devuelto = devuelto;
     }
 
 }

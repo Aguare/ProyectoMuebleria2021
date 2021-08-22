@@ -1,6 +1,9 @@
 package Archivo;
 
+import EntidadesFabrica.TipoPiezas;
+import SQL.ObtenerObj;
 import java.io.IOException;
+import java.util.ArrayList;
 
 /**
  *
@@ -9,7 +12,12 @@ import java.io.IOException;
 public class Main {
 
     public static void main(String[] args) throws IOException {
-        LecturaArchivo leer = new LecturaArchivo();
-        leer.Leer("/home/aguare/Documentos/ProyectoMuebleria2021/BD/ArchivoPrueba.txt");
+        //LecturaArchivo leer = new LecturaArchivo();
+        //leer.Leer("/home/aguare/Documentos/ProyectoMuebleria2021/BD/ArchivoPrueba.txt");
+        ObtenerObj obtener = new ObtenerObj();
+        ArrayList<TipoPiezas> piezas = obtener.obtenerTipoPiezas();
+        for (TipoPiezas pieza : piezas) {
+            pieza.imprimir();
+        }
     }
 }
