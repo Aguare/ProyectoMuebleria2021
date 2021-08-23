@@ -9,11 +9,37 @@ public class Usuario {
     private String nombre_usuario;
     private int idDepartamento;
     private String nombreDepartamento;
+    private boolean acceso;
 
-    public Usuario(String nombre_usuario, int idDepartamento, String nombreDepartamento) {
+    public Usuario(String nombre_usuario, int idDepartamento, boolean acceso) {
         this.nombre_usuario = nombre_usuario;
         this.idDepartamento = idDepartamento;
-        this.nombreDepartamento = nombreDepartamento;
+        this.acceso = acceso;
+        definir();
+    }
+
+    private void definir() {
+        switch (idDepartamento) {
+            case 1:
+                nombreDepartamento = "Fábrica";
+                break;
+            case 2:
+                nombreDepartamento = "Punto de Venta";
+                break;
+            case 3:
+                nombreDepartamento = "Financiero";
+                break;
+            default:
+                break;
+        }
+    }
+
+    public boolean isAcceso() {
+        return acceso;
+    }
+
+    public void setAcceso(boolean acceso) {
+        this.acceso = acceso;
     }
 
     public String getNombre_usuario() {
@@ -39,6 +65,5 @@ public class Usuario {
     public void setNombreDepartamento(String nombreDepartamento) {
         this.nombreDepartamento = nombreDepartamento;
     }
-    
-    
+
 }

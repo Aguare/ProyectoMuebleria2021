@@ -1,7 +1,6 @@
 package EntidadesVenta;
 
 import EntidadesFabrica.Ensamble;
-import EntidadesFabrica.TipoMueble;
 
 /**
  *
@@ -12,14 +11,15 @@ public class Mueble {
     private int idMueble;
     private double precioCosto;
     private Ensamble ensamble;
-    private TipoMueble tipoMueble;
-    private boolean devuelto = false;
+    private String tipoMueble;
+    private boolean devuelto;
 
-    public Mueble(int idMueble, double precioCosto, Ensamble ensamble, TipoMueble tipoMueble) {
+    public Mueble(int idMueble, double precioCosto, Ensamble ensamble, String tipoMueble, boolean devuelto) {
         this.idMueble = idMueble;
         this.precioCosto = precioCosto;
         this.ensamble = ensamble;
         this.tipoMueble = tipoMueble;
+        this.devuelto = devuelto;
     }
 
     public void seDevolvio() {
@@ -50,11 +50,11 @@ public class Mueble {
         this.ensamble = ensamble;
     }
 
-    public TipoMueble getTipoMueble() {
+    public String getTipoMueble() {
         return tipoMueble;
     }
 
-    public void setTipoMueble(TipoMueble tipoMueble) {
+    public void setTipoMueble(String tipoMueble) {
         this.tipoMueble = tipoMueble;
     }
 
@@ -64,6 +64,10 @@ public class Mueble {
 
     public void setDevuelto(boolean devuelto) {
         this.devuelto = devuelto;
+    }
+
+    public void imprimir() {
+        System.out.println("idMueble:" + idMueble + " TM:" + tipoMueble + " D:" + devuelto);
     }
 
 }

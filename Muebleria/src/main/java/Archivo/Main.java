@@ -1,5 +1,6 @@
 package Archivo;
 
+import EntidadesFabrica.TipoMueble;
 import EntidadesFabrica.TipoPiezas;
 import SQL.ObtenerObj;
 import java.io.IOException;
@@ -18,6 +19,10 @@ public class Main {
         ArrayList<TipoPiezas> piezas = obtener.obtenerTipoPiezas();
         for (TipoPiezas pieza : piezas) {
             pieza.imprimir();
+        }
+        ArrayList<TipoMueble> muebles = obtener.obtenerTipoMuebles();
+        for (TipoMueble mueble : muebles) {
+            mueble.imprimir();
         }
     }
 }

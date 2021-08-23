@@ -48,7 +48,7 @@ public class InsertarArchivo {
         }
     }
 
-    public void InsertarPieza(String tipoPieza, String precio) {
+    public void insertarPieza(String tipoPieza, String precio) {
         String query = "INSERT INTO Pieza (precio,usada,TPnombre_pieza) VALUES (?,?,?);";
         try {
             PreparedStatement prepared = conexion.obtenerConexion().prepareStatement(query);

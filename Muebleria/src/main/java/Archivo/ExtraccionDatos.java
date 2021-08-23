@@ -69,7 +69,7 @@ public class ExtraccionDatos {
         for (String[] pieza : pieza) {
             try {
                 insertar.insertarTipo(pieza[0], pieza[1]);
-                insertar.InsertarPieza(pieza[0], pieza[1]);
+                insertar.insertarPieza(pieza[0], pieza[1]);
             } catch (Exception e) {
                 insertar.errorAlInsertar(pieza);
             }

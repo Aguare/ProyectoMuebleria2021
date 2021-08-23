@@ -12,10 +12,10 @@ public class Ensamble {
     private int idEnsamble;
     private Date fecha;
     private Usuario usuario;
-    private TipoMueble tipoMueble;
+    private String tipoMueble;
     private ArrayList<Pieza> piezas;
 
-    public Ensamble(int idEnsamble, Date fecha, Usuario usuario, TipoMueble tipoMueble, ArrayList<Pieza> piezas) {
+    public Ensamble(int idEnsamble, Date fecha, Usuario usuario, String tipoMueble, ArrayList<Pieza> piezas) {
         this.idEnsamble = idEnsamble;
         this.fecha = fecha;
         this.usuario = usuario;
@@ -47,11 +47,11 @@ public class Ensamble {
         this.usuario = usuario;
     }
 
-    public TipoMueble getTipoMueble() {
+    public String getTipoMueble() {
         return tipoMueble;
     }
 
-    public void setTipoMueble(TipoMueble tipoMueble) {
+    public void setTipoMueble(String tipoMueble) {
         this.tipoMueble = tipoMueble;
     }
 
