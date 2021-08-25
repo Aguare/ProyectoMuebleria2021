@@ -18,7 +18,7 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
 
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
-    <a href="#" class="navbar-brand"><b>FABRICA</b></a>  		
+    <a href="#" class="navbar-brand"><b>FÁBRICA</b></a>  		
     <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navbarCollapse">
         <span class="navbar-toggler-icon"></span>
     </button>
@@ -27,25 +27,22 @@
             <a href="#" class="nav-item nav-link">Inicio</a>
             <a href="#" class="nav-item nav-link">Ensamblar</a>			
             <div class="nav-item dropdown">
-                <a href="#" data-toggle="dropdown" class="nav-item nav-link dropdown-toggle">Crear</a>
+                <a href="#" data-toggle="dropdown" class="nav-item nav-link dropdown-toggle">Crear y Editar</a>
                 <div class="dropdown-menu">					
                     <a href="#" class="dropdown-item">Tipo de Pieza</a>
-                    <a href="#" class="dropdown-item">Mueble</a>
+                    <a href="#" class="dropdown-item">Pieza</a>
                     <a href="#" class="dropdown-item">Graphic Design</a>
                     <a href="#" class="dropdown-item">Digital Marketing</a>
                 </div>
             </div>
             <div class="nav-item dropdown">
-                <a href="#" data-toggle="dropdown" class="nav-item nav-link dropdown-toggle">Reportes</a>
+                <a href="#" data-toggle="dropdown" class="nav-item nav-link dropdown-toggle">Consulta</a>
                 <div class="dropdown-menu">					
-                    <a href="#" class="dropdown-item">Reporte 1</a>
-                    <a href="#" class="dropdown-item">Reporte 2</a>
-                    <a href="#" class="dropdown-item">Reporte 3</a>
-                    <a href="#" class="dropdown-item">Reporte 4</a>
+                    <a href="#" class="dropdown-item">Piezas Existentes</a>
+                    <a href="#" class="dropdown-item">Muebles Creados</a>
                 </div>
             </div>
-            <a href="#" class="nav-item nav-link">Blog</a>
-            <a href="#" class="nav-item nav-link">Contact</a>
+            <a href="#" class="nav-item nav-link">Devoluciones</a>
         </div>
         <div class="navbar-nav action-buttons ml-auto">
             <a href="#" data-toggle="dropdown" class="navbar-nav mr-3">Nombre Usuario</a>
