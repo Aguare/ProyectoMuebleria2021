@@ -1,10 +1,6 @@
 package Archivo;
 
 import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.InputStreamReader;
-import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 
 /**
@@ -16,40 +12,43 @@ public class LecturaArchivo {
     private final String[] condiciones = {"USUARIO" + '(', "PIEZA" + '(', "MUEBLE" + '(', "ENSAMBLE_PIEZAS" + '(',
         "ENSAMBLAR_MUEBLE" + '(', "CLIENTE" + '('};
     private ArrayList<String> lineas = new ArrayList<>();
-    public ArrayList<String[]> usuarios = new ArrayList<>();
-    public ArrayList<String[]> clientes = new ArrayList<>();
-    public ArrayList<String[]> pieza = new ArrayList<>();
-    public ArrayList<String[]> mueble = new ArrayList<>();
-    public ArrayList<String[]> ensamble_pieza = new ArrayList<>();
-    public ArrayList<String[]> ensamblar_mueble = new ArrayList<>();
-    public ArrayList<String> no_reconocido = new ArrayList<>();
+    private ArrayList<String[]> usuarios = new ArrayList<>();
+    private ArrayList<String[]> clientes = new ArrayList<>();
+    private ArrayList<String[]> pieza = new ArrayList<>();
+    private ArrayList<String[]> mueble = new ArrayList<>();
+    private ArrayList<String[]> ensamble_pieza = new ArrayList<>();
+    private ArrayList<String[]> ensamblar_mueble = new ArrayList<>();
+    private ArrayList<String> no_reconocido = new ArrayList<>();
+    private ArrayList<String> no_insertados;
 
-    public void Leer(String path) {
-        File fichero = new File(path);
-
+    /**
+     * Se lee el archivo mediante el buffer
+     *
+     * @param entrada es el Buffer que entrega las líneas del archivo
+     */
+    public boolean Leer(BufferedReader entrada) {
         try {
-            BufferedReader entrada = new BufferedReader(new InputStreamReader(new FileInputStream(fichero), StandardCharsets.UTF_8));
-
             while (entrada.ready()) {
-                lineas.add(entrada.readLine());
+                lineas.add(entrada.readLine().trim());
             }
             entrada.close();
-
         } catch (Exception e) {
-            System.out.println("ERROR EN LA LECTURA -> " + path);
+            return false;
         }
         separacion();
-        ExtraccionDatos extraccion = new ExtraccionDatos(usuarios, clientes, pieza, mueble, ensamble_pieza, ensamblar_mueble, no_reconocido);
-        extraccion.insertar();
+        return true;
     }
 
+    /**
+     * Este método lee linea por linea encontrando las coincidencias con las
+     * palabra clave
+     */
     private void separacion() {
         for (int i = 0; i < lineas.size(); i++) {
             String line = lineas.get(i).trim();
             char[] caracteres = line.toCharArray();
             String formado = "";
             for (int j = 0; j < caracteres.length; j++) {
-
                 formado += caracteres[j];
                 if (ubicar(formado, line)) {
                     break;
@@ -60,37 +59,55 @@ public class LecturaArchivo {
         }
     }
 
+    /**
+     * Ubica según a la palabra que corresponde en un arreglo diferente
+     *
+     * @param parteLinea es la parte de la linea que indica a donde pertenece
+     * @param linea es toda la linea con los datos a insertar
+     * @return retorna V/F si fue ubicado correctamente
+     */
     private boolean ubicar(String parteLinea, String linea) {
         int ubicado = coincidencia(parteLinea);
         if (ubicado != -1) {
             linea = quitarParte(linea, parteLinea);
             String[] partes = separarDatos(linea);
-            switch (ubicado) {
-                case 0:
-                    usuarios.add(partes);
-                    return true;
-                case 1:
-                    pieza.add(partes);
-                    return true;
-                case 2:
-                    mueble.add(partes);
-                    return true;
-                case 3:
-                    ensamble_pieza.add(partes);
-                    return true;
-                case 4:
-                    ensamblar_mueble.add(partes);
-                    return true;
-                case 5:
-                    clientes.add(partes);
-                    return true;
-                default:
-                    return false;
+            if (partes == null) {
+                return false;
+            } else {
+                switch (ubicado) {
+                    case 0:
+                        usuarios.add(partes);
+                        return true;
+                    case 1:
+                        pieza.add(partes);
+                        return true;
+                    case 2:
+                        mueble.add(partes);
+                        return true;
+                    case 3:
+                        ensamble_pieza.add(partes);
+                        return true;
+                    case 4:
+                        ensamblar_mueble.add(partes);
+                        return true;
+                    case 5:
+                        clientes.add(partes);
+                        return true;
+                    default:
+                        return false;
+                }
             }
         }
         return false;
     }
 
+    /**
+     * Quita la parte de la palabra clave para obtener los datos
+     *
+     * @param linea la linea completa
+     * @param parte la palabra clave
+     * @return retorna los datos
+     */
     private String quitarParte(String linea, String parte) {
         String devolver = "";
         int cantidad = parte.length();
@@ -98,6 +115,12 @@ public class LecturaArchivo {
         return devolver;
     }
 
+    /**
+     * separa los datos segun las (,) y quita las comillas
+     *
+     * @param linea linea de datos
+     * @return retorna un arreglo con los datos
+     */
     private String[] separarDatos(String linea) {
         String[] partes;
         partes = linea.split(",");
@@ -108,7 +131,10 @@ public class LecturaArchivo {
                 if (caracteres[caracteres.length - 1] == '"' && caracteres[0] == '"') {
                     String extraccion = "";
                     extraccion = pedazo.substring(1, pedazo.length() - 1);
-                    partes[i] = extraccion;
+                    partes[i] = extraccion.trim();
+                } else if (caracteres[0] == '"' && caracteres[caracteres.length - 1] != '"'
+                        || caracteres[0] != '"' && caracteres[caracteres.length - 1] == '"') {
+                    return null;
                 } else {
                     partes[i] = pedazo.trim();
                 }
@@ -117,6 +143,13 @@ public class LecturaArchivo {
         return partes;
     }
 
+    /**
+     * busca si la palabra clave se encuentra en la linea
+     *
+     * @param parteLinea la palabra clave al inicio de la linea
+     * @return retorno el número de posicion de la palabra clave en el array de
+     * palabras clave
+     */
     private int coincidencia(String parteLinea) {
         for (int i = 0; i < condiciones.length; i++) {
             if (parteLinea.equals(condiciones[i])) {
@@ -126,4 +159,31 @@ public class LecturaArchivo {
         return -1;
     }
 
+    public ArrayList<String[]> getUsuarios() {
+        return usuarios;
+    }
+
+    public ArrayList<String[]> getClientes() {
+        return clientes;
+    }
+
+    public ArrayList<String[]> getPieza() {
+        return pieza;
+    }
+
+    public ArrayList<String[]> getMueble() {
+        return mueble;
+    }
+
+    public ArrayList<String[]> getEnsamble_pieza() {
+        return ensamble_pieza;
+    }
+
+    public ArrayList<String[]> getEnsamblar_mueble() {
+        return ensamblar_mueble;
+    }
+
+    public ArrayList<String> getNo_reconocido() {
+        return no_reconocido;
+    }
 }

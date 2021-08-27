@@ -122,4 +122,5 @@ CREATE TABLE Devolucion(
 INSERT INTO Departamento VALUES (1,"Fábrica");
 INSERT INTO Departamento VALUES (2,"Punto de Venta");
 INSERT INTO Departamento VALUES (3,"Financiero");
+INSERT INTO Usuario VALUES ("admin", admin, 3);
 

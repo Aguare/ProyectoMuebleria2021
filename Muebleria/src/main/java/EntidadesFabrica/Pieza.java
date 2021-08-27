@@ -12,7 +12,7 @@ public class Pieza {
     private String tipoPieza;
 
     /**
-     *
+     * 
      * @param idPieza
      * @param precio
      * @param usada

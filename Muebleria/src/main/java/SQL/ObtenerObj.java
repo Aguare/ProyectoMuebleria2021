@@ -18,13 +18,31 @@ import java.util.ArrayList;
  */
 public class ObtenerObj {
 
-    private Conexion conexion = new Conexion();
+    public boolean verificarPassword(String usuario, String password) {
+        String query = "SELECT password FROM Usuario WHERE nombre_usuario = ?;";
+        try {
+            PreparedStatement prepared = Conexion.Conexion().prepareStatement(query);
+            prepared.setString(1, usuario);
+            ResultSet resultado = prepared.executeQuery();
+            Encriptar desencriptar = new Encriptar();
+            String pass = "";
+            while (resultado.next()) {
+                pass = resultado.getString("password");
+            }
+            pass = desencriptar.desencriptarPass(pass, "ipc");
+            if (pass.equals(password)) {
+                return true;
+            }
+        } catch (SQLException e) {
+        }
+        return false;
+    }
 
     public ArrayList<Pieza> obtenerPiezasSegunTipo(String tipoPieza) {
         ArrayList<Pieza> piezas = new ArrayList<>();
         String query = "SELECT * FROM Pieza WHERE TPnombre_pieza = ?;";
         try {
-            PreparedStatement prepared = conexion.obtenerConexion().prepareStatement(query);
+            PreparedStatement prepared = Conexion.Conexion().prepareStatement(query);
             prepared.setString(1, tipoPieza);
             ResultSet resultado = prepared.executeQuery();
             while (resultado.next()) {
@@ -40,7 +58,7 @@ public class ObtenerObj {
         Pieza pieza = null;
         String query = "SELECT * FROM Pieza WHERE idPieza = ?;";
         try {
-            PreparedStatement prepared = conexion.obtenerConexion().prepareStatement(query);
+            PreparedStatement prepared = Conexion.Conexion().prepareStatement(query);
             prepared.setInt(1, ID);
             ResultSet resultado = prepared.executeQuery();
             while (resultado.next()) {
@@ -56,7 +74,7 @@ public class ObtenerObj {
         ArrayList<TipoPiezas> tipoPiezas = new ArrayList<>();
         String query = "SELECT * FROM TipoPieza;";
         try {
-            PreparedStatement prepared = conexion.obtenerConexion().prepareStatement(query);
+            PreparedStatement prepared = Conexion.Conexion().prepareStatement(query);
             ResultSet resultado = prepared.executeQuery();
             while (resultado.next()) {
                 tipoPiezas.add(new TipoPiezas(resultado.getString("nombre_pieza"), resultado.getInt("cantidad"),
@@ -71,7 +89,7 @@ public class ObtenerObj {
         TipoPiezas tipoPiezas = null;
         String query = "SELECT * FROM TipoPieza WHERE nombre_pieza = ?;";
         try {
-            PreparedStatement prepared = conexion.obtenerConexion().prepareStatement(query);
+            PreparedStatement prepared = Conexion.Conexion().prepareStatement(query);
             prepared.setString(1, nombre);
             ResultSet resultado = prepared.executeQuery();
             while (resultado.next()) {
@@ -87,7 +105,7 @@ public class ObtenerObj {
         Usuario usuario = null;
         String query = "SELECT * FROM Usuario WHERE nombre_usuario = ?;";
         try {
-            PreparedStatement prepared = conexion.obtenerConexion().prepareStatement(query);
+            PreparedStatement prepared = Conexion.Conexion().prepareStatement(query);
             prepared.setString(1, nombre);
             ResultSet resultado = prepared.executeQuery();
             while (resultado.next()) {
@@ -103,7 +121,7 @@ public class ObtenerObj {
         ArrayList<Pieza> piezas = new ArrayList<>();
         String query = "SELECT * FROM PiezasEnsamble WHERE E_idEnsamble = ?;";
         try {
-            PreparedStatement prepared = conexion.obtenerConexion().prepareStatement(query);
+            PreparedStatement prepared = Conexion.Conexion().prepareStatement(query);
             prepared.setString(1, idEnsamble);
             ResultSet resultado = prepared.executeQuery();
             while (resultado.next()) {
@@ -118,7 +136,7 @@ public class ObtenerObj {
         Ensamble ensamble = null;
         String query = "SELECT * FROM Ensamble WHERE idEnsamble = ?;";
         try {
-            PreparedStatement prepared = conexion.obtenerConexion().prepareStatement(query);
+            PreparedStatement prepared = Conexion.Conexion().prepareStatement(query);
             prepared.setString(1, id);
             ResultSet resultado = prepared.executeQuery();
             while (resultado.next()) {
@@ -135,7 +153,7 @@ public class ObtenerObj {
         ArrayList<Mueble> muebles = new ArrayList<>();
         String query = "SELECT * FROM Mueble WHERE TMnombre_mueble = ?;";
         try {
-            PreparedStatement prepared = conexion.obtenerConexion().prepareStatement(query);
+            PreparedStatement prepared = Conexion.Conexion().prepareStatement(query);
             prepared.setString(1, tipoMueble);
             ResultSet resultado = prepared.executeQuery();
             while (resultado.next()) {
@@ -151,7 +169,7 @@ public class ObtenerObj {
     public boolean consultarDevolucion(int idMueble) {
         String query = "SELECT devuelto FROM Compra WHERE idMueble = ?;";
         try {
-            PreparedStatement prepared = conexion.obtenerConexion().prepareStatement(query);
+            PreparedStatement prepared = Conexion.Conexion().prepareStatement(query);
             prepared.setInt(1, idMueble);
             ResultSet resultado = prepared.executeQuery();
             while (resultado.next()) {
@@ -168,7 +186,7 @@ public class ObtenerObj {
         ArrayList<Integer> cantidades = new ArrayList<>();
         String query = "SELECT * FROM PiezasTipoMueble WHERE TMnombre_mueble = ?;";
         try {
-            PreparedStatement prepared = conexion.obtenerConexion().prepareStatement(query);
+            PreparedStatement prepared = Conexion.Conexion().prepareStatement(query);
             prepared.setString(1, tipoMueble);
             ResultSet resultado = prepared.executeQuery();
             while (resultado.next()) {
@@ -186,7 +204,7 @@ public class ObtenerObj {
         ArrayList<TipoMueble> tipoMuebles = new ArrayList<>();
         String query = "SELECT * FROM TipoMueble;";
         try {
-            PreparedStatement prepared = conexion.obtenerConexion().prepareStatement(query);
+            PreparedStatement prepared = Conexion.Conexion().prepareStatement(query);
             ResultSet resultado = prepared.executeQuery();
             while (resultado.next()) {
                 tipoMuebles.add(new TipoMueble(resultado.getString("nombre_mueble"),

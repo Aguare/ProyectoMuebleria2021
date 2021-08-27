@@ -28,14 +28,13 @@
             Usuario usuario = (Usuario) request.getSession().getAttribute("Usuario");
     %>
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
-
-    <a href="${pageContext.request.contextPath}/Menus/Fabrica.jsp" class="navbar-brand"><b>FÁBRICA</b></a>  		
+    <a href="${pageContext.request.contextPath}/Menus/Financiero.jsp" class="navbar-brand"><b>FINANCIERO</b></a>  		
     <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navbarCollapse">
         <span class="navbar-toggler-icon"></span>
     </button>
     <div id="navbarCollapse" class="collapse navbar-collapse justify-content-start">
         <div class="navbar-nav">
-            <a href="${pageContext.request.contextPath}/Menus/Fabrica.jsp" class="nav-item nav-link">Inicio</a>
+            <a href="${pageContext.request.contextPath}/Menus/Financiero.jsp" class="nav-item nav-link">Inicio</a>
             <a href="#" class="nav-item nav-link">Ensamblar</a>			
             <div class="nav-item dropdown">
                 <a href="#" data-toggle="dropdown" class="nav-item nav-link dropdown-toggle">Crear y Editar</a>

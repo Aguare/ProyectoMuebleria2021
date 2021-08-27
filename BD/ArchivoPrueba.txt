@@ -1,31 +1,69 @@
 USUARIO("jgranados","miPassword",1)  
 USUARIO("aguare","contraseña",2)
 USUARIO("aguare2","contraseña",2)
+USUARIO("financiero","123",3)
+USUARIO("jorge","123",1)
+USUARIO("daniel","123",1)
+USUARIO("pedro","123",1)
+USUARIO("jorge velasques","123",1)
+USUARIO("Eduardo","123",2)
+USUARIO("josé","123",2)
+USUARIO("gonzalez","123",2)
+USUARIO("bravo","123",2)
+USUARIO("bravo","123",3)
+USUARIO("mentira","123",3)
+USUARIO(" flores ", "123",3)
+
 PIEZA("Pata cuAdrada",15.50)
 PIEZA("PaTa cuadrada",14.50)
 PIEZA("Pata cuadRada",17)
 PIEZA("Pata cuadRadA",11)
 PIEZA("PatA cuadRada",21)
 PIEZA("Tabla", 200)
+PIEZA("Tabla", 100)
+PIEZA("Tabla", 250)
+PIEZA("Tabla", 100)
+PIEZA("Tabla", 100)
+PIEZA("Tabla", 100)
+PIEZA("Tabla", 100)
+PIEZA("Tabla", 100)
+PIEZA("Tabla", 100)
+
+
 MUEBLE("Mesa rustica", 150.00)
 MUEBLE("Cabecera",150)
 MUEBLE("Comedor",500)
 MUEBLE("Silla",100)
 MUEBLE("Sofa",300)
 MUEBLE("Tablero",150)
+MUEBLE("Mesa de noche",250)
+MUEBLE("Mesa de computadora",150)
+MUEBLE("Banco",80)
+
+
 ENSAMBLE_PIEZAS("Mesa rustica","Pata cuadrada",4)
 ENSAMBLE_PIEZAS("Mesa rustica","Tabla",1)
+
+
 ENSAMBLAR_MUEBLE("Mesa rustica", jgranados,"21/04/2018")
 ENSAMBLAR_MUEBLE("Cabecera", jgranados,"21/04/2018")
 ENSAMBLAR_MUEBLE("Cabecera", jgranados,"21/04/2018")
 ENSAMBLAR_MUEBLE("Cabecera", jgranados,"21/04/2018")
+
+
 CLIENTE("José Granados", "578964k", "5av 7-25 zona 1", "Quetzaltenango", "Quetzaltenango")
 CLIENTE("Pablo González", "1810714-1", "Ciudad")
 CLIENTE("Henry Bravo", "4525876Q", "San Marcos")
 CLIENTE("Marcos Aguare", "330038-20", "San Marcos")
+CLIENTE("Iran Bravo", "1234", "San Marcos")
+CLIENTE("Iran Eory", "12345", "San Marcos")
 
 
-----------------ERRORES----------------------
-uariousuario("april","mipassword3",1)
-USUARIO("jgranados","miPassword",1) USUARIO("jgranados","miPassword",1)
-ENSAMBLAR_MUEB("",69)
+-------------ERRORES------------
+USUARIO("bravo",|"123",2)
+USUARIO("bravo","123",|3)
+USUARIO("mentira","123",3|)
+USUARIO(" flores ", "123|",3)
+PIEZA("Tabla"|, 100)
+CLIENTE("Iran Eory"1, "12345", "San Marcos")
+CLIENTE(1"Iran Eory", "145", "San Marcos")

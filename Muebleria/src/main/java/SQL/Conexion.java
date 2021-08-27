@@ -10,29 +10,26 @@ import java.sql.SQLException;
  */
 public class Conexion {
 
-    private static final String USER = "root";
-    private static final String PASSWORD = "74ef6a14";
-    private static final String MYSQL = "jdbc:mysql://localhost:3306/Muebleria";
-    private static Connection conecta;
+    private static final String URL = "jdbc:mysql://localhost:3306/Muebleria";
+    private String user = "root";
+    private String password = "74ef6a14";
+    private static Connection conexion = null;
 
-    public Conexion() {
-        try {
-            conecta = DriverManager.getConnection(MYSQL, USER, PASSWORD);
-        } catch (SQLException e) {
-            System.out.println("Error al Conectar a la BD");
+    public static Connection Conexion() {
+        if (conexion == null) {
+            new Conexion();
         }
+        return conexion;
     }
 
-    public Connection obtenerConexion() {
-        return conecta;
-    }
-
-    public void cerrarConexion() {
+    private Conexion() {
         try {
-            conecta.close();
-        } catch (Exception e) {
-            System.out.println("Error al cerrar la conexión");
-        }
+            Class.forName("com.mysql.jdbc.Driver");
+            conexion = DriverManager.getConnection(URL, user, password);
+            System.out.println("conexion establecida");
 
+        } catch (SQLException | ClassNotFoundException ex) {
+            System.out.println("No se ha podido generar la conexion");
+        }
     }
 }
