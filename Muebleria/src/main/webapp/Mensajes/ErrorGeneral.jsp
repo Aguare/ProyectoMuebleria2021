@@ -21,6 +21,10 @@
             <center><h1>ERROR:</h1></center>
             <center><h2><%=mensaje%></h2></center>
         </div>
-
+        <%if (request.getAttribute("cargaArchivo") != null) {%>
+        <div class="container my-3 border text-center">
+            <a href="${pageContext.request.contextPath}/Inicio/CargaArchivo.jsp" type="button" class="btn btn-link text-center">Reintentar Carga de Archivos</a>
+        </div>
+        <%}%>  
     </body>
 </html>

@@ -53,7 +53,7 @@ public class LecturaArchivo {
                 if (ubicar(formado, line)) {
                     break;
                 } else if (j == caracteres.length - 2) {
-                    no_reconocido.add((i + 1) + "|" + line);
+                    no_reconocido.add((i + 1) + "|" + line + " <- Sintaxis no reconocida");
                 }
             }
         }
@@ -72,7 +72,8 @@ public class LecturaArchivo {
             linea = quitarParte(linea, parteLinea);
             String[] partes = separarDatos(linea);
             if (partes == null) {
-                return false;
+                no_reconocido.add("-> " + linea + " No debe tener nada afuera de las comillas");
+                return true;
             } else {
                 switch (ubicado) {
                     case 0:
