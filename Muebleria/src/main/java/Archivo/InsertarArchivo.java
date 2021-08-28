@@ -29,7 +29,7 @@ public class InsertarArchivo {
             prepared.executeUpdate();
             insertados.add("USUARIO ->" + usuario + " " + password + " " + departamento);
         } catch (SQLException ex) {
-            errorAlInsertar(new String[]{"USUARIO ->", usuario, password, departamento, ex.getErrorCode() + ""});
+            errorAlInsertar(new String[]{"USUARIO ->", usuario, password, departamento, obtenerTipoError(ex.getErrorCode())});
         }
     }
 
@@ -43,7 +43,7 @@ public class InsertarArchivo {
             prepared.executeUpdate();
             insertados.add("CLIENTE ->" + NIT + " " + nombre + " " + direccion);
         } catch (SQLException ex) {
-            errorAlInsertar(new String[]{"CLIENTE ->", NIT, nombre, direccion});
+            errorAlInsertar(new String[]{"CLIENTE ->", NIT, nombre, direccion, obtenerTipoError(ex.getErrorCode())});
         }
     }
 
@@ -57,7 +57,7 @@ public class InsertarArchivo {
             prepared.executeUpdate();
             insertados.add("PIEZA ->" + precio + " " + tipoPieza);
         } catch (SQLException ex) {
-            errorAlInsertar(new String[]{"PIEZA ->", tipoPieza, precio});
+            errorAlInsertar(new String[]{"PIEZA ->", tipoPieza, precio, obtenerTipoError(ex.getErrorCode())});
         }
     }
 
@@ -72,7 +72,7 @@ public class InsertarArchivo {
                 prepared.setString(3, "");
                 prepared.executeUpdate();
             } catch (SQLException ex) {
-                errorAlInsertar(new String[]{"TIPOPIEZA->", nombre_pieza, precio});
+                errorAlInsertar(new String[]{"TIPOPIEZA->", nombre_pieza, precio, obtenerTipoError(ex.getErrorCode())});
             }
         } else {
             aumentarPieza(nombre_pieza, cantidadExistente);
@@ -118,7 +118,7 @@ public class InsertarArchivo {
             prepared.executeUpdate();
             insertados.add("MUEBLE ->" + nombre_mueble + " " + precio);
         } catch (SQLException ex) {
-            errorAlInsertar(new String[]{"MUEBLE ->", nombre_mueble, precio});
+            errorAlInsertar(new String[]{"MUEBLE ->", nombre_mueble, precio, obtenerTipoError(ex.getErrorCode())});
         }
     }
 
@@ -132,7 +132,7 @@ public class InsertarArchivo {
             prepared.executeUpdate();
             insertados.add("ENSAMBLE_PIEZAS ->" + tipoMueble + " " + tipoPieza + " " + cantidad);
         } catch (SQLException ex) {
-            errorAlInsertar(new String[]{"ENSAMBLE_PIEZAS ->", tipoMueble, tipoPieza, cantidad});
+            errorAlInsertar(new String[]{"ENSAMBLE_PIEZAS ->", tipoMueble, tipoPieza, cantidad, obtenerTipoError(ex.getErrorCode())});
         }
     }
 
@@ -141,7 +141,7 @@ public class InsertarArchivo {
         try {
             PreparedStatement prepared = Conexion.Conexion().prepareStatement(query, PreparedStatement.RETURN_GENERATED_KEYS);
             prepared.setString(1, fecha);
-            prepared.setString(2, usuario);
+            prepared.setString(2, usuario.trim());
             prepared.setString(3, mueble);
             prepared.executeUpdate();
             ResultSet resultado = prepared.getGeneratedKeys();
@@ -151,7 +151,7 @@ public class InsertarArchivo {
             }
             insertarMueble("" + num, mueble);
         } catch (SQLException ex) {
-            errorAlInsertar(new String[]{"ENSAMBLAR_MUEBLE ->", fecha, usuario, mueble});
+            errorAlInsertar(new String[]{"ENSAMBLAR_MUEBLE ->", fecha, usuario, mueble, obtenerTipoError(ex.getErrorCode())});
         }
     }
 
@@ -218,6 +218,23 @@ public class InsertarArchivo {
             linea += dato + " ";
         }
         noInsertados.add(linea);
+    }
+
+    private String obtenerTipoError(int error) {
+        switch (error) {
+            case 1062:
+                return "<- El registro ya existe";
+            case 1136:
+                return "<- El ID de referencia aún no existe";
+            case 1064:
+                return "<- Los datos no cumplen con su formato";
+            case 1366:
+                return "<- Los valores numéricos contienen un error";
+            case 1452:
+                return "<- El usuario o Tipo de Mueble que desea ensamblar no existe";
+            default:
+                return "<- No se pudo cargar a la BD";
+        }
     }
 
     public ArrayList<String> getInsertados() {

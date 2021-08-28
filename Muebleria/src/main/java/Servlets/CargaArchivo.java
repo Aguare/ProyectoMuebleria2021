@@ -1,7 +1,6 @@
 package Servlets;
 
 import Archivo.ControladorInsertar;
-import Archivo.LecturaArchivo;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -57,10 +56,13 @@ public class CargaArchivo extends HttpServlet {
         InputStream contenido = filePart.getInputStream();
         BufferedReader buffer = new BufferedReader(new InputStreamReader(contenido, StandardCharsets.UTF_8));
         ControladorInsertar leer = new ControladorInsertar();
-        if (!leer.ejecutar(buffer)) {
-            request.setAttribute("mensaje", "No se pudo leer el archivo");
+        String n = filePart.getSubmittedFileName();
+        if (n.equalsIgnoreCase("")) {
+            request.setAttribute("mensaje", "No se pudo leer el archivo, o no se selecciono ninguno");
+            request.setAttribute("cargaArchivo", true);
             request.getRequestDispatcher("Mensajes/ErrorGeneral.jsp").forward(request, response);
         } else {
+            leer.ejecutar(buffer);
             request.setAttribute("noReconocido", leer.getErrores());
             request.setAttribute("correcto", leer.getCorrecto());
             request.setAttribute("mostrar", true);
