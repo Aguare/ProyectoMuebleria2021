@@ -17,32 +17,34 @@
     </head>
     <body>
         <jsp:include page="../../Menus/Fabrica.jsp"></jsp:include>
-        <jsp:include page="../../resources/CSS/RecursosCSS.jsp"></jsp:include>
-        <jsp:include page="../../resources/JS/RecursosJS.jsp"></jsp:include>
-        <jsp:include page="../../resources/JS/RecursosJS.jsp"></jsp:include>
-        <jsp:include page="../../Inicio/Redireccionar.jsp"></jsp:include>
+        <style><%@include file="../../resources/CSS/RecursosCSS.jsp"%></style>
+        <style><%@include file="../../resources/JS/RecursosJS.jsp"%></style>
         <%
             ObtenerObj obtener = new ObtenerObj();
             ArrayList<TipoPiezas> tipoPiezas = obtener.obtenerTipoPiezas();
-            Pieza pieza = (Pieza) request.getAttribute("pieza");
         %>
         <br>
+        <%
+            if (request.getAttribute("crear") == null && request.getAttribute("pieza") != null) {
+                Pieza pieza = (Pieza) request.getAttribute("pieza");
+        %>
         <div class="container border" style="width: 600px">
             <br>
             <form action="${pageContext.request.contextPath}/CambioPiezas" method="POST">
+                <input type="hidden" name="opcion" value="1">
                 <div class="form-row">
                     <div class="form-group col-md-6">
                         <label>ID PIEZA</label>
-                        <input type="number" class="form-control" id="idPieza" value="<%=pieza.getIdPieza()%>" disabled="">
+                        <input type="number" class="form-control" name="idPieza" value="<%=pieza.getIdPieza()%>" readonly>
                     </div>
                     <div class="form-group col-md-6">
                         <label>Precio</label>
-                        <input type="number" min="0" class="form-control" id="precio" placeholder="Precio Pieza" value="<%=pieza.getPrecio()%>">
+                        <input type="number" min="0" class="form-control" name="precio" value="<%=pieza.getPrecio()%>">
                     </div>
                 </div>
                 <div class="form-group">
                     <label for="inputState">TIPO DE PIEZA</label>
-                    <select id="tipoPieza" class="form-control">
+                    <select name="tipoPieza" class="form-control">
                         <option selected><%=pieza.getTipoPieza().toUpperCase()%></option>
                         <%for (TipoPiezas tipoPieza : tipoPiezas) {
                                 if (!tipoPieza.getNombrePieza().equalsIgnoreCase(pieza.getTipoPieza())) {%>
@@ -56,10 +58,39 @@
                 <div class="text-center">
                     <button type="submit" class="btn btn-primary">Actualizar</button>
                 </div>
-
             </form>
             <br>
         </div>
-
+        <%} else {%>
+        <div class="container border" style="width: 600px">
+            <form action="${pageContext.request.contextPath}/CambioPiezas" method="POST">
+                <input type="hidden" name="opcion" value="2">
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label>ID PIEZA</label>
+                        <input type="number" class="form-control" name="idPieza" id="idPieza" placeholder="Se asignará posteriormente" value="" readonly>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label>Precio</label>
+                        <input type="number" min="0" class="form-control" name="precioC" id="precioC" value="0">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="inputState">TIPO DE PIEZA</label>
+                    <select name="tipoPiezaC" id="tipoPiezaC" class="form-control">
+                        <%for (TipoPiezas tipoPieza : tipoPiezas) {%>
+                        <option><%=tipoPieza.getNombrePieza().toUpperCase()%></option>
+                        <%
+                            }
+                        %>
+                    </select>
+                </div>
+                <div class="text-center">
+                    <button type="submit" class="btn btn-primary">Actualizar</button>
+                </div>
+            </form>
+            <br>
+        </div>
+        <%}%>
     </body>
 </html>

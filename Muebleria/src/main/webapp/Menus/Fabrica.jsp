@@ -12,7 +12,6 @@
     <title>Bienvenido</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
     <link rel="stylesheet" href="../resources/CSS/barraMenu.css">
-    <script src="../resources/JS/menu.js"></script>
     <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
@@ -38,7 +37,7 @@
             <div class="nav-item dropdown">
                 <a href="#" data-toggle="dropdown" class="nav-item nav-link dropdown-toggle">Piezas</a>
                 <div class="dropdown-menu">					
-                    <a href="#" class="dropdown-item">Crear</a>
+                    <a href="${pageContext.request.contextPath}/Consultas/Fabrica/EditarPieza.jsp?crear=true" class="dropdown-item">Crear</a>
                     <a href="${pageContext.request.contextPath}/Consultas/Fabrica/Piezas.jsp" class="dropdown-item">Ver Todas</a>
                     <a href="#" class="dropdown-item">Tipo de Piezas</a>
                 </div>

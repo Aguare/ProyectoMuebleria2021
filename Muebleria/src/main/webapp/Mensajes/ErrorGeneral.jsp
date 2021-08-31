@@ -20,21 +20,23 @@
                 tipo = ((Usuario) request.getSession().getAttribute("Usuario")).getIdDepartamento();
             }
         %>
-        <%switch (tipo) {
+        <div class="container border text-center">
+            <%switch (tipo) {
                 case 1:%>
-        <jsp:include page="../Menus/Fabrica.jsp"></jsp:include>
-        <% break;
+            <jsp:include page="../Menus/Fabrica.jsp"></jsp:include>
+            <% break;
             case 2:%>
-        <jsp:include page="../Menus/Venta.jsp"></jsp:include>
-        <%break;
+            <jsp:include page="../Menus/Venta.jsp"></jsp:include>
+            <%break;
             case 3:%>
-        <jsp:include page="../Menus/Financiero.jsp"></jsp:include>
-        <%break;
+            <jsp:include page="../Menus/Financiero.jsp"></jsp:include>
+            <%break;
             default:%>
-        <jsp:include page="../Menus/Principal.jsp"></jsp:include>
-        <%break;
-            }
-        %>
+            <jsp:include page="../Menus/Principal.jsp"></jsp:include>
+            <%break;
+                }
+            %>
+        </div>
         <style><%@include file="../resources/CSS/barraMenu.css"%></style>
         <% String mensaje = String.valueOf(request.getAttribute("mensaje"));%>
         <div class="container p-3 my-3 bg-primary text-white">

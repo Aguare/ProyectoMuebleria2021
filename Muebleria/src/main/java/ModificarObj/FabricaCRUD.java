@@ -22,10 +22,11 @@ public class FabricaCRUD {
         String actualizar = "UPDATE Pieza SET precio = ?, TPnombre_pieza = ? WHERE idPieza = ?;";
         String eliminar = "DELETE FROM Pieza WHERE idPieza = ?;";
         try {
-            PreparedStatement prepared = Conexion.Conexion().prepareStatement(query);
+            PreparedStatement prepared;
             switch (opcion) {
                 case INSERTAR:
                     query = insertar;
+                    prepared = Conexion.Conexion().prepareStatement(query);
                     prepared.setDouble(1, pieza.getPrecio());
                     prepared.setString(2, "0");
                     prepared.setString(3, pieza.getTipoPieza());
@@ -33,11 +34,18 @@ public class FabricaCRUD {
                     break;
                 case ACTUALIZAR:
                     query = actualizar;
+                    prepared = Conexion.Conexion().prepareStatement(query);
                     prepared.setDouble(1, pieza.getPrecio());
-                    prepared.setString(2, pieza.getTipoPieza());
+                    prepared.setString(2, pieza.getNuevoTipo());
+                    prepared.setInt(3, pieza.getIdPieza());
+                    if (!pieza.getNuevoTipo().equalsIgnoreCase(pieza.getNuevoTipo())) {
+                        aumentarDisminuirPieza(pieza.getTipoPieza(), 2);
+                        aumentarDisminuirPieza(pieza.getNuevoTipo(), 1);
+                    }
                     break;
                 case ELIMINAR:
                     query = eliminar;
+                    prepared = Conexion.Conexion().prepareStatement(query);
                     prepared.setInt(1, pieza.getIdPieza());
                     aumentarDisminuirPieza(pieza.getTipoPieza(), 2);
                     break;

@@ -1,6 +1,7 @@
 package FabricaServlets;
 
 import EntidadesFabrica.Pieza;
+import ModificarObj.FabricaCRUD;
 import SQL.ObtenerObj;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -66,9 +67,22 @@ public class CambioPiezas extends HttpServlet {
             switch (opcion) {
                 case 1:
                     request.setAttribute("pieza", pieza);
+                    request.removeAttribute("crear");
                     request.getRequestDispatcher("Consultas/Fabrica/EditarPieza.jsp").forward(request, response);
                     break;
                 case 2:
+                    FabricaCRUD modificar = new FabricaCRUD();
+                    if (modificar.modificarPieza(pieza, FabricaCRUD.ELIMINAR)) {
+                        request.setAttribute("mensaje", "¡ÉXITO!");
+                        request.setAttribute("mensaje2", "La pieza se eliminó correctamente");
+                        request.setAttribute("color", 1);
+                        request.getRequestDispatcher("Mensajes/MensajeGeneral.jsp").forward(request, response);
+                    } else {
+                        request.setAttribute("mensaje", "ERROR");
+                        request.setAttribute("mensaje2", "La pieza no se pudo eliminar");
+                        request.setAttribute("color", 2);
+                        request.getRequestDispatcher("Mensajes/MensajeGeneral.jsp").forward(request, response);
+                    }
                     break;
                 default:
                     request.setAttribute("mensaje", "LA OPCIÓN NO EXISTE");
@@ -77,8 +91,7 @@ public class CambioPiezas extends HttpServlet {
             }
         }
     }
-    
-    
+
     /**
      * Handles the HTTP <code>POST</code> method.
      *
@@ -90,7 +103,72 @@ public class CambioPiezas extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        int opcion = Integer.parseInt(request.getParameter("opcion"));
+        ObtenerObj obtener = new ObtenerObj();
+        String idPieza = "";
+        double precio = 0;
+        String tipoPieza = "";
+        switch (opcion) {
+            case 1:
+                try {
+                idPieza = request.getParameter("idPieza");
+                precio = Double.parseDouble(request.getParameter("precio"));
+                tipoPieza = request.getParameter("tipoPieza");
+            } catch (Exception e) {
+                request.setAttribute("mensaje", "LOS VALORES NO SON VÁLIDOS");
+                request.getRequestDispatcher("Mensajes/ErrorGeneral.jsp").forward(request, response);
+            }
+            if (precio < 0) {
+                request.setAttribute("mensaje", "El precio no puede ser menor a 0");
+                request.getRequestDispatcher("Mensajes/ErrorGeneral.jsp").forward(request, response);
+            } else {
+                int n = Integer.parseInt(idPieza);
+                Pieza pieza = obtener.obtenerPiezaSegunID(n);
+                if (pieza == null) {
+                    request.setAttribute("mensaje", "La pieza que intenta editar no existe");
+                    request.getRequestDispatcher("Mensajes/ErrorGeneral.jsp").forward(request, response);
+                } else {
+                    pieza.setPrecio(precio);
+                    pieza.setNuevoTipo(tipoPieza);
+                    FabricaCRUD editar = new FabricaCRUD();
+                    if (editar.modificarPieza(pieza, FabricaCRUD.ACTUALIZAR)) {
+                        request.setAttribute("mensaje", "¡ÉXITO!");
+                        request.setAttribute("mensaje2", "La pieza se actualizó correctamente");
+                        request.setAttribute("color", 1);
+                        request.getRequestDispatcher("Mensajes/MensajeGeneral.jsp").forward(request, response);
+                    } else {
+                        request.setAttribute("mensaje", "ERROR");
+                        request.setAttribute("mensaje2", "La pieza no se pudo actualizar");
+                        request.setAttribute("color", 2);
+                        request.getRequestDispatcher("Mensajes/MensajeGeneral.jsp").forward(request, response);
+                    }
+                }
+            }
+            break;
+            case 2:
+                FabricaCRUD modificar = new FabricaCRUD();
+                double precioC = Double.parseDouble(request.getParameter("precioC"));
+                String tipo = request.getParameter("tipoPiezaC");
+                Pieza pieza = new Pieza(0, precioC, false, tipo);
+                if (modificar.modificarPieza(pieza, FabricaCRUD.INSERTAR)) {
+                    request.setAttribute("mensaje", "¡ÉXITO!");
+                    request.setAttribute("mensaje2", "La pieza se eliminó correctamente");
+                    request.setAttribute("color", 1);
+                    request.getRequestDispatcher("Mensajes/MensajeGeneral.jsp").forward(request, response);
+                } else {
+                    request.setAttribute("mensaje", "ERROR");
+                    request.setAttribute("mensaje2", "La pieza no se pudo eliminar");
+                    request.setAttribute("color", 2);
+                    request.getRequestDispatcher("Mensajes/MensajeGeneral.jsp").forward(request, response);
+                }
+                break;
+            default:
+                request.setAttribute("mensaje", "LA OPCIÓN NO EXISTE");
+                request.getRequestDispatcher("Mensajes/ErrorGeneral.jsp").forward(request, response);
+                break;
+
+        }
+
     }
 
     /**

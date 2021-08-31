@@ -1,10 +1,12 @@
 package Servlets;
 
 import EntidadesFabrica.Pieza;
+import EntidadesFabrica.TipoPiezas;
 import EntidadesFabrica.Usuario;
 import SQL.ObtenerObj;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -84,7 +86,8 @@ public class Sesion extends HttpServlet {
             } else {
                 request.getSession().setAttribute("Usuario", user);
                 Pieza pieza = obtener.obtenerPiezaSegunID(1);
-                if (pieza == null) {
+                ArrayList<TipoPiezas> tipo = obtener.obtenerTipoPiezas();
+                if (pieza == null && tipo.isEmpty()) {
                     response.sendRedirect("Inicio/CargaArchivo.jsp");
                 } else {
                     switch (user.getIdDepartamento()) {

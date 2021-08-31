@@ -52,10 +52,4 @@ public class TipoPiezas {
         this.piezas = piezas;
     }
 
-    public void imprimir() {
-        System.out.println("Nombre: " + nombrePieza + " Cantidad: " + cantidad);
-        for (Pieza pieza : piezas) {
-            pieza.imprimir();
-        }
-    }
 }
