@@ -4,6 +4,7 @@
     Author     : marco
 --%>
 
+<%@page import="EntidadesFabrica.Usuario"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
@@ -14,7 +15,26 @@
     <body>
         <style><%@include file="../resources/CSS/RecursosCSS.jsp"%></style>
         <style><%@include file="../resources/JS/RecursosJS.jsp"%></style>
+        <% int tipo = 0;
+            if (request.getSession() != null) {
+                tipo = ((Usuario) request.getSession().getAttribute("Usuario")).getIdDepartamento();
+            }
+        %>
+        <%switch (tipo) {
+                case 1:%>
+        <jsp:include page="../Menus/Fabrica.jsp"></jsp:include>
+        <% break;
+            case 2:%>
+        <jsp:include page="../Menus/Venta.jsp"></jsp:include>
+        <%break;
+            case 3:%>
+        <jsp:include page="../Menus/Financiero.jsp"></jsp:include>
+        <%break;
+            default:%>
         <jsp:include page="../Menus/Principal.jsp"></jsp:include>
+        <%break;
+            }
+        %>
         <style><%@include file="../resources/CSS/barraMenu.css"%></style>
         <% String mensaje = String.valueOf(request.getAttribute("mensaje"));%>
         <div class="container p-3 my-3 bg-primary text-white">

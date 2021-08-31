@@ -35,21 +35,15 @@
     <div id="navbarCollapse" class="collapse navbar-collapse justify-content-start">
         <div class="navbar-nav">
             <a href="${pageContext.request.contextPath}/Menus/Venta.jsp" class="nav-item nav-link">Inicio</a>
-            <a href="#" class="nav-item nav-link">Ensamblar</a>			
-            <div class="nav-item dropdown">
-                <a href="#" data-toggle="dropdown" class="nav-item nav-link dropdown-toggle">Crear y Editar</a>
-                <div class="dropdown-menu">					
-                    <a href="#" class="dropdown-item">Tipo de Pieza</a>
-                    <a href="#" class="dropdown-item">Pieza</a>
-                    <a href="#" class="dropdown-item">Graphic Design</a>
-                    <a href="#" class="dropdown-item">Digital Marketing</a>
-                </div>
-            </div>
+            <a href="#" class="nav-item nav-link">Venta</a>			
             <div class="nav-item dropdown">
                 <a href="#" data-toggle="dropdown" class="nav-item nav-link dropdown-toggle">Consulta</a>
-                <div class="dropdown-menu">					
-                    <a href="#" class="dropdown-item">Piezas Existentes</a>
-                    <a href="#" class="dropdown-item">Muebles Creados</a>
+                <div class="dropdown-menu">
+                    <a href="#" class="dropdown-item">Factura</a>
+                    <a href="#" class="dropdown-item">Compras</a>
+                    <a href="#" class="dropdown-item">Devoluciones</a>
+                    <a href="#" class="dropdown-item">Ventas del Día</a>
+                    <a href="#" class="dropdown-item">Muebles Disponibles</a>
                 </div>
             </div>
             <a href="#" class="nav-item nav-link">Devoluciones</a>

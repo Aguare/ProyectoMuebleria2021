@@ -34,25 +34,32 @@
     </button>
     <div id="navbarCollapse" class="collapse navbar-collapse justify-content-start">
         <div class="navbar-nav">
-            <a href="${pageContext.request.contextPath}/Menus/Financiero.jsp" class="nav-item nav-link">Inicio</a>
-            <a href="#" class="nav-item nav-link">Ensamblar</a>			
+            <a href="${pageContext.request.contextPath}/Menus/Financiero.jsp" class="nav-item nav-link">Inicio</a>		
             <div class="nav-item dropdown">
-                <a href="#" data-toggle="dropdown" class="nav-item nav-link dropdown-toggle">Crear y Editar</a>
+                <a href="#" data-toggle="dropdown" class="nav-item nav-link dropdown-toggle">Usuarios</a>
                 <div class="dropdown-menu">					
-                    <a href="#" class="dropdown-item">Tipo de Pieza</a>
-                    <a href="#" class="dropdown-item">Pieza</a>
-                    <a href="#" class="dropdown-item">Graphic Design</a>
-                    <a href="#" class="dropdown-item">Digital Marketing</a>
+                    <a href="#" class="dropdown-item">Crear</a>
+                    <a href="#" class="dropdown-item">Ver Todos</a>
                 </div>
             </div>
             <div class="nav-item dropdown">
-                <a href="#" data-toggle="dropdown" class="nav-item nav-link dropdown-toggle">Consulta</a>
+                <a href="#" data-toggle="dropdown" class="nav-item nav-link dropdown-toggle">Muebles</a>
                 <div class="dropdown-menu">					
-                    <a href="#" class="dropdown-item">Piezas Existentes</a>
-                    <a href="#" class="dropdown-item">Muebles Creados</a>
+                    <a href="#" class="dropdown-item">Ver Tipo de Muebles</a>
+                    <a href="#" class="dropdown-item">Crear Tipo de Mueble</a>
                 </div>
             </div>
-            <a href="#" class="nav-item nav-link">Devoluciones</a>
+            <div class="nav-item dropdown">
+                <a href="#" data-toggle="dropdown" class="nav-item nav-link dropdown-toggle">Reportes</a>
+                <div class="dropdown-menu">					
+                    <a href="#" class="dropdown-item">Ventas</a>
+                    <a href="#" class="dropdown-item">Ganancias</a>
+                    <a href="#" class="dropdown-item">Devoluciones</a>
+                    <a href="#" class="dropdown-item">Usuario con más Ventas</a>
+                    <a href="#" class="dropdown-item">Mueble con más Ventas</a>
+                    <a href="#" class="dropdown-item">Mueble con menos Ventas</a>
+                </div>
+            </div>
         </div>
         <div class="navbar-nav action-buttons ml-auto">
             <a href="#" data-toggle="dropdown" class="navbar-nav mr-3"><%=usuario.getNombre_usuario()%></a>

@@ -50,7 +50,7 @@ public class LecturaArchivo {
             String formado = "";
             for (int j = 0; j < caracteres.length; j++) {
                 formado += caracteres[j];
-                if (ubicar(formado, line)) {
+                if (ubicar(formado, line, i + 1)) {
                     break;
                 } else if (j == caracteres.length - 2) {
                     no_reconocido.add((i + 1) + "|" + line + " <- Sintaxis no reconocida");
@@ -66,13 +66,13 @@ public class LecturaArchivo {
      * @param linea es toda la linea con los datos a insertar
      * @return retorna V/F si fue ubicado correctamente
      */
-    private boolean ubicar(String parteLinea, String linea) {
+    private boolean ubicar(String parteLinea, String linea, int noLinea) {
         int ubicado = coincidencia(parteLinea);
         if (ubicado != -1) {
             linea = quitarParte(linea, parteLinea);
-            String[] partes = separarDatos(linea);
+            String[] partes = separarDatos(linea, noLinea);
             if (partes == null) {
-                no_reconocido.add("-> " + linea + " No debe tener nada afuera de las comillas");
+                no_reconocido.add(noLinea + "| " + linea + " Error en la sintaxis de las comillas");
                 return true;
             } else {
                 switch (ubicado) {
@@ -122,26 +122,41 @@ public class LecturaArchivo {
      * @param linea linea de datos
      * @return retorna un arreglo con los datos
      */
-    private String[] separarDatos(String linea) {
+    private String[] separarDatos(String linea, int noLinea) {
         String[] partes;
         partes = linea.split(",");
         if (partes != null) {
             for (int i = 0; i < partes.length; i++) {
                 String pedazo = partes[i].trim();
                 char[] caracteres = pedazo.toCharArray();
-                if (caracteres[caracteres.length - 1] == '"' && caracteres[0] == '"') {
-                    String extraccion = "";
-                    extraccion = pedazo.substring(1, pedazo.length() - 1);
-                    partes[i] = extraccion.trim();
-                } else if (caracteres[0] == '"' && caracteres[caracteres.length - 1] != '"'
-                        || caracteres[0] != '"' && caracteres[caracteres.length - 1] == '"') {
-                    return null;
-                } else {
-                    partes[i] = pedazo.trim();
+                try {
+                    if (caracteres[caracteres.length - 1] == '"' && caracteres[0] == '"') {
+                        String extraccion = "";
+                        extraccion = pedazo.substring(1, pedazo.length() - 1);
+                        partes[i] = extraccion.trim();
+                    } else if (caracteres[0] == '"' && caracteres[caracteres.length - 1] != '"'
+                            || caracteres[0] != '"' && caracteres[caracteres.length - 1] == '"') {
+                        return null;
+                    } else {
+                        partes[i] = pedazo.trim();
+                    }
+                } catch (Exception e) {
                 }
             }
         }
-        return partes;
+        return agregarNoLinea(partes, noLinea);
+    }
+
+    private String[] agregarNoLinea(String[] partes, int noLinea) {
+        String[] nuev = new String[partes.length + 1];
+        for (int i = 0; i < nuev.length; i++) {
+            if (i == nuev.length - 1) {
+                nuev[i] = "" + noLinea;
+            } else {
+                nuev[i] = partes[i];
+            }
+        }
+        return nuev;
     }
 
     /**

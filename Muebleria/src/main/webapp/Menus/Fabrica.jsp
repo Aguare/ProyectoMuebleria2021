@@ -5,7 +5,6 @@
 --%>
 
 <%@page import="EntidadesFabrica.Usuario"%>
-<%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <head>
     <meta charset="utf-8">
@@ -28,8 +27,7 @@
             Usuario usuario = (Usuario) request.getSession().getAttribute("Usuario");
     %>
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
-
-    <a href="${pageContext.request.contextPath}/Menus/Fabrica.jsp" class="navbar-brand"><b>F√ÅBRICA</b></a>  		
+    <a href="${pageContext.request.contextPath}/Menus/Fabrica.jsp" class="navbar-brand"><b>F¡BRICA</b></a>  		
     <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navbarCollapse">
         <span class="navbar-toggler-icon"></span>
     </button>
@@ -38,19 +36,18 @@
             <a href="${pageContext.request.contextPath}/Menus/Fabrica.jsp" class="nav-item nav-link">Inicio</a>
             <a href="#" class="nav-item nav-link">Ensamblar</a>			
             <div class="nav-item dropdown">
-                <a href="#" data-toggle="dropdown" class="nav-item nav-link dropdown-toggle">Crear y Editar</a>
+                <a href="#" data-toggle="dropdown" class="nav-item nav-link dropdown-toggle">Piezas</a>
                 <div class="dropdown-menu">					
-                    <a href="#" class="dropdown-item">Tipo de Pieza</a>
-                    <a href="#" class="dropdown-item">Pieza</a>
-                    <a href="#" class="dropdown-item">Graphic Design</a>
-                    <a href="#" class="dropdown-item">Digital Marketing</a>
+                    <a href="#" class="dropdown-item">Crear</a>
+                    <a href="${pageContext.request.contextPath}/Consultas/Fabrica/Piezas.jsp" class="dropdown-item">Ver Todas</a>
+                    <a href="#" class="dropdown-item">Tipo de Piezas</a>
                 </div>
             </div>
             <div class="nav-item dropdown">
-                <a href="#" data-toggle="dropdown" class="nav-item nav-link dropdown-toggle">Consulta</a>
+                <a href="#" data-toggle="dropdown" class="nav-item nav-link dropdown-toggle">Ensambles</a>
                 <div class="dropdown-menu">					
-                    <a href="#" class="dropdown-item">Piezas Existentes</a>
-                    <a href="#" class="dropdown-item">Muebles Creados</a>
+                    <a href="#" class="dropdown-item">Muebles Ensamblados</a>
+                    <a href="#" class="dropdown-item">Registrar en Ventas</a>
                 </div>
             </div>
             <a href="#" class="nav-item nav-link">Devoluciones</a>
@@ -59,7 +56,7 @@
             <a href="#" data-toggle="dropdown" class="navbar-nav mr-3"><%=usuario.getNombre_usuario()%></a>
             <div class="dropdown-menu login-form">
                 <form action="${pageContext.request.contextPath}/Sesion" method="GET">
-                    <input type="submit" class="btn btn-primary btn-block" value="Cerrar Sesi√≥n">
+                    <input type="submit" class="btn btn-primary btn-block" value="Cerrar SesiÛn">
                 </form>					
             </div>			
         </div>

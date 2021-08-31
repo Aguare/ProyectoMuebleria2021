@@ -54,6 +54,21 @@ public class ObtenerObj {
         return piezas;
     }
 
+    public ArrayList<Pieza> obtenerPiezas() {
+        ArrayList<Pieza> piezas = new ArrayList<>();
+        String query = "SELECT * FROM Pieza WHERE usada = 0;";
+        try {
+            PreparedStatement prepared = Conexion.Conexion().prepareStatement(query);
+            ResultSet resultado = prepared.executeQuery();
+            while (resultado.next()) {
+                piezas.add(new Pieza(resultado.getInt("idPieza"), resultado.getDouble("precio"),
+                        resultado.getBoolean("usada"), resultado.getString("TPnombre_pieza")));
+            }
+        } catch (SQLException e) {
+        }
+        return piezas;
+    }
+
     public Pieza obtenerPiezaSegunID(int ID) {
         Pieza pieza = null;
         String query = "SELECT * FROM Pieza WHERE idPieza = ?;";
