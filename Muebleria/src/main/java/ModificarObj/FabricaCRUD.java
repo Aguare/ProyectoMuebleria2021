@@ -1,6 +1,7 @@
 package ModificarObj;
 
 import EntidadesFabrica.Pieza;
+import EntidadesVenta.Mueble;
 import SQL.Conexion;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -38,7 +39,7 @@ public class FabricaCRUD {
                     prepared.setDouble(1, pieza.getPrecio());
                     prepared.setString(2, pieza.getNuevoTipo());
                     prepared.setInt(3, pieza.getIdPieza());
-                    if (!pieza.getNuevoTipo().equalsIgnoreCase(pieza.getNuevoTipo())) {
+                    if (!pieza.getTipoPieza().equalsIgnoreCase(pieza.getNuevoTipo())) {
                         aumentarDisminuirPieza(pieza.getTipoPieza(), 2);
                         aumentarDisminuirPieza(pieza.getNuevoTipo(), 1);
                     }
@@ -65,7 +66,7 @@ public class FabricaCRUD {
      * @param nombre_pieza Tipo de Pieza
      * @param opcion 1 si se desea aumentar 2 para disminuir
      */
-    private void aumentarDisminuirPieza(String nombre_pieza, int opcion) {
+    public void aumentarDisminuirPieza(String nombre_pieza, int opcion) {
         int cantidadExistente = obtenerCantidadExistente(nombre_pieza);
         if (opcion == 1) {
             cantidadExistente++;
@@ -96,5 +97,59 @@ public class FabricaCRUD {
         } catch (Exception e) {
             return -1;
         }
+    }
+
+    /**
+     * Obtiene la última pieza insertada
+     *
+     * @return
+     */
+    public Pieza obtenerUltimaPieza() {
+        String query = "SELECT * FROM Pieza WHERE usada = 0 ORDER BY idPieza DESC LIMIT 1;";
+        Pieza pieza = null;
+        try {
+            PreparedStatement prepared = Conexion.Conexion().prepareStatement(query);
+            ResultSet resultado = prepared.executeQuery();
+            while (resultado.next()) {
+                pieza = new Pieza(resultado.getInt("idPieza"), resultado.getDouble("precio"),
+                        resultado.getBoolean("usada"), resultado.getString("TPnombre_pieza"));
+            }
+        } catch (SQLException e) {
+        }
+        return pieza;
+    }
+
+    /**
+     * Cambia el estado de una pieza que no está usada a usada
+     *
+     * @param pieza
+     */
+    public void actualizarPiezaUsada(Pieza pieza) {
+        String query = "UPDATE Pieza SET usada = 1 WHERE idPieza = ?";
+        try {
+            PreparedStatement prepared = Conexion.Conexion().prepareStatement(query);
+            prepared.setInt(1, pieza.getIdPieza());
+            prepared.executeUpdate();
+            aumentarDisminuirPieza(pieza.getTipoPieza(), 2);
+        } catch (Exception e) {
+        }
+    }
+
+    public boolean estaEnVentas(int idEnsamble) {
+        String query = "SELECT * FROM Mueble WHERE E_idEnsamble = ?;";
+        int resul = 0;
+        try {
+            PreparedStatement prepared = Conexion.Conexion().prepareStatement(query);
+            prepared.setInt(1, idEnsamble);
+            ResultSet resultado = prepared.executeQuery();
+            while (resultado.next()) {
+                resul = resultado.getInt("E_idEnsamble");
+            }
+            if (resul == idEnsamble) {
+                return true;
+            }
+        } catch (SQLException e) {
+        }
+        return false;
     }
 }

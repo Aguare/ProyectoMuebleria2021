@@ -1,6 +1,6 @@
 package EntidadesFabrica;
 
-import java.sql.Date;
+import java.time.LocalDate;
 import java.util.ArrayList;
 
 /**
@@ -10,12 +10,12 @@ import java.util.ArrayList;
 public class Ensamble {
 
     private int idEnsamble;
-    private Date fecha;
+    private LocalDate fecha;
     private Usuario usuario;
     private String tipoMueble;
     private ArrayList<Pieza> piezas;
 
-    public Ensamble(int idEnsamble, Date fecha, Usuario usuario, String tipoMueble, ArrayList<Pieza> piezas) {
+    public Ensamble(int idEnsamble, LocalDate fecha, Usuario usuario, String tipoMueble, ArrayList<Pieza> piezas) {
         this.idEnsamble = idEnsamble;
         this.fecha = fecha;
         this.usuario = usuario;
@@ -31,11 +31,11 @@ public class Ensamble {
         this.idEnsamble = idEnsamble;
     }
 
-    public Date getFecha() {
+    public LocalDate getFecha() {
         return fecha;
     }
 
-    public void setFecha(Date fecha) {
+    public void setFecha(LocalDate fecha) {
         this.fecha = fecha;
     }
 

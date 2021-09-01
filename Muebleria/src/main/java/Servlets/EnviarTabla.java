@@ -1,9 +1,5 @@
 package Servlets;
 
-import EntidadesFabrica.Pieza;
-import EntidadesFabrica.TipoPiezas;
-import EntidadesFabrica.Usuario;
-import SQL.ObtenerObj;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
@@ -17,8 +13,8 @@ import javax.servlet.http.HttpServletResponse;
  *
  * @author marco
  */
-@WebServlet(name = "Sesion", urlPatterns = {"/Sesion"})
-public class Sesion extends HttpServlet {
+@WebServlet(name = "EnviarTabla", urlPatterns = {"/EnviarTabla"})
+public class EnviarTabla extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -37,10 +33,10 @@ public class Sesion extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet Sesion</title>");
+            out.println("<title>Servlet EnviarTabla</title>");
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet Sesion at " + request.getContextPath() + "</h1>");
+            out.println("<h1>Servlet EnviarTabla at " + request.getContextPath() + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
@@ -58,9 +54,7 @@ public class Sesion extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        request.getSession().removeAttribute("Usuario");
-        request.getSession().invalidate();
-        response.sendRedirect(request.getContextPath());
+        processRequest(request, response);
     }
 
     /**
@@ -74,40 +68,15 @@ public class Sesion extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        request.setCharacterEncoding("UTF-8");
-        String usuario = request.getParameter("usuario");
-        String password = request.getParameter("password");
-        ObtenerObj obtener = new ObtenerObj();
-        Usuario user = obtener.obtenerUsuarioSegunNombre(usuario);
-        if (user != null && obtener.verificarPassword(usuario, password)) {
-            if (!user.isAcceso()) {
-                request.setAttribute("mensaje", "USTED YA NO TIENE ACCESO AL SISTEMA");
-                request.getRequestDispatcher("Mensajes/ErrorGeneral.jsp").forward(request, response);
-            } else {
-                request.getSession().setAttribute("Usuario", user);
-                Pieza pieza = obtener.obtenerPiezaSegunID(1);
-                ArrayList<TipoPiezas> tipo = obtener.obtenerTipoPiezas(1);
-                if (pieza == null && tipo.isEmpty()) {
-                    response.sendRedirect("Inicio/CargaArchivo.jsp");
-                } else {
-                    switch (user.getIdDepartamento()) {
-                        case 1:
-                            request.getRequestDispatcher("Menus/Fabrica.jsp").forward(request, response);
-                            break;
-                        case 2:
-                            request.getRequestDispatcher("Menus/Venta.jsp").forward(request, response);
-                            break;
-                        case 3:
-                            request.getRequestDispatcher("Menus/Financiero.jsp").forward(request, response);
-                            break;
-                        default:
-                            break;
-                    }
-                }
-            }
-        } else {
-            request.getRequestDispatcher("Mensajes/Credenciales.jsp").forward(request, response);
-        }
+        String titulo = (String) request.getAttribute("titulo");
+        String subtitulo = (String) request.getAttribute("subtitulo");
+        ArrayList<String> titulos = (ArrayList<String>) request.getAttribute("titulos");
+        ArrayList<String[]> contenido = (ArrayList<String[]>) request.getAttribute("titulos");
+        request.setAttribute("titulo", titulo);
+        request.setAttribute("subtitulo", subtitulo);
+        request.setAttribute("titulos", titulos);
+        request.setAttribute("contenido", contenido);
+        request.getRequestDispatcher("Consultas/Tabla.jsp").forward(request, response);
     }
 
     /**

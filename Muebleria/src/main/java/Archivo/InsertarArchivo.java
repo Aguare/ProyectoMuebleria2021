@@ -136,8 +136,22 @@ public class InsertarArchivo {
         }
     }
 
-    public void insertarEnsambleMueble(String mueble, String usuario, String fecha, String noLinea) {
+    //INICIA LAS SECUENCIAS SQL PARA ENSAMBLAR UN MUEBLE
+    /**
+     * Este método inserta un ensamble y pasa a ventas si el noLinea viene vacío
+     *
+     * @param mueble Nombre Tipo de Mueble
+     * @param usuario nombre usuario
+     * @param fecha fecha en tipo DATE
+     * @param precioCosto precio costo del ensamble
+     * @param noLinea Número de la linea si viene del archivo de entrada, si no
+     * viene de archivo enviar ""
+     */
+    public boolean insertarEnsambleMueble(String mueble, String usuario, String fecha, String precioCosto, String noLinea) {
         String query = "INSERT INTO Ensamble (fecha, nombre_usuario, TipoMueble) VALUES (STR_TO_DATE(REPLACE(?,\"/\",\".\") ,GET_FORMAT(date,'EUR')),?,?);";
+        if (noLinea.equalsIgnoreCase("")) {
+            query = "INSERT INTO Ensamble (fecha, nombre_usuario, TipoMueble) VALUES (?,?,?);";
+        }
         try {
             PreparedStatement prepared = Conexion.Conexion().prepareStatement(query, PreparedStatement.RETURN_GENERATED_KEYS);
             prepared.setString(1, fecha);
@@ -149,17 +163,21 @@ public class InsertarArchivo {
             while (resultado.next()) {
                 num = resultado.getInt(1);
             }
-            insertarMueble("" + num, mueble);
+            if (!noLinea.equalsIgnoreCase("")) {
+                insertarMueble("" + num, mueble, precioCosto);
+            }
+            return true;
         } catch (SQLException ex) {
             errorAlInsertar(new String[]{"ENSAMBLAR_MUEBLE ->", fecha, usuario, mueble}, ex.getErrorCode(), noLinea);
         }
+        return false;
     }
 
-    private void insertarMueble(String idEnsamble, String tipoMueble) {
+    private void insertarMueble(String idEnsamble, String tipoMueble, String precioCosto) {
         String query = "INSERT INTO Mueble (precio_costo, E_idEnsamble, TMnombre_mueble) VALUES (?,?,?);";
         try {
             PreparedStatement prepared = Conexion.Conexion().prepareStatement(query);
-            prepared.setString(1, "" + obtenerPrecioCosto(tipoMueble));
+            prepared.setString(1, precioCosto);
             prepared.setString(2, idEnsamble);
             prepared.setString(3, tipoMueble);
             prepared.executeUpdate();
@@ -196,28 +214,21 @@ public class InsertarArchivo {
         }
     }
 
-    private double obtenerPrecioCosto(String tipoMueble) {
-        String query = "SELECT precio_venta FROM TipoMueble WHERE nombre_mueble = ?";
-        try {
-            PreparedStatement prepared = Conexion.Conexion().prepareStatement(query);
-            prepared.setString(1, tipoMueble);
-            ResultSet resultado = prepared.executeQuery();
-            double num = 20;
-            while (resultado.next()) {
-                num = resultado.getDouble("precio_venta");
-            }
-            return num - 20;
-        } catch (Exception e) {
-            return 0;
-        }
-    }
-
     public void errorAlInsertar(String[] datos, int error, String noLinea) {
         String linea = noLinea + "| ";
         for (String dato : datos) {
             linea += dato + " ";
         }
         linea += obtenerTipoError(error);
+        noInsertados.add(linea);
+    }
+
+    public void errorEnsamble(String[] datos, String error, String noLinea) {
+        String linea = noLinea + "| ";
+        for (String dato : datos) {
+            linea += dato + " ";
+        }
+        linea += error;
         noInsertados.add(linea);
     }
 

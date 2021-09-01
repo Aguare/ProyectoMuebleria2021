@@ -151,13 +151,14 @@ public class CambioPiezas extends HttpServlet {
                 String tipo = request.getParameter("tipoPiezaC");
                 Pieza pieza = new Pieza(0, precioC, false, tipo);
                 if (modificar.modificarPieza(pieza, FabricaCRUD.INSERTAR)) {
+                    pieza = modificar.obtenerUltimaPieza();
                     request.setAttribute("mensaje", "¡ÉXITO!");
-                    request.setAttribute("mensaje2", "La pieza se eliminó correctamente");
+                    request.setAttribute("mensaje2", "La pieza se creó correctamente ID = " + pieza.getIdPieza());
                     request.setAttribute("color", 1);
                     request.getRequestDispatcher("Mensajes/MensajeGeneral.jsp").forward(request, response);
                 } else {
                     request.setAttribute("mensaje", "ERROR");
-                    request.setAttribute("mensaje2", "La pieza no se pudo eliminar");
+                    request.setAttribute("mensaje2", "La pieza no se pudo crear");
                     request.setAttribute("color", 2);
                     request.getRequestDispatcher("Mensajes/MensajeGeneral.jsp").forward(request, response);
                 }

@@ -7,9 +7,11 @@ import EntidadesFabrica.TipoMueble;
 import EntidadesFabrica.TipoPiezas;
 import EntidadesFabrica.Usuario;
 import EntidadesVenta.Mueble;
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDate;
 import java.util.ArrayList;
 
 /**
@@ -40,7 +42,7 @@ public class ObtenerObj {
 
     public ArrayList<Pieza> obtenerPiezasSegunTipo(String tipoPieza) {
         ArrayList<Pieza> piezas = new ArrayList<>();
-        String query = "SELECT * FROM Pieza WHERE TPnombre_pieza = ?;";
+        String query = "SELECT * FROM Pieza WHERE usada = 0 AND Tpnombre_pieza = ?;";
         try {
             PreparedStatement prepared = Conexion.Conexion().prepareStatement(query);
             prepared.setString(1, tipoPieza);
@@ -54,9 +56,22 @@ public class ObtenerObj {
         return piezas;
     }
 
-    public ArrayList<Pieza> obtenerPiezas() {
+    /**
+     * Se obtienen las piezas en la base de datos
+     *
+     * @param orden Se ingresa 2 si se quiere que se devuelva en orden DESC
+     * @return
+     */
+    public ArrayList<Pieza> obtenerPiezas(int orden) {
         ArrayList<Pieza> piezas = new ArrayList<>();
         String query = "SELECT * FROM Pieza WHERE usada = 0;";
+        switch (orden) {
+            case 2:
+                query = "SELECT * FROM Pieza WHERE usada = 0 ORDER BY idPieza DESC;";
+                break;
+            default:
+                break;
+        }
         try {
             PreparedStatement prepared = Conexion.Conexion().prepareStatement(query);
             ResultSet resultado = prepared.executeQuery();
@@ -85,9 +100,26 @@ public class ObtenerObj {
         return pieza;
     }
 
-    public ArrayList<TipoPiezas> obtenerTipoPiezas() {
+    /**
+     * Obtiene los tipo de piezas
+     *
+     * @param opcion 1 Ascendente 2 Descendente
+     * @return
+     */
+    public ArrayList<TipoPiezas> obtenerTipoPiezas(int opcion) {
         ArrayList<TipoPiezas> tipoPiezas = new ArrayList<>();
-        String query = "SELECT * FROM TipoPieza;";
+        String query;
+        switch (opcion) {
+            case 1:
+                query = "SELECT * FROM TipoPieza ORDER BY cantidad ASC;";
+                break;
+            case 2:
+                query = "SELECT * FROM TipoPieza ORDER BY cantidad DESC;";
+                break;
+            default:
+                query = "SELECT * FROM TipoPieza;";
+                break;
+        }
         try {
             PreparedStatement prepared = Conexion.Conexion().prepareStatement(query);
             ResultSet resultado = prepared.executeQuery();
@@ -155,7 +187,9 @@ public class ObtenerObj {
             prepared.setString(1, id);
             ResultSet resultado = prepared.executeQuery();
             while (resultado.next()) {
-                ensamble = new Ensamble(resultado.getInt("idEnsamble"), resultado.getDate("fecha"),
+                Date fechaBD = resultado.getDate("fecha");
+                LocalDate fecha = fechaBD.toLocalDate();
+                ensamble = new Ensamble(resultado.getInt("idEnsamble"), fecha,
                         obtenerUsuarioSegunNombre(resultado.getString("nombre_usuario")),
                         resultado.getString("TipoMueble"), obtenerPiezasDeEnsamble(id));
             }
@@ -164,12 +198,46 @@ public class ObtenerObj {
         return ensamble;
     }
 
+    public ArrayList<Ensamble> obtenerEnsambles() {
+        ArrayList<Ensamble> ensambles = new ArrayList<>();
+        String query = "SELECT * FROM Ensamble;";
+        try {
+            PreparedStatement prepared = Conexion.Conexion().prepareStatement(query);
+            ResultSet resultado = prepared.executeQuery();
+            while (resultado.next()) {
+                Date fechaBD = resultado.getDate("fecha");
+                LocalDate fecha = fechaBD.toLocalDate();
+                ensambles.add(new Ensamble(resultado.getInt("idEnsamble"), fecha,
+                        obtenerUsuarioSegunNombre(resultado.getString("nombre_usuario")),
+                        resultado.getString("TipoMueble"), obtenerPiezasDeEnsamble("" + resultado.getInt("idEnsamble"))));
+            }
+        } catch (SQLException e) {
+        }
+        return ensambles;
+    }
+
     public ArrayList<Mueble> obtenerMuebles(String tipoMueble) {
         ArrayList<Mueble> muebles = new ArrayList<>();
         String query = "SELECT * FROM Mueble WHERE TMnombre_mueble = ?;";
         try {
             PreparedStatement prepared = Conexion.Conexion().prepareStatement(query);
             prepared.setString(1, tipoMueble);
+            ResultSet resultado = prepared.executeQuery();
+            while (resultado.next()) {
+                muebles.add(new Mueble(resultado.getInt("idMueble"), resultado.getDouble("precio_costo"),
+                        obtenerEnsambleSegunID(resultado.getString("E_idEnsamble")), resultado.getString("TMnombre_mueble"),
+                        consultarDevolucion(resultado.getInt("idMueble"))));
+            }
+        } catch (SQLException e) {
+        }
+        return muebles;
+    }
+
+    public ArrayList<Mueble> obtenerMueblesTodos() {
+        ArrayList<Mueble> muebles = new ArrayList<>();
+        String query = "SELECT * FROM Mueble;";
+        try {
+            PreparedStatement prepared = Conexion.Conexion().prepareStatement(query);
             ResultSet resultado = prepared.executeQuery();
             while (resultado.next()) {
                 muebles.add(new Mueble(resultado.getInt("idMueble"), resultado.getDouble("precio_costo"),
@@ -215,6 +283,12 @@ public class ObtenerObj {
         return piezas;
     }
 
+    /**
+     * Obtiene todos los tipos de muebles como objeto, con su receta cantida,
+     * etc.
+     *
+     * @return Retorna un arreglo de TipoMueble
+     */
     public ArrayList<TipoMueble> obtenerTipoMuebles() {
         ArrayList<TipoMueble> tipoMuebles = new ArrayList<>();
         String query = "SELECT * FROM TipoMueble;";
@@ -230,5 +304,28 @@ public class ObtenerObj {
         } catch (SQLException e) {
         }
         return tipoMuebles;
+    }
+
+    /**
+     * Obtiene un tipo de mueble según su nombre
+     *
+     * @return Devulve un TipoMueble
+     */
+    public TipoMueble obtenerTipoMuebleSegunNombre(String tipoMueble) {
+        TipoMueble tipo = null;
+        String query = "SELECT * FROM TipoMueble WHERE nombre_mueble = ?;";
+        try {
+            PreparedStatement prepared = Conexion.Conexion().prepareStatement(query);
+            prepared.setString(1, tipoMueble);
+            ResultSet resultado = prepared.executeQuery();
+            while (resultado.next()) {
+                tipo = new TipoMueble(resultado.getString("nombre_mueble"),
+                        resultado.getDouble("precio_venta"), resultado.getInt("cantidad"),
+                        resultado.getString("detalles"), obtenerMuebles(resultado.getString("nombre_mueble")),
+                        obtenerPiezasTipoMueble(resultado.getString("nombre_mueble")));
+            }
+        } catch (SQLException e) {
+        }
+        return tipo;
     }
 }

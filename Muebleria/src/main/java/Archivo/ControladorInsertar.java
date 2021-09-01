@@ -1,6 +1,8 @@
 package Archivo;
 
+import EntidadesFabrica.EnsamblarLogica;
 import java.io.BufferedReader;
+import java.sql.Date;
 import java.util.ArrayList;
 
 /**
@@ -113,10 +115,14 @@ public class ControladorInsertar {
     }
 
     private void recepcionEnsambleMueble(ArrayList<String[]> ensamblar_mueble) {
+        EnsamblarLogica logica = new EnsamblarLogica();
         for (String[] mueble : ensamblar_mueble) {
             if (!verificarDatosVacios(mueble)) {
                 try {
-                    insertar.insertarEnsambleMueble(mueble[0], mueble[1], mueble[2], mueble[mueble.length - 1]);
+                    boolean sePudo = logica.ensamblarMueble(mueble[0], mueble[1], mueble[2], mueble[mueble.length - 1]);
+                    if (!sePudo) {
+                        insertar.errorEnsamble(mueble, logica.getError(), mueble[mueble.length - 1]);
+                    }
                 } catch (Exception e) {
                     insertar.errorAlInsertar(mueble, Error.DATOS_INCOMPLETOS, mueble[mueble.length - 1]);
                 }

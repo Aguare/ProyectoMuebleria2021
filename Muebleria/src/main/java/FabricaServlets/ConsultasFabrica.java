@@ -1,12 +1,8 @@
-package Servlets;
+package FabricaServlets;
 
-import EntidadesFabrica.Pieza;
-import EntidadesFabrica.TipoPiezas;
-import EntidadesFabrica.Usuario;
 import SQL.ObtenerObj;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.ArrayList;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -17,8 +13,8 @@ import javax.servlet.http.HttpServletResponse;
  *
  * @author marco
  */
-@WebServlet(name = "Sesion", urlPatterns = {"/Sesion"})
-public class Sesion extends HttpServlet {
+@WebServlet(name = "ConsultasFabrica", urlPatterns = {"/ConsultasFabrica"})
+public class ConsultasFabrica extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -37,10 +33,10 @@ public class Sesion extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet Sesion</title>");
+            out.println("<title>Servlet ConsultasFabrica</title>");
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet Sesion at " + request.getContextPath() + "</h1>");
+            out.println("<h1>Servlet ConsultasFabrica at " + request.getContextPath() + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
@@ -58,9 +54,29 @@ public class Sesion extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        request.getSession().removeAttribute("Usuario");
-        request.getSession().invalidate();
-        response.sendRedirect(request.getContextPath());
+        try {
+            ObtenerObj obtener = new ObtenerObj();
+            int opcion = Integer.parseInt(request.getParameter("orden"));
+            switch (opcion) {
+                case 1:
+                    request.setAttribute("piezas", obtener.obtenerPiezas(1));
+                    request.setAttribute("orden", 1);
+                    request.getRequestDispatcher("Consultas/Fabrica/Piezas.jsp").forward(request, response);
+                    break;
+                case 2:
+                    request.setAttribute("piezas", obtener.obtenerPiezas(1));
+                    request.setAttribute("orden", 2);
+                    request.getRequestDispatcher("Consultas/Fabrica/Piezas.jsp").forward(request, response);
+                    break;
+                default:
+                    request.setAttribute("mensaje", "LA OPCIÓN NO EXISTE");
+                    request.getRequestDispatcher("Mensajes/ErrorGeneral.jsp").forward(request, response);
+                    break;
+            }
+        } catch (Exception e) {
+            request.setAttribute("mensaje", "LA OPCIÓN NO EXISTE");
+            request.getRequestDispatcher("Mensajes/ErrorGeneral.jsp").forward(request, response);
+        }
     }
 
     /**
@@ -74,40 +90,7 @@ public class Sesion extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        request.setCharacterEncoding("UTF-8");
-        String usuario = request.getParameter("usuario");
-        String password = request.getParameter("password");
-        ObtenerObj obtener = new ObtenerObj();
-        Usuario user = obtener.obtenerUsuarioSegunNombre(usuario);
-        if (user != null && obtener.verificarPassword(usuario, password)) {
-            if (!user.isAcceso()) {
-                request.setAttribute("mensaje", "USTED YA NO TIENE ACCESO AL SISTEMA");
-                request.getRequestDispatcher("Mensajes/ErrorGeneral.jsp").forward(request, response);
-            } else {
-                request.getSession().setAttribute("Usuario", user);
-                Pieza pieza = obtener.obtenerPiezaSegunID(1);
-                ArrayList<TipoPiezas> tipo = obtener.obtenerTipoPiezas(1);
-                if (pieza == null && tipo.isEmpty()) {
-                    response.sendRedirect("Inicio/CargaArchivo.jsp");
-                } else {
-                    switch (user.getIdDepartamento()) {
-                        case 1:
-                            request.getRequestDispatcher("Menus/Fabrica.jsp").forward(request, response);
-                            break;
-                        case 2:
-                            request.getRequestDispatcher("Menus/Venta.jsp").forward(request, response);
-                            break;
-                        case 3:
-                            request.getRequestDispatcher("Menus/Financiero.jsp").forward(request, response);
-                            break;
-                        default:
-                            break;
-                    }
-                }
-            }
-        } else {
-            request.getRequestDispatcher("Mensajes/Credenciales.jsp").forward(request, response);
-        }
+        processRequest(request, response);
     }
 
     /**

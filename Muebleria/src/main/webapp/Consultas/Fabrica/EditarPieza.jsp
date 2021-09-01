@@ -4,6 +4,7 @@
     Author     : marco
 --%>
 
+<%@page import="ModificarObj.FabricaCRUD"%>
 <%@page import="EntidadesFabrica.TipoPiezas"%>
 <%@page import="java.util.ArrayList"%>
 <%@page import="SQL.ObtenerObj"%>
@@ -14,14 +15,14 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Editar Pieza</title>
-    </head>
-    <body>
         <jsp:include page="../../Menus/Fabrica.jsp"></jsp:include>
         <style><%@include file="../../resources/CSS/RecursosCSS.jsp"%></style>
         <style><%@include file="../../resources/JS/RecursosJS.jsp"%></style>
+    </head>
+    <body>
         <%
             ObtenerObj obtener = new ObtenerObj();
-            ArrayList<TipoPiezas> tipoPiezas = obtener.obtenerTipoPiezas();
+            ArrayList<TipoPiezas> tipoPiezas = obtener.obtenerTipoPiezas(1);
         %>
         <br>
         <%
@@ -39,7 +40,7 @@
                     </div>
                     <div class="form-group col-md-6">
                         <label>Precio</label>
-                        <input type="number" min="0" class="form-control" name="precio" value="<%=pieza.getPrecio()%>">
+                        <input type="number" min="0" step="0.01" class="form-control" name="precio" value="<%=pieza.getPrecio()%>">
                     </div>
                 </div>
                 <div class="form-group">
@@ -63,16 +64,17 @@
         </div>
         <%} else {%>
         <div class="container border" style="width: 600px">
+            <br>
             <form action="${pageContext.request.contextPath}/CambioPiezas" method="POST">
                 <input type="hidden" name="opcion" value="2">
                 <div class="form-row">
                     <div class="form-group col-md-6">
                         <label>ID PIEZA</label>
-                        <input type="number" class="form-control" name="idPieza" id="idPieza" placeholder="Se asignará posteriormente" value="" readonly>
+                        <input type="number" class="form-control" name="idPieza" id="idPieza"  placeholder="Se asignará después" readonly>
                     </div>
                     <div class="form-group col-md-6">
                         <label>Precio</label>
-                        <input type="number" min="0" class="form-control" name="precioC" id="precioC" value="0">
+                        <input type="number" min="0" step="0.01" class="form-control" name="precioC" id="precioC" value="0">
                     </div>
                 </div>
                 <div class="form-group">
@@ -86,7 +88,7 @@
                     </select>
                 </div>
                 <div class="text-center">
-                    <button type="submit" class="btn btn-primary">Actualizar</button>
+                    <button type="submit" class="btn btn-primary">Crear Pieza</button>
                 </div>
             </form>
             <br>

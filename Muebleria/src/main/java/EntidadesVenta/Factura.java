@@ -1,6 +1,6 @@
 package EntidadesVenta;
 
-import java.sql.Date;
+import java.time.LocalDate;
 
 /**
  *
@@ -9,11 +9,11 @@ import java.sql.Date;
 public class Factura {
 
     private int noFactura;
-    private Date fecha;
+    private LocalDate fecha;
     private double total;
     private Cliente cliente;
 
-    public Factura(int noFactura, Date fecha, double total, Cliente cliente) {
+    public Factura(int noFactura, LocalDate fecha, double total, Cliente cliente) {
         this.noFactura = noFactura;
         this.fecha = fecha;
         this.total = total;
@@ -28,11 +28,11 @@ public class Factura {
         this.noFactura = noFactura;
     }
 
-    public Date getFecha() {
+    public LocalDate getFecha() {
         return fecha;
     }
 
-    public void setFecha(Date fecha) {
+    public void setFecha(LocalDate fecha) {
         this.fecha = fecha;
     }
 
