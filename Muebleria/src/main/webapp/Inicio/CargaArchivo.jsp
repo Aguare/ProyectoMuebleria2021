@@ -21,7 +21,7 @@
             response.setDateHeader("Expires", -1);
             if (request.getSession().getAttribute("Usuario") == null) {
                 request.getRequestDispatcher("../index.jsp").forward(request, response);
-            } else {
+            } else {    
         %>
         <% if (request.getAttribute("mostrar") == null) {%>
         <style><%@include file="../resources/CSS/barraMenu.css"%></style>

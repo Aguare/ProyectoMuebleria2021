@@ -163,9 +163,7 @@ public class InsertarArchivo {
             while (resultado.next()) {
                 num = resultado.getInt(1);
             }
-            if (!noLinea.equalsIgnoreCase("")) {
-                insertarMueble("" + num, mueble, precioCosto);
-            }
+            insertarMueble("" + num, mueble, precioCosto);
             return true;
         } catch (SQLException ex) {
             errorAlInsertar(new String[]{"ENSAMBLAR_MUEBLE ->", fecha, usuario, mueble}, ex.getErrorCode(), noLinea);
@@ -250,8 +248,10 @@ public class InsertarArchivo {
                 return "<- No se pudo cargar a la BD";
             case Error.DATOS_VACIOS:
                 return "<- Los datos no pueden estar vacios";
+            case Error.SOBREPASA:
+                return "<- El tamaño de los datos sobrepasa el límite";
             default:
-                return "<- No se reconoce la sintaxis";
+                return "<- No se pudo insertar a la BD";
         }
     }
 

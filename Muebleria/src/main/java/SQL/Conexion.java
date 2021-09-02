@@ -12,7 +12,7 @@ public class Conexion {
 
     private static final String URL = "jdbc:mysql://localhost:3306/Muebleria";
     private String user = "root";
-    private String password = "74ef6a14";
+    private String password = "74ef6A14!";
     private static Connection conexion = null;
 
     public static Connection Conexion() {

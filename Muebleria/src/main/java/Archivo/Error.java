@@ -15,4 +15,5 @@ public class Error {
     public static final int ERROR_INSERTAR = 2;
     public static final int DATOS_VACIOS = 3;
     public static final int ERROR_SINTAXIS = 4;
+    public static final int SOBREPASA = 1406;
 }

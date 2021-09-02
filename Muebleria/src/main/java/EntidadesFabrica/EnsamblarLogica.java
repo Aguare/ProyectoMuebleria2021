@@ -39,7 +39,7 @@ public class EnsamblarLogica {
                     InsertarArchivo insertar = new InsertarArchivo();
                     boolean sePudo = insertar.insertarEnsambleMueble(tipoMueble, usuario, fecha, "" + precioCosto, noLinea);
                     if (!sePudo) {
-                        error = "<- No se pudo insertar en la BD";
+                        error = "<- El usuario o Tipo de Mueble no existe";
                     } else {
                         FabricaCRUD modificar = new FabricaCRUD();
                         for (Pieza piezasNueva : piezasNuevas) {

@@ -46,15 +46,9 @@
                         <td class="text-center"><%=ensamble.getFecha().toString()%></td>
                         <td class="text-center"><%=ensamble.getUsuario().getNombre_usuario()%></td>
                         <td class="text-center"><%=ensamble.getTipoMueble()%></td>
-                        <%if (fabrica.estaEnVentas(ensamble.getIdEnsamble())) {%>
                         <td class="text-center">
-                            <a class="bg-success text-white" role="button">REGISTRADO</a>
+                            <a href="${pageContext.request.contextPath}/CambioEnsamble?ensamble=<%=ensamble.getIdEnsamble()%>" class="btn btn-info" role="button">Editar</a>
                         </td>
-                        <%} else {%>
-                        <td class="text-center">
-                            <a href="#" class="btn btn-info" role="button">REGISTRAR</a>
-                        </td>
-                        <%}%>
                     </tr>
                     <%}%>
                 </tbody>

@@ -1,5 +1,11 @@
-USUARIO("jgranados","miPassword",1)  
+//USUARIOS PARA TESTEO
+USUARIO("admin","admin",3)
+USUARIO("fabrica","admin",1)
+USUARIO("ventas","admin",2)  
+//FIN
+
 USUARIO("aguare","contraseña",2)
+USUARIO("jgranados","contraseña",2)
 USUARIO("aguare2","contraseña",2)
 USUARIO("financiero","123",3)
 USUARIO("jorge","123",1)

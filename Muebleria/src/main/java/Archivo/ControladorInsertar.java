@@ -2,7 +2,6 @@ package Archivo;
 
 import EntidadesFabrica.EnsamblarLogica;
 import java.io.BufferedReader;
-import java.sql.Date;
 import java.util.ArrayList;
 
 /**

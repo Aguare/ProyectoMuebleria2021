@@ -164,6 +164,40 @@ public class ObtenerObj {
         return usuario;
     }
 
+    /**
+     * Obtiene todos los usuarios de un departamento en específico
+     * @param opcion 0 Todos, 1 Fábrica, 2 Ventas, 3 Financiero
+     * @return
+     */
+    public ArrayList<Usuario> obtenerUsuariosSegunDepartamento(int opcion) {
+        ArrayList<Usuario> usuarios = new ArrayList<>();
+        String query = "SELECT * FROM Usuario";
+        switch(opcion){
+            case 1:
+                query = "SELECT * FROM Usuario WHERE idDepartamento = 1;";
+                break;
+            case 2:
+                query = "SELECT * FROM Usuario WHERE idDepartamento = 2;";
+                break;
+            case 3:
+                query = "SELECT * FROM Usuario WHERE idDepartamento = 3;";
+                break;
+            default:
+            break;
+        }
+        try {
+            PreparedStatement prepared = Conexion.Conexion().prepareStatement(query);
+            ResultSet resultado = prepared.executeQuery();
+            while (resultado.next()) {
+                usuarios.add(new Usuario(resultado.getString("nombre_usuario"), resultado.getInt("idDepartamento"),
+                        resultado.getBoolean("acceso")));
+            }
+        } catch (SQLException e) {
+        }
+        return usuarios;
+    }
+
+
     public ArrayList<Pieza> obtenerPiezasDeEnsamble(String idEnsamble) {
         ArrayList<Pieza> piezas = new ArrayList<>();
         String query = "SELECT * FROM PiezasEnsamble WHERE E_idEnsamble = ?;";

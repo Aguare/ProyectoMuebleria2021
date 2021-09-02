@@ -56,8 +56,15 @@ public class CambioPiezas extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        int id = Integer.parseInt(request.getParameter("pie"));
-        int opcion = Integer.parseInt(request.getParameter("accion"));
+        int id = 0;
+        int opcion = 0;
+        try{
+           id = Integer.parseInt(request.getParameter("pie"));
+           opcion = Integer.parseInt(request.getParameter("accion"));
+        }catch(Exception e){
+            request.setAttribute("mensaje", "LA OPCIÓN NO EXISTE");
+                    request.getRequestDispatcher("Mensajes/ErrorGeneral.jsp").forward(request, response);
+        }
         ObtenerObj obtener = new ObtenerObj();
         Pieza pieza = obtener.obtenerPiezaSegunID(id);
         if (pieza == null) {

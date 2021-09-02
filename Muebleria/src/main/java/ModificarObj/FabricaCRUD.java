@@ -1,7 +1,6 @@
 package ModificarObj;
 
 import EntidadesFabrica.Pieza;
-import EntidadesVenta.Mueble;
 import SQL.Conexion;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -149,6 +148,20 @@ public class FabricaCRUD {
                 return true;
             }
         } catch (SQLException e) {
+        }
+        return false;
+    }
+    
+    public boolean actualizarEnsamble(String fecha, String usuario, int idEnsamble){
+        String query = "UPDATE Ensamble SET fecha = ?, nombre_usuario = ? WHERE idEnsamble = ?;";
+        try {
+            PreparedStatement prepared = Conexion.Conexion().prepareStatement(query);
+            prepared.setString(1, fecha);
+            prepared.setString(2, usuario);
+            prepared.setInt(3, idEnsamble);
+            prepared.executeUpdate();
+            return true;
+        } catch (Exception e) {
         }
         return false;
     }
