@@ -120,17 +120,35 @@ public class FabricaCRUD {
 
     /**
      * Cambia el estado de una pieza que no está usada a usada
-     *
      * @param pieza
+     * @param idEnsamble se debe enviar el id del ensamble para ser actualizadas
      */
-    public void actualizarPiezaUsada(Pieza pieza) {
+    public void actualizarPiezaUsada(Pieza pieza, String idEnsamble) {
         String query = "UPDATE Pieza SET usada = 1 WHERE idPieza = ?";
         try {
             PreparedStatement prepared = Conexion.Conexion().prepareStatement(query);
             prepared.setInt(1, pieza.getIdPieza());
             prepared.executeUpdate();
             aumentarDisminuirPieza(pieza.getTipoPieza(), 2);
+            insertarPiezaEnsamble(idEnsamble, pieza);
         } catch (Exception e) {
+        }
+    }
+    
+    /**
+     * Inserta la pieza que se utilizó en el ensamble
+     * @param idEnsamble
+     * @param pieza 
+     */
+    private void insertarPiezaEnsamble(String idEnsamble, Pieza pieza) {
+        String query = "INSERT INTO PiezaEnsamble VALUES (?,?,?);";
+        try {
+            PreparedStatement prepared = Conexion.Conexion().prepareStatement(query);
+            prepared.setString(1, idEnsamble);
+            prepared.setInt(2, pieza.getIdPieza());
+            prepared.setString(3, pieza.getTipoPieza());
+            prepared.executeUpdate();
+        } catch (SQLException ex) {
         }
     }
 

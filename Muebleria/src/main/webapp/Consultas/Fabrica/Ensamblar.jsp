@@ -75,6 +75,41 @@
             </form>
             <br>
         </div>
+        <br>
+        <div class="container border" style="width: 600px">
+            <br>
+            <h2 class="text-center">PIEZAS DE ENSAMBLE</h2>
+            <div class="table-responsive">
+                <table class="table table-bordered">
+                    <thead class="thead-dark">
+                        <tr>
+                            <th class="text-center">ID</th>
+                            <th>TIPO DE PIEZA</th>
+                            <th class="text-center">PRECIO</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% 
+                            ArrayList<Pieza> piezas = ensamble.getPiezas();
+                            double precioCosto = 0;
+                        %>
+                        <%for (Pieza pieza : piezas) {%>
+                        <tr>
+                            <td class="text-center"><%=pieza.getIdPieza()%></td>
+                            <td><%=pieza.getTipoPieza().toUpperCase()%></td>
+                            <td class="text-center">Q<%=pieza.getPrecio()%></td>
+                            <%precioCosto+= pieza.getPrecio();%>
+                        </tr>
+                        <%}%>
+                        <tr>
+                            <th class="text-center" colspan="2">PRECIO COSTO</td>
+                            <th class="text-center" colspan="2">Q<%=precioCosto%></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <br>
+        </div>
         <%} else {%>
         <%
             LocalDate fecha = LocalDate.now();

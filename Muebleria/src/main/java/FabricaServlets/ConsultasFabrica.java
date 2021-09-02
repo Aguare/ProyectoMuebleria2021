@@ -1,8 +1,10 @@
 package FabricaServlets;
 
+import EntidadesFabrica.Ensamble;
 import SQL.ObtenerObj;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -68,6 +70,9 @@ public class ConsultasFabrica extends HttpServlet {
                     request.setAttribute("orden", 2);
                     request.getRequestDispatcher("Consultas/Fabrica/Piezas.jsp").forward(request, response);
                     break;
+                case 3:
+                    doPost(request, response);
+                    break;
                 default:
                     request.setAttribute("mensaje", "LA OPCIÓN NO EXISTE");
                     request.getRequestDispatcher("Mensajes/ErrorGeneral.jsp").forward(request, response);
@@ -90,7 +95,20 @@ public class ConsultasFabrica extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        ObtenerObj obtener = new ObtenerObj();
+        String fechaInicial = request.getParameter("fechaInicial");
+        String fechaFinal = request.getParameter("fechaFinal");
+        if (fechaInicial == null && fechaFinal == null || fechaInicial.equals("") && fechaFinal.equals("")) {
+            ArrayList<Ensamble> ensambles = obtener.obtenerEnsambles();
+            request.setAttribute("ensambles", ensambles);
+            request.getRequestDispatcher("Consultas/Fabrica/MueblesEnsamblados.jsp").forward(request, response);
+        }else{
+            ArrayList<Ensamble> ensambles = obtener.obtenerEnsamblesPorFecha(fechaInicial, fechaFinal);
+            request.setAttribute("ensambles", ensambles);
+            request.setAttribute("fechaInicial", fechaInicial);
+            request.setAttribute("fechaFinal", fechaFinal);
+            request.getRequestDispatcher("Consultas/Fabrica/MueblesEnsamblados.jsp").forward(request, response);   
+        }
     }
 
     /**

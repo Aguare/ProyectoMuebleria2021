@@ -25,11 +25,11 @@ public class EnsamblarLogica {
      * @param noLinea Número de línea del archivo, sino enviar ""
      * @return
      */
-    public boolean ensamblarMueble(String tipoMueble, String usuario, String fecha, String noLinea) {
+    public int ensamblarMueble(String tipoMueble, String usuario, String fecha, String noLinea) {
         TipoMueble tipo = obtener.obtenerTipoMuebleSegunNombre(tipoMueble);
         if (tipo != null) {
             PiezasTipoMueble piezasNecesarias = tipo.getPiezasNecesarias();
-             //Se verifica que exista una receta para la creación del mueble
+            //Se verifica que exista una receta para la creación del mueble
             if (!piezasNecesarias.getPiezas().isEmpty()) {
                 ArrayList<TipoPiezas> piezas = piezasNecesarias.getPiezas();
                 //Se verifica si la cantidad de piezas en el inventario es suficiente para ensamblar
@@ -37,27 +37,27 @@ public class EnsamblarLogica {
                     ArrayList<Pieza> piezasNuevas = obtenerPiezas(piezasNecesarias.getCantidades(), piezas);
                     double precioCosto = obtenerPrecioCosto(piezasNuevas);
                     InsertarArchivo insertar = new InsertarArchivo();
-                    boolean sePudo = insertar.insertarEnsambleMueble(tipoMueble, usuario, fecha, "" + precioCosto, noLinea);
-                    if (!sePudo) {
+                    int sePudo = insertar.insertarEnsambleMueble(tipoMueble, usuario, fecha, "" + precioCosto, noLinea);
+                    if (sePudo == -1) {
                         error = "<- El usuario o Tipo de Mueble no existe";
                     } else {
                         FabricaCRUD modificar = new FabricaCRUD();
                         for (Pieza piezasNueva : piezasNuevas) {
-                            modificar.actualizarPiezaUsada(piezasNueva);
+                            modificar.actualizarPiezaUsada(piezasNueva, "" + sePudo);
                         }
                     }
                     return sePudo;
                 } else {
                     error = "<- Las piezas existentes no son suficientes para el ensamble";
-                    return false;
+                    return -1;
                 }
             } else {
                 error = "<- No hay instrucciones para ensamblar este Mueble";
-                return false;
+                return -1;
             }
         } else {
             error = "<- El tipo de mueble no existe";
-            return false;
+            return -1;
         }
     }
 

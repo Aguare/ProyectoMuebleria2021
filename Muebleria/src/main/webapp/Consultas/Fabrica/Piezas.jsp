@@ -66,7 +66,6 @@
                         <th class="text-center">TIPO DE PIEZA</th>
                         <th class="text-center">CANTIDAD</th>
                         <th class="text-center">ESTADO</th>
-                        <th class="text-center">OPCIONES</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -81,9 +80,6 @@
                         <%} else {%>
                         <td class="text-center"><p class="bg-success text-white">En existencia</p></td>
                         <%}%>
-                        <td class="text-center">
-                            <a href="#" class="btn btn-info" role="button">Editar</a>
-                        </td>
                     </tr>
                     <%}%>
                 </tbody>

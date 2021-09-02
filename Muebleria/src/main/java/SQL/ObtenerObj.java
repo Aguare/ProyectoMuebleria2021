@@ -200,7 +200,7 @@ public class ObtenerObj {
 
     public ArrayList<Pieza> obtenerPiezasDeEnsamble(String idEnsamble) {
         ArrayList<Pieza> piezas = new ArrayList<>();
-        String query = "SELECT * FROM PiezasEnsamble WHERE E_idEnsamble = ?;";
+        String query = "SELECT * FROM PiezaEnsamble WHERE E_idEnsamble = ?;";
         try {
             PreparedStatement prepared = Conexion.Conexion().prepareStatement(query);
             prepared.setString(1, idEnsamble);
@@ -232,6 +232,10 @@ public class ObtenerObj {
         return ensamble;
     }
 
+    /**
+     * Obtiene todos los ensambles registrados
+     * @return 
+     */
     public ArrayList<Ensamble> obtenerEnsambles() {
         ArrayList<Ensamble> ensambles = new ArrayList<>();
         String query = "SELECT * FROM Ensamble;";
@@ -249,7 +253,38 @@ public class ObtenerObj {
         }
         return ensambles;
     }
+    
+    /**
+     * Obtiene todos los ensambles entre dos fechas
+     * @param fechaInicial
+     * @param fechaFinal
+     * @return 
+     */
+    public ArrayList<Ensamble> obtenerEnsamblesPorFecha(String fechaInicial, String fechaFinal) {
+        ArrayList<Ensamble> ensambles = new ArrayList<>();
+        String query = "SELECT * FROM Ensamble WHERE fecha BETWEEN ? AND ?;";
+        try {
+            PreparedStatement prepared = Conexion.Conexion().prepareStatement(query);
+            prepared.setString(1, fechaInicial);
+            prepared.setString(2, fechaFinal);
+            ResultSet resultado = prepared.executeQuery();
+            while (resultado.next()) {
+                Date fechaBD = resultado.getDate("fecha");
+                LocalDate fecha = fechaBD.toLocalDate();
+                ensambles.add(new Ensamble(resultado.getInt("idEnsamble"), fecha,
+                        obtenerUsuarioSegunNombre(resultado.getString("nombre_usuario")),
+                        resultado.getString("TipoMueble"), obtenerPiezasDeEnsamble("" + resultado.getInt("idEnsamble"))));
+            }
+        } catch (SQLException e) {
+        }
+        return ensambles;
+    }
 
+    /**
+     * Obtiene los Muebles según el tipo de mueble 
+     * @param tipoMueble
+     * @return 
+     */
     public ArrayList<Mueble> obtenerMuebles(String tipoMueble) {
         ArrayList<Mueble> muebles = new ArrayList<>();
         String query = "SELECT * FROM Mueble WHERE TMnombre_mueble = ?;";

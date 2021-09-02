@@ -15,6 +15,7 @@ public class InsertarArchivo {
 
     private ArrayList<String> noInsertados = new ArrayList<>();
     private ArrayList<String> insertados = new ArrayList<>();
+    private String mensaje = "";
 
     public void insertarUsuario(String usuario, String password, String departamento, String noLinea) {
         String query = "INSERT INTO Usuario VALUES(?,?,?,?);";
@@ -61,6 +62,12 @@ public class InsertarArchivo {
         }
     }
 
+    /**
+     * Inserta un nuevo tipo de pieza que no está en la base de datos
+     * @param nombre_pieza
+     * @param precio
+     * @param noLinea 
+     */
     public void insertarTipo(String nombre_pieza, String precio, String noLinea) {
         String query = "INSERT INTO TipoPieza VALUES (?,?,?);";
         int cantidadExistente = obtenerCantidadExistente(nombre_pieza);
@@ -71,7 +78,9 @@ public class InsertarArchivo {
                 prepared.setString(2, "1");
                 prepared.setString(3, "");
                 prepared.executeUpdate();
+                mensaje = "¡EL TIPO DE PIEZA SE HA CREADO EXITOSAMENTE!";
             } catch (SQLException ex) {
+                mensaje = obtenerTipoError(ex.getErrorCode());
                 errorAlInsertar(new String[]{"TIPOPIEZA->", nombre_pieza, precio}, ex.getErrorCode(), noLinea);
             }
         } else {
@@ -147,7 +156,7 @@ public class InsertarArchivo {
      * @param noLinea Número de la linea si viene del archivo de entrada, si no
      * viene de archivo enviar ""
      */
-    public boolean insertarEnsambleMueble(String mueble, String usuario, String fecha, String precioCosto, String noLinea) {
+    public int insertarEnsambleMueble(String mueble, String usuario, String fecha, String precioCosto, String noLinea) {
         String query = "INSERT INTO Ensamble (fecha, nombre_usuario, TipoMueble) VALUES (STR_TO_DATE(REPLACE(?,\"/\",\".\") ,GET_FORMAT(date,'EUR')),?,?);";
         if (noLinea.equalsIgnoreCase("")) {
             query = "INSERT INTO Ensamble (fecha, nombre_usuario, TipoMueble) VALUES (?,?,?);";
@@ -164,11 +173,11 @@ public class InsertarArchivo {
                 num = resultado.getInt(1);
             }
             insertarMueble("" + num, mueble, precioCosto);
-            return true;
+            return num;
         } catch (SQLException ex) {
             errorAlInsertar(new String[]{"ENSAMBLAR_MUEBLE ->", fecha, usuario, mueble}, ex.getErrorCode(), noLinea);
         }
-        return false;
+        return -1;
     }
 
     private void insertarMueble(String idEnsamble, String tipoMueble, String precioCosto) {
@@ -261,5 +270,13 @@ public class InsertarArchivo {
 
     public ArrayList<String> getNoInsertados() {
         return noInsertados;
+    }
+
+    public String getMensaje() {
+        return mensaje;
+    }
+
+    public void setMensaje(String mensaje) {
+        this.mensaje = mensaje;
     }
 }

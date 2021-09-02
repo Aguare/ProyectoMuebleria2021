@@ -1,5 +1,6 @@
 package FabricaServlets;
 
+import Archivo.InsertarArchivo;
 import EntidadesFabrica.Pieza;
 import ModificarObj.FabricaCRUD;
 import SQL.ObtenerObj;
@@ -156,18 +157,36 @@ public class CambioPiezas extends HttpServlet {
                 FabricaCRUD modificar = new FabricaCRUD();
                 double precioC = Double.parseDouble(request.getParameter("precioC"));
                 String tipo = request.getParameter("tipoPiezaC");
-                Pieza pieza = new Pieza(0, precioC, false, tipo);
-                if (modificar.modificarPieza(pieza, FabricaCRUD.INSERTAR)) {
-                    pieza = modificar.obtenerUltimaPieza();
-                    request.setAttribute("mensaje", "¡ÉXITO!");
-                    request.setAttribute("mensaje2", "La pieza se creó correctamente ID = " + pieza.getIdPieza());
-                    request.setAttribute("color", 1);
+                String nombreNuevo = request.getParameter("nombreNuevo");
+                if (nombreNuevo != null & nombreNuevo.length()>5) {
+                    if (tipo.equalsIgnoreCase("Nuevo Tipo")) {
+                    InsertarArchivo insertar = new InsertarArchivo();
+                    insertar.insertarTipo(nombreNuevo,""+ precioC, "");
+                    insertar.insertarPieza(nombreNuevo,""+ precioC, "");
+                    request.setAttribute("mensaje", "ESTADO: ");
+                    request.setAttribute("mensaje2", insertar.getMensaje());
+                    request.setAttribute("color", 3);
                     request.getRequestDispatcher("Mensajes/MensajeGeneral.jsp").forward(request, response);
-                } else {
+                }else{
+                    Pieza pieza = new Pieza(0, precioC, false, tipo);
+                    if (modificar.modificarPieza(pieza, FabricaCRUD.INSERTAR)) {
+                        pieza = modificar.obtenerUltimaPieza();
+                        request.setAttribute("mensaje", "¡ÉXITO!");
+                        request.setAttribute("mensaje2", "La pieza se creó correctamente ID = " + pieza.getIdPieza());
+                        request.setAttribute("color", 1);
+                        request.getRequestDispatcher("Mensajes/MensajeGeneral.jsp").forward(request, response);
+                    } else {
+                        request.setAttribute("mensaje", "ERROR");
+                        request.setAttribute("mensaje2", "La pieza no se pudo crear");
+                        request.setAttribute("color", 2);
+                        request.getRequestDispatcher("Mensajes/MensajeGeneral.jsp").forward(request, response);
+                    }
+                }
+                }else{
                     request.setAttribute("mensaje", "ERROR");
-                    request.setAttribute("mensaje2", "La pieza no se pudo crear");
-                    request.setAttribute("color", 2);
-                    request.getRequestDispatcher("Mensajes/MensajeGeneral.jsp").forward(request, response);
+                        request.setAttribute("mensaje2", "El nombre debe tener almenos 5 caracteres");
+                        request.setAttribute("color", 2);
+                        request.getRequestDispatcher("Mensajes/MensajeGeneral.jsp").forward(request, response);
                 }
                 break;
             default:

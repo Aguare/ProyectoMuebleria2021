@@ -118,8 +118,8 @@ public class ControladorInsertar {
         for (String[] mueble : ensamblar_mueble) {
             if (!verificarDatosVacios(mueble)) {
                 try {
-                    boolean sePudo = logica.ensamblarMueble(mueble[0], mueble[1], mueble[2], mueble[mueble.length - 1]);
-                    if (!sePudo) {
+                    int sePudo = logica.ensamblarMueble(mueble[0], mueble[1], mueble[2], mueble[mueble.length - 1]);
+                    if (sePudo == -1) {
                         insertar.errorEnsamble(mueble, logica.getError(), mueble[mueble.length - 1]);
                     }
                 } catch (Exception e) {

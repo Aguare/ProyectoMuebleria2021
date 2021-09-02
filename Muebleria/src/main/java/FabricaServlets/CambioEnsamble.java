@@ -6,7 +6,6 @@ import ModificarObj.FabricaCRUD;
 import SQL.ObtenerObj;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.time.LocalDate;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -93,7 +92,7 @@ public class CambioEnsamble extends HttpServlet {
             switch (opcion) {
                 case 1:
                     EnsamblarLogica ensamblar = new EnsamblarLogica();
-                    if (ensamblar.ensamblarMueble(tipoMueble, usuario, fecha, "")) {
+                    if (ensamblar.ensamblarMueble(tipoMueble, usuario, fecha, "") != -1) {
                         request.setAttribute("mensaje", "¡ÉXITO!");
                         request.setAttribute("mensaje2", "El mueble se ensambló correctamente");
                         request.setAttribute("color", 1);

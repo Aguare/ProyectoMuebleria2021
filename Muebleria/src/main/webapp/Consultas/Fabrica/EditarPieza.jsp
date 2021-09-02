@@ -17,6 +17,7 @@
         <title>Editar Pieza</title>
         <jsp:include page="../../Menus/Fabrica.jsp"></jsp:include>
         <jsp:include page="../../resources/JS/RecursosJS.jsp"></jsp:include>
+        <jsp:include page="../../resources/JS/RecursosJS.jsp"></jsp:include>
         <style><%@include file="../../resources/CSS/RecursosCSS.jsp"%></style>
         <style><%@include file="../../resources/JS/RecursosJS.jsp"%></style>
     </head>
@@ -95,7 +96,7 @@
                 </div>
                 <div class="form-group" id="nuevoTipo">
                     <label>NUEVO TIPO DE PIEZA</label>
-                    <input type="text" minlength="5" maxlength="50" class="form-control" name="nombreNuevo" id="nombreNuevo" value="0">
+                    <input type="text"  class="form-control" name="nombreNuevo" placeholder="NOMBRE PARA EL TIPO DE PIEZA" minlength="5" maxlength="50">
                 </div>
                 <div class="text-center">
                     <button type="submit" class="btn btn-primary">Crear Pieza</button>
@@ -107,9 +108,9 @@
             $("#tipoPiezaC").change(function (e) {
                 e.preventDefault();
                 if (this.value === "NUEVO TIPO") {
-                    $("#nuevoTipo").addClass("d-none");
-                } else {
                     $("#nuevoTipo").removeClass("d-none");
+                } else {
+                    $("#nuevoTipo").addClass("d-none");
                 }
             });
         </script>
