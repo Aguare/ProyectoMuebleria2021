@@ -21,7 +21,7 @@
             response.setDateHeader("Expires", -1);
             if (request.getSession().getAttribute("Usuario") == null) {
                 request.getRequestDispatcher("../index.jsp").forward(request, response);
-            } else {
+            } else {    
         %>
         <% if (request.getAttribute("mostrar") == null) {%>
         <style><%@include file="../resources/CSS/barraMenu.css"%></style>
@@ -44,7 +44,7 @@
             <br><br>
             <div class="container col-auto text-center">
                 <label class="text-center">DATOS INGRESADOS CORRECTAMENTE</label><br>
-                <textarea name="ingresoC" rows="20" cols="100" readonly>
+                <textarea name="ingresoC" rows="20" cols="150" readonly>
                 <%
                     ArrayList<String> c = (ArrayList<String>) request.getAttribute("correcto");
                     for (String string : c) {
@@ -54,7 +54,7 @@
 
             </textarea><br><br>
             <label class="text-center">DATOS INGRESADOS INCORRECTAMENTE</label><br>
-            <textarea name="ingresoC" rows="20" cols="100" readonly>
+            <textarea name="ingresoC" rows="20" cols="150" readonly>
                 <%
                     ArrayList<String> e = (ArrayList<String>) request.getAttribute("noReconocido");
                     for (String string : e) {

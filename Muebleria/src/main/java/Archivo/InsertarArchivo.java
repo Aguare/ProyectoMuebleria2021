@@ -15,8 +15,9 @@ public class InsertarArchivo {
 
     private ArrayList<String> noInsertados = new ArrayList<>();
     private ArrayList<String> insertados = new ArrayList<>();
+    private String mensaje = "";
 
-    public void insertarUsuario(String usuario, String password, String departamento) {
+    public void insertarUsuario(String usuario, String password, String departamento, String noLinea) {
         String query = "INSERT INTO Usuario VALUES(?,?,?,?);";
         Encriptar encriptar = new Encriptar();
         String passEncriptada = encriptar.encriptarPass(password);
@@ -29,11 +30,11 @@ public class InsertarArchivo {
             prepared.executeUpdate();
             insertados.add("USUARIO ->" + usuario + " " + password + " " + departamento);
         } catch (SQLException ex) {
-            errorAlInsertar(new String[]{"USUARIO ->", usuario, password, departamento, obtenerTipoError(ex.getErrorCode())});
+            errorAlInsertar(new String[]{"USUARIO ->", usuario, password, departamento}, ex.getErrorCode(), noLinea);
         }
     }
 
-    public void insertarCliente(String NIT, String nombre, String direccion) {
+    public void insertarCliente(String NIT, String nombre, String direccion, String noLinea) {
         String query = "INSERT INTO Cliente VALUES(?,?,?);";
         try {
             PreparedStatement prepared = Conexion.Conexion().prepareStatement(query);
@@ -43,11 +44,11 @@ public class InsertarArchivo {
             prepared.executeUpdate();
             insertados.add("CLIENTE ->" + NIT + " " + nombre + " " + direccion);
         } catch (SQLException ex) {
-            errorAlInsertar(new String[]{"CLIENTE ->", NIT, nombre, direccion, obtenerTipoError(ex.getErrorCode())});
+            errorAlInsertar(new String[]{"CLIENTE ->", NIT, nombre, direccion}, ex.getErrorCode(), noLinea);
         }
     }
 
-    public void insertarPieza(String tipoPieza, String precio) {
+    public void insertarPieza(String tipoPieza, String precio, String noLinea) {
         String query = "INSERT INTO Pieza (precio,usada,TPnombre_pieza) VALUES (?,?,?);";
         try {
             PreparedStatement prepared = Conexion.Conexion().prepareStatement(query);
@@ -57,11 +58,17 @@ public class InsertarArchivo {
             prepared.executeUpdate();
             insertados.add("PIEZA ->" + precio + " " + tipoPieza);
         } catch (SQLException ex) {
-            errorAlInsertar(new String[]{"PIEZA ->", tipoPieza, precio, obtenerTipoError(ex.getErrorCode())});
+            errorAlInsertar(new String[]{"PIEZA ->", tipoPieza, precio}, ex.getErrorCode(), noLinea);
         }
     }
 
-    public void insertarTipo(String nombre_pieza, String precio) {
+    /**
+     * Inserta un nuevo tipo de pieza que no está en la base de datos
+     * @param nombre_pieza
+     * @param precio
+     * @param noLinea 
+     */
+    public void insertarTipo(String nombre_pieza, String precio, String noLinea) {
         String query = "INSERT INTO TipoPieza VALUES (?,?,?);";
         int cantidadExistente = obtenerCantidadExistente(nombre_pieza);
         if (cantidadExistente == -1) {
@@ -71,8 +78,10 @@ public class InsertarArchivo {
                 prepared.setString(2, "1");
                 prepared.setString(3, "");
                 prepared.executeUpdate();
+                mensaje = "¡EL TIPO DE PIEZA SE HA CREADO EXITOSAMENTE!";
             } catch (SQLException ex) {
-                errorAlInsertar(new String[]{"TIPOPIEZA->", nombre_pieza, precio, obtenerTipoError(ex.getErrorCode())});
+                mensaje = obtenerTipoError(ex.getErrorCode());
+                errorAlInsertar(new String[]{"TIPOPIEZA->", nombre_pieza, precio}, ex.getErrorCode(), noLinea);
             }
         } else {
             aumentarPieza(nombre_pieza, cantidadExistente);
@@ -107,7 +116,7 @@ public class InsertarArchivo {
         }
     }
 
-    public void insertarTipoMueble(String nombre_mueble, String precio) {
+    public void insertarTipoMueble(String nombre_mueble, String precio, String noLinea) {
         String query = "INSERT INTO TipoMueble VALUES (?,?,?,?);";
         try {
             PreparedStatement prepared = Conexion.Conexion().prepareStatement(query);
@@ -118,11 +127,11 @@ public class InsertarArchivo {
             prepared.executeUpdate();
             insertados.add("MUEBLE ->" + nombre_mueble + " " + precio);
         } catch (SQLException ex) {
-            errorAlInsertar(new String[]{"MUEBLE ->", nombre_mueble, precio, obtenerTipoError(ex.getErrorCode())});
+            errorAlInsertar(new String[]{"MUEBLE ->", nombre_mueble, precio}, ex.getErrorCode(), noLinea);
         }
     }
 
-    public void insertarEnsamblePiezas(String tipoMueble, String tipoPieza, String cantidad) {
+    public void insertarEnsamblePiezas(String tipoMueble, String tipoPieza, String cantidad, String noLinea) {
         String query = "INSERT INTO PiezasTipoMueble VALUES (?,?,?);";
         try {
             PreparedStatement prepared = Conexion.Conexion().prepareStatement(query);
@@ -132,12 +141,26 @@ public class InsertarArchivo {
             prepared.executeUpdate();
             insertados.add("ENSAMBLE_PIEZAS ->" + tipoMueble + " " + tipoPieza + " " + cantidad);
         } catch (SQLException ex) {
-            errorAlInsertar(new String[]{"ENSAMBLE_PIEZAS ->", tipoMueble, tipoPieza, cantidad, obtenerTipoError(ex.getErrorCode())});
+            errorAlInsertar(new String[]{"ENSAMBLE_PIEZAS ->", tipoMueble, tipoPieza, cantidad}, ex.getErrorCode(), noLinea);
         }
     }
 
-    public void insertarEnsambleMueble(String mueble, String usuario, String fecha) {
+    //INICIA LAS SECUENCIAS SQL PARA ENSAMBLAR UN MUEBLE
+    /**
+     * Este método inserta un ensamble y pasa a ventas si el noLinea viene vacío
+     *
+     * @param mueble Nombre Tipo de Mueble
+     * @param usuario nombre usuario
+     * @param fecha fecha en tipo DATE
+     * @param precioCosto precio costo del ensamble
+     * @param noLinea Número de la linea si viene del archivo de entrada, si no
+     * viene de archivo enviar ""
+     */
+    public int insertarEnsambleMueble(String mueble, String usuario, String fecha, String precioCosto, String noLinea) {
         String query = "INSERT INTO Ensamble (fecha, nombre_usuario, TipoMueble) VALUES (STR_TO_DATE(REPLACE(?,\"/\",\".\") ,GET_FORMAT(date,'EUR')),?,?);";
+        if (noLinea.equalsIgnoreCase("")) {
+            query = "INSERT INTO Ensamble (fecha, nombre_usuario, TipoMueble) VALUES (?,?,?);";
+        }
         try {
             PreparedStatement prepared = Conexion.Conexion().prepareStatement(query, PreparedStatement.RETURN_GENERATED_KEYS);
             prepared.setString(1, fecha);
@@ -149,17 +172,19 @@ public class InsertarArchivo {
             while (resultado.next()) {
                 num = resultado.getInt(1);
             }
-            insertarMueble("" + num, mueble);
+            insertarMueble("" + num, mueble, precioCosto);
+            return num;
         } catch (SQLException ex) {
-            errorAlInsertar(new String[]{"ENSAMBLAR_MUEBLE ->", fecha, usuario, mueble, obtenerTipoError(ex.getErrorCode())});
+            errorAlInsertar(new String[]{"ENSAMBLAR_MUEBLE ->", fecha, usuario, mueble}, ex.getErrorCode(), noLinea);
         }
+        return -1;
     }
 
-    private void insertarMueble(String idEnsamble, String tipoMueble) {
+    private void insertarMueble(String idEnsamble, String tipoMueble, String precioCosto) {
         String query = "INSERT INTO Mueble (precio_costo, E_idEnsamble, TMnombre_mueble) VALUES (?,?,?);";
         try {
             PreparedStatement prepared = Conexion.Conexion().prepareStatement(query);
-            prepared.setString(1, "" + obtenerPrecioCosto(tipoMueble));
+            prepared.setString(1, precioCosto);
             prepared.setString(2, idEnsamble);
             prepared.setString(3, tipoMueble);
             prepared.executeUpdate();
@@ -196,44 +221,46 @@ public class InsertarArchivo {
         }
     }
 
-    private double obtenerPrecioCosto(String tipoMueble) {
-        String query = "SELECT precio_venta FROM TipoMueble WHERE nombre_mueble = ?";
-        try {
-            PreparedStatement prepared = Conexion.Conexion().prepareStatement(query);
-            prepared.setString(1, tipoMueble);
-            ResultSet resultado = prepared.executeQuery();
-            double num = 20;
-            while (resultado.next()) {
-                num = resultado.getDouble("precio_venta");
-            }
-            return num - 20;
-        } catch (Exception e) {
-            return 0;
-        }
-    }
-
-    public void errorAlInsertar(String[] datos) {
-        String linea = "";
+    public void errorAlInsertar(String[] datos, int error, String noLinea) {
+        String linea = noLinea + "| ";
         for (String dato : datos) {
             linea += dato + " ";
         }
+        linea += obtenerTipoError(error);
+        noInsertados.add(linea);
+    }
+
+    public void errorEnsamble(String[] datos, String error, String noLinea) {
+        String linea = noLinea + "| ";
+        for (String dato : datos) {
+            linea += dato + " ";
+        }
+        linea += error;
         noInsertados.add(linea);
     }
 
     private String obtenerTipoError(int error) {
         switch (error) {
-            case 1062:
+            case Error.REGISTRO_EXISTE:
                 return "<- El registro ya existe";
-            case 1136:
-                return "<- El ID de referencia aún no existe";
-            case 1064:
+            case Error.DATOS_INCOMPLETOS:
+                return "<- Los datos no estan completos";
+            case Error.FORMATO_INCORRECTO:
                 return "<- Los datos no cumplen con su formato";
-            case 1366:
+            case Error.ERROR_NUMERICO:
                 return "<- Los valores numéricos contienen un error";
-            case 1452:
-                return "<- El usuario o Tipo de Mueble que desea ensamblar no existe";
-            default:
+            case Error.ID_NOEXISTE:
+                return "<- El número de ID al que desea hacer referencia no existe";
+            case Error.ERROR_NIT:
+                return "<- El NIT no debe contener guiones";
+            case Error.ERROR_INSERTAR:
                 return "<- No se pudo cargar a la BD";
+            case Error.DATOS_VACIOS:
+                return "<- Los datos no pueden estar vacios";
+            case Error.SOBREPASA:
+                return "<- El tamaño de los datos sobrepasa el límite";
+            default:
+                return "<- No se pudo insertar a la BD";
         }
     }
 
@@ -243,5 +270,13 @@ public class InsertarArchivo {
 
     public ArrayList<String> getNoInsertados() {
         return noInsertados;
+    }
+
+    public String getMensaje() {
+        return mensaje;
+    }
+
+    public void setMensaje(String mensaje) {
+        this.mensaje = mensaje;
     }
 }

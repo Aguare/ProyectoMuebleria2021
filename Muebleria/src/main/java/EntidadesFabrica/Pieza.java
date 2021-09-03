@@ -10,9 +10,10 @@ public class Pieza {
     private double precio;
     private boolean usada;
     private String tipoPieza;
+    private String nuevoTipo = "";
 
     /**
-     * 
+     *
      * @param idPieza
      * @param precio
      * @param usada
@@ -57,7 +58,11 @@ public class Pieza {
         this.tipoPieza = tipoPieza;
     }
 
-    public void imprimir() {
-        System.out.println("ID:" + idPieza + " Precio:" + precio + " Usada:" + usada + " Tipo Pieza:" + tipoPieza);
+    public String getNuevoTipo() {
+        return nuevoTipo;
+    }
+
+    public void setNuevoTipo(String nuevoTipo) {
+        this.nuevoTipo = nuevoTipo;
     }
 }

@@ -1,6 +1,6 @@
 package EntidadesVenta;
 
-import java.sql.Date;
+import java.time.LocalDate;
 import java.util.ArrayList;
 
 /**
@@ -10,12 +10,12 @@ import java.util.ArrayList;
 public class Devolucion {
 
     private int idDevolucion;
-    private Date fecha;
+    private LocalDate fecha;
     private double perdida;
     private Factura factura;
     private ArrayList<Mueble> muebles;
 
-    public Devolucion(int idDevolucion, Date fecha, double perdida, Factura factura, ArrayList<Mueble> muebles) {
+    public Devolucion(int idDevolucion, LocalDate fecha, double perdida, Factura factura, ArrayList<Mueble> muebles) {
         this.idDevolucion = idDevolucion;
         this.fecha = fecha;
         this.perdida = perdida;
@@ -31,11 +31,11 @@ public class Devolucion {
         this.idDevolucion = idDevolucion;
     }
 
-    public Date getFecha() {
+    public LocalDate getFecha() {
         return fecha;
     }
 
-    public void setFecha(Date fecha) {
+    public void setFecha(LocalDate fecha) {
         this.fecha = fecha;
     }
 

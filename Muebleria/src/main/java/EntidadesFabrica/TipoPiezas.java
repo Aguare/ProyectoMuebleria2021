@@ -20,6 +20,38 @@ public class TipoPiezas {
         this.piezas = piezas;
     }
 
+    /**
+     * Se verifica si la cantidad de piezas es alcanza para ensamblar un mueble
+     *
+     * @param cantidadNecesaria cantidad necesaria según el tipo de pieza
+     * @return retorna un booleano
+     */
+    public boolean verificarExistenciaSuficiente(int cantidadNecesaria) {
+        if (cantidad >= cantidadNecesaria) {
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * Devuelve un arreglo con las piezas que se necesitaran para ensamblar un
+     * mueble
+     *
+     * @param cantidadNecesaria cantidad de piezas que se extraeran
+     * @return
+     */
+    public ArrayList<Pieza> obtenerPiezasNecesarias(int cantidadNecesaria) {
+        ArrayList<Pieza> pie = new ArrayList<>();
+        for (int i = 0; i < cantidadNecesaria; i++) {
+            pie.add(piezas.get(0));
+            piezas.remove(0);
+            if (i == cantidadNecesaria) {
+                return pie;
+            }
+        }
+        return pie;
+    }
+
     public String getNombrePieza() {
         return nombrePieza;
     }
@@ -52,10 +84,4 @@ public class TipoPiezas {
         this.piezas = piezas;
     }
 
-    public void imprimir() {
-        System.out.println("Nombre: " + nombrePieza + " Cantidad: " + cantidad);
-        for (Pieza pieza : piezas) {
-            pieza.imprimir();
-        }
-    }
 }
