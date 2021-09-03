@@ -1,7 +1,7 @@
 package FabricaServlets;
 
 import EntidadesFabrica.Ensamble;
-import SQL.ObtenerObj;
+import ObtenerObjetos.ObtenerF;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
@@ -57,7 +57,7 @@ public class ConsultasFabrica extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         try {
-            ObtenerObj obtener = new ObtenerObj();
+            ObtenerF obtener = new ObtenerF();
             int opcion = Integer.parseInt(request.getParameter("orden"));
             switch (opcion) {
                 case 1:
@@ -95,7 +95,7 @@ public class ConsultasFabrica extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        ObtenerObj obtener = new ObtenerObj();
+        ObtenerF obtener = new ObtenerF();
         String fechaInicial = request.getParameter("fechaInicial");
         String fechaFinal = request.getParameter("fechaFinal");
         if (fechaInicial == null && fechaFinal == null || fechaInicial.equals("") && fechaFinal.equals("")) {

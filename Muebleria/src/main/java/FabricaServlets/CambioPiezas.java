@@ -3,7 +3,7 @@ package FabricaServlets;
 import Archivo.InsertarArchivo;
 import EntidadesFabrica.Pieza;
 import ModificarObj.FabricaCRUD;
-import SQL.ObtenerObj;
+import ObtenerObjetos.ObtenerF;
 import java.io.IOException;
 import java.io.PrintWriter;
 import javax.servlet.ServletException;
@@ -64,9 +64,9 @@ public class CambioPiezas extends HttpServlet {
            opcion = Integer.parseInt(request.getParameter("accion"));
         }catch(Exception e){
             request.setAttribute("mensaje", "LA OPCIÓN NO EXISTE");
-                    request.getRequestDispatcher("Mensajes/ErrorGeneral.jsp").forward(request, response);
+            request.getRequestDispatcher("Mensajes/ErrorGeneral.jsp").forward(request, response);
         }
-        ObtenerObj obtener = new ObtenerObj();
+        ObtenerF obtener = new ObtenerF();
         Pieza pieza = obtener.obtenerPiezaSegunID(id);
         if (pieza == null) {
             request.setAttribute("mensaje", "El ID de la pieza no existe");
@@ -112,7 +112,7 @@ public class CambioPiezas extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         int opcion = Integer.parseInt(request.getParameter("opcion"));
-        ObtenerObj obtener = new ObtenerObj();
+        ObtenerF obtener = new ObtenerF();
         String idPieza = "";
         double precio = 0;
         String tipoPieza = "";

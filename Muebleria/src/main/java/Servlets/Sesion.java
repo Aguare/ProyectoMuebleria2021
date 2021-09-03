@@ -3,7 +3,8 @@ package Servlets;
 import EntidadesFabrica.Pieza;
 import EntidadesFabrica.TipoPiezas;
 import EntidadesFabrica.Usuario;
-import SQL.ObtenerObj;
+import ObtenerObjetos.ObtenerF;
+import ObtenerObjetos.ObtenerUC;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
@@ -77,16 +78,17 @@ public class Sesion extends HttpServlet {
         request.setCharacterEncoding("UTF-8");
         String usuario = request.getParameter("usuario");
         String password = request.getParameter("password");
-        ObtenerObj obtener = new ObtenerObj();
-        Usuario user = obtener.obtenerUsuarioSegunNombre(usuario);
-        if (user != null && obtener.verificarPassword(usuario, password)) {
+        ObtenerUC obtenerUC = new ObtenerUC();
+        ObtenerF obtenerF = new ObtenerF();
+        Usuario user = obtenerUC.obtenerUsuarioSegunNombre(usuario);
+        if (user != null && obtenerUC.verificarPassword(usuario, password)) {
             if (!user.isAcceso()) {
                 request.setAttribute("mensaje", "USTED YA NO TIENE ACCESO AL SISTEMA");
                 request.getRequestDispatcher("Mensajes/ErrorGeneral.jsp").forward(request, response);
             } else {
                 request.getSession().setAttribute("Usuario", user);
-                Pieza pieza = obtener.obtenerPiezaSegunID(1);
-                ArrayList<TipoPiezas> tipo = obtener.obtenerTipoPiezas(1);
+                Pieza pieza = obtenerF.obtenerPiezaSegunID(1);
+                ArrayList<TipoPiezas> tipo = obtenerF.obtenerTipoPiezas(1);
                 if (pieza == null && tipo.isEmpty()) {
                     response.sendRedirect("Inicio/CargaArchivo.jsp");
                 } else {

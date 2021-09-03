@@ -2,7 +2,7 @@ package EntidadesFabrica;
 
 import Archivo.InsertarArchivo;
 import ModificarObj.FabricaCRUD;
-import SQL.ObtenerObj;
+import ObtenerObjetos.ObtenerF;
 import java.util.ArrayList;
 
 /**
@@ -11,7 +11,7 @@ import java.util.ArrayList;
  */
 public class EnsamblarLogica {
 
-    private ObtenerObj obtener = new ObtenerObj();
+    private ObtenerF obtener = new ObtenerF();
     private ArrayList<String> erroresArchivo = new ArrayList<>();
     private String error;
 

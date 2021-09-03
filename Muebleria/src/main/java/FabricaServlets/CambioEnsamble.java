@@ -3,7 +3,7 @@ package FabricaServlets;
 import EntidadesFabrica.EnsamblarLogica;
 import EntidadesFabrica.Ensamble;
 import ModificarObj.FabricaCRUD;
-import SQL.ObtenerObj;
+import ObtenerObjetos.ObtenerF;
 import java.io.IOException;
 import java.io.PrintWriter;
 import javax.servlet.ServletException;
@@ -57,7 +57,7 @@ public class CambioEnsamble extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        ObtenerObj obtener = new ObtenerObj();
+        ObtenerF obtener = new ObtenerF();
         String idEnsamble = request.getParameter("ensamble");
         if (idEnsamble == null) {
             request.getRequestDispatcher("Consultas/Fabrica/Ensamblar.jsp").forward(request, response);

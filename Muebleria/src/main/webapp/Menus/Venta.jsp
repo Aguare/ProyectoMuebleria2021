@@ -12,12 +12,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <title>Bienvenido</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
-    <link rel="stylesheet" href="../resources/CSS/barraMenu.css">
-    <script src="../resources/JS/menu.js"></script>
+    <jsp:include page="../resources/JS/RecursosJS.jsp"></jsp:include>
+    <jsp:include page="../resources/JS/RecursosJS.jsp"></jsp:include>
+    <jsp:include page="../resources/CSS/RecursosCSS.jsp"></jsp:include>
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/CSS/barraMenu.css">
     <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
-    <style><%@include file="../resources/CSS/barraMenu.css"%></style>
     <%
         response.setHeader("Pragma", "No-cache");
         response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
@@ -35,7 +36,7 @@
     <div id="navbarCollapse" class="collapse navbar-collapse justify-content-start">
         <div class="navbar-nav">
             <a href="${pageContext.request.contextPath}/Menus/Venta.jsp" class="nav-item nav-link">Inicio</a>
-            <a href="#" class="nav-item nav-link">Venta</a>			
+            <a href="${pageContext.request.contextPath}/Consultas/Ventas/RegistrarVenta.jsp" class="nav-item nav-link">Venta</a>			
             <div class="nav-item dropdown">
                 <a href="#" data-toggle="dropdown" class="nav-item nav-link dropdown-toggle">Consulta</a>
                 <div class="dropdown-menu">
