@@ -1,12 +1,10 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package VentasServlets;
 
+import EntidadesFabrica.Usuario;
+import EntidadesVenta.CarritoCompra;
 import EntidadesVenta.Cliente;
 import ObtenerObjetos.ObtenerUC;
+import ObtenerObjetos.ObtenerV;
 import java.io.IOException;
 import java.io.PrintWriter;
 import javax.servlet.ServletException;
@@ -22,31 +20,6 @@ import javax.servlet.http.HttpServletResponse;
 @WebServlet(name = "Venta", urlPatterns = {"/Venta"})
 public class Venta extends HttpServlet {
 
-    /**
-     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
-     * methods.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
-    protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        response.setContentType("text/html;charset=UTF-8");
-        try ( PrintWriter out = response.getWriter()) {
-            /* TODO output your page here. You may use following sample code. */
-            out.println("<!DOCTYPE html>");
-            out.println("<html>");
-            out.println("<head>");
-            out.println("<title>Servlet Venta</title>");
-            out.println("</head>");
-            out.println("<body>");
-            out.println("<h1>Servlet Venta at " + request.getContextPath() + "</h1>");
-            out.println("</body>");
-            out.println("</html>");
-        }
-    }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
@@ -60,17 +33,56 @@ public class Venta extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        String nit = request.getParameter("NIT");
-        ObtenerUC obtener = new ObtenerUC();
-        if (nit != null) {
-            Cliente cliente = obtener.obtenerClientesSegunNIT(nit);
+        if (request.getSession().getAttribute("carritoCompra") == null) {
+            ObtenerV obtenerV = new ObtenerV();
+            Usuario usuario = (Usuario) request.getSession().getAttribute("Usuario");
+            CarritoCompra carrito = new CarritoCompra(obtenerV.obtenerMueblesNoVendidos(), usuario);
+            request.getSession().setAttribute("carritoCompra", carrito);
+            request.getRequestDispatcher("Consultas/Ventas/RegistrarVenta.jsp").forward(request, response);
+        } else if (request.getParameter("cancelarVenta") != null) {
+            request.getSession().removeAttribute("carritoCompra");
+            request.setAttribute("mensaje", "¡ÉXITO!");
+            request.setAttribute("mensaje2", "La venta se ha cancelado exitósamente");
+            request.setAttribute("color", 1);
+            request.getRequestDispatcher("Mensajes/MensajeGeneral.jsp").forward(request, response);
+        } else if (request.getParameter("NIT") != null) {
+            ObtenerUC obtenerUC = new ObtenerUC();
+            Cliente cliente = obtenerUC.obtenerClientesSegunNIT(request.getParameter("NIT"));
             if (cliente != null) {
-                request.setAttribute("clienteSeleccionado", cliente);
+                CarritoCompra carrito = (CarritoCompra) request.getSession().getAttribute("carritoCompra");
+                carrito.setCliente(cliente);
+                request.getSession().setAttribute("carritoCompra", carrito);
                 request.getRequestDispatcher("Consultas/Ventas/RegistrarVenta.jsp").forward(request, response);
             } else {
-                request.setAttribute("mensaje", "EL CLIENTE NO ESTÁ REGISTRADO");
-                request.getRequestDispatcher("Mensajes/ErrorGeneral.jsp").forward(request, response);
+                request.setAttribute("mensaje", "¡ERROR!");
+                request.setAttribute("mensaje2", "EL CLIENTE NO ESTÁ REGISTRADO");
+                request.setAttribute("color", 1);
+                request.getRequestDispatcher("Mensajes/MensajeGeneral.jsp").forward(request, response);
             }
+        } else if (request.getParameter("agregar") != null) {
+            CarritoCompra carrito = (CarritoCompra) request.getSession().getAttribute("carritoCompra");
+            if (carrito.agregarCarrito(request.getParameter("agregar"))) {
+                request.getSession().setAttribute("carritoCompra", carrito);
+                request.getRequestDispatcher("Consultas/Ventas/RegistrarVenta.jsp").forward(request, response);
+            } else {
+                request.setAttribute("mensaje", "¡ERROR!");
+                request.setAttribute("mensaje2", "EL MUEBLE NO EXISTE");
+                request.setAttribute("color", 2);
+                request.getRequestDispatcher("Mensajes/MensajeGeneral.jsp").forward(request, response);
+            }
+        } else if (request.getParameter("quitar") != null) {
+            CarritoCompra carrito = (CarritoCompra) request.getSession().getAttribute("carritoCompra");
+            if (carrito.quitarCarrito(request.getParameter("quitar"))) {
+                request.getSession().setAttribute("carritoCompra", carrito);
+                request.getRequestDispatcher("Consultas/Ventas/RegistrarVenta.jsp").forward(request, response);
+            } else {
+                request.setAttribute("mensaje", "¡ERROR!");
+                request.setAttribute("mensaje2", "EL MUEBLE NO EXISTE");
+                request.setAttribute("color", 2);
+                request.getRequestDispatcher("Mensajes/MensajeGeneral.jsp").forward(request, response);
+            }
+        } else {
+            request.getRequestDispatcher("Consultas/Ventas/RegistrarVenta.jsp").forward(request, response);
         }
     }
 
@@ -85,17 +97,6 @@ public class Venta extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+
     }
-
-    /**
-     * Returns a short description of the servlet.
-     *
-     * @return a String containing servlet description
-     */
-    @Override
-    public String getServletInfo() {
-        return "Short description";
-    }// </editor-fold>
-
 }

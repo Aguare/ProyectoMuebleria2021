@@ -97,15 +97,15 @@ CREATE TABLE Factura(
 CREATE TABLE Compra(
 	no_factura INT NOT NULL,
 	Cliente_NIT VARCHAR(20) NOT NULL,
-	idMueble INT NOT NULL,
+	C_idMueble INT NOT NULL,
 	M_idEnsamble INT NOT NULL,
-	TMnombre_mueble VARCHAR(50) NOT NULL,
+	nombre_mueble VARCHAR(50) NOT NULL,
 	devuelto TINYINT NOT NULL,
 	FOREIGN KEY (no_factura) REFERENCES Factura(no_factura),
 	FOREIGN KEY (Cliente_NIT) REFERENCES Cliente(NIT),
-	FOREIGN KEY (idMueble) REFERENCES Mueble(idMueble),
+	FOREIGN KEY (C_idMueble) REFERENCES Mueble(idMueble),
 	FOREIGN KEY (M_idEnsamble) REFERENCES Mueble(E_idEnsamble),
-	FOREIGN KEY (TMnombre_mueble) REFERENCES Mueble(TMnombre_mueble)
+	FOREIGN KEY (nombre_mueble) REFERENCES Mueble(TMnombre_mueble)
 );
 
 CREATE TABLE Devolucion(

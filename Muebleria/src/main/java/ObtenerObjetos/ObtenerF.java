@@ -216,67 +216,6 @@ public class ObtenerF {
         }
         return ensambles;
     }
-
-    /**
-     * Obtiene los Muebles según el tipo de mueble 
-     * @param tipoMueble
-     * @return 
-     */
-    public ArrayList<Mueble> obtenerMuebles(String tipoMueble) {
-        ArrayList<Mueble> muebles = new ArrayList<>();
-        String query = "SELECT * FROM Mueble WHERE TMnombre_mueble = ?;";
-        try {
-            PreparedStatement prepared = Conexion.Conexion().prepareStatement(query);
-            prepared.setString(1, tipoMueble);
-            ResultSet resultado = prepared.executeQuery();
-            while (resultado.next()) {
-                muebles.add(new Mueble(resultado.getInt("idMueble"), resultado.getDouble("precio_costo"),
-                        obtenerEnsambleSegunID(resultado.getString("E_idEnsamble")), resultado.getString("TMnombre_mueble"),
-                        consultarDevolucion(resultado.getInt("idMueble"))));
-            }
-        } catch (SQLException e) {
-        }
-        return muebles;
-    }
-
-    /**
-     * obtiene todos los muebles que han sido ensamblados junto con los que han sido vendidos
-     * @return 
-     */
-    public ArrayList<Mueble> obtenerMueblesTodos() {
-        ArrayList<Mueble> muebles = new ArrayList<>();
-        String query = "SELECT * FROM Mueble;";
-        try {
-            PreparedStatement prepared = Conexion.Conexion().prepareStatement(query);
-            ResultSet resultado = prepared.executeQuery();
-            while (resultado.next()) {
-                muebles.add(new Mueble(resultado.getInt("idMueble"), resultado.getDouble("precio_costo"),
-                        obtenerEnsambleSegunID(resultado.getString("E_idEnsamble")), resultado.getString("TMnombre_mueble"),
-                        consultarDevolucion(resultado.getInt("idMueble"))));
-            }
-        } catch (SQLException e) {
-        }
-        return muebles;
-    }
-    
-    /**
-     * Este método consulta en la base de datos si el mueble ha sido devuelto o no
-     * @param idMueble
-     * @return 
-     */
-    public boolean consultarDevolucion(int idMueble) {
-        String query = "SELECT devuelto FROM Compra WHERE idMueble = ?;";
-        try {
-            PreparedStatement prepared = Conexion.Conexion().prepareStatement(query);
-            prepared.setInt(1, idMueble);
-            ResultSet resultado = prepared.executeQuery();
-            while (resultado.next()) {
-                return resultado.getBoolean("devuelto");
-            }
-        } catch (SQLException e) {
-        }
-        return false;
-    }
     
     /**
      * Obtiene las piezas que necesita un mueble según su tipo ES SU RECETA
@@ -301,51 +240,5 @@ public class ObtenerF {
         } catch (SQLException e) {
         }
         return piezas;
-    }
-
-    /**
-     * Obtiene todos los tipos de muebles como objeto, con su receta cantida,
-     * etc.
-     *
-     * @return Retorna un arreglo de TipoMueble
-     */
-    public ArrayList<TipoMueble> obtenerTipoMuebles() {
-        ArrayList<TipoMueble> tipoMuebles = new ArrayList<>();
-        String query = "SELECT * FROM TipoMueble;";
-        try {
-            PreparedStatement prepared = Conexion.Conexion().prepareStatement(query);
-            ResultSet resultado = prepared.executeQuery();
-            while (resultado.next()) {
-                tipoMuebles.add(new TipoMueble(resultado.getString("nombre_mueble"),
-                        resultado.getDouble("precio_venta"), resultado.getInt("cantidad"),
-                        resultado.getString("detalles"), obtenerMuebles(resultado.getString("nombre_mueble")),
-                        obtenerPiezasTipoMueble(resultado.getString("nombre_mueble"))));
-            }
-        } catch (SQLException e) {
-        }
-        return tipoMuebles;
-    }
-
-    /**
-     * Obtiene un tipo de mueble según su nombre
-     * @param tipoMueble el nombre del tipo de Mueble
-     * @return Devulve un TipoMueble
-     */
-    public TipoMueble obtenerTipoMuebleSegunNombre(String tipoMueble) {
-        TipoMueble tipo = null;
-        String query = "SELECT * FROM TipoMueble WHERE nombre_mueble = ?;";
-        try {
-            PreparedStatement prepared = Conexion.Conexion().prepareStatement(query);
-            prepared.setString(1, tipoMueble);
-            ResultSet resultado = prepared.executeQuery();
-            while (resultado.next()) {
-                tipo = new TipoMueble(resultado.getString("nombre_mueble"),
-                        resultado.getDouble("precio_venta"), resultado.getInt("cantidad"),
-                        resultado.getString("detalles"), obtenerMuebles(resultado.getString("nombre_mueble")),
-                        obtenerPiezasTipoMueble(resultado.getString("nombre_mueble")));
-            }
-        } catch (SQLException e) {
-        }
-        return tipo;
     }
 }

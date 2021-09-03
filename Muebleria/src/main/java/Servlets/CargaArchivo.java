@@ -38,7 +38,6 @@ public class CargaArchivo extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-
     }
 
     /**
@@ -70,5 +69,4 @@ public class CargaArchivo extends HttpServlet {
             request.getRequestDispatcher("Inicio/CargaArchivo.jsp").forward(request, response);
         }
     }
-
 }

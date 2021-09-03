@@ -3,6 +3,7 @@ package EntidadesFabrica;
 import Archivo.InsertarArchivo;
 import ModificarObj.FabricaCRUD;
 import ObtenerObjetos.ObtenerF;
+import ObtenerObjetos.ObtenerV;
 import java.util.ArrayList;
 
 /**
@@ -11,7 +12,8 @@ import java.util.ArrayList;
  */
 public class EnsamblarLogica {
 
-    private ObtenerF obtener = new ObtenerF();
+    private final ObtenerF obtener = new ObtenerF();
+    private final ObtenerV obtenerV = new ObtenerV();
     private ArrayList<String> erroresArchivo = new ArrayList<>();
     private String error;
 
@@ -26,7 +28,7 @@ public class EnsamblarLogica {
      * @return
      */
     public int ensamblarMueble(String tipoMueble, String usuario, String fecha, String noLinea) {
-        TipoMueble tipo = obtener.obtenerTipoMuebleSegunNombre(tipoMueble);
+        TipoMueble tipo = obtenerV.obtenerTipoMuebleSegunNombre(tipoMueble);
         if (tipo != null) {
             PiezasTipoMueble piezasNecesarias = tipo.getPiezasNecesarias();
             //Se verifica que exista una receta para la creación del mueble

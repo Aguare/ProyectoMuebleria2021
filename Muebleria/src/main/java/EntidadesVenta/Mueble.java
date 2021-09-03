@@ -13,13 +13,15 @@ public class Mueble {
     private Ensamble ensamble;
     private String tipoMueble;
     private boolean devuelto;
+    private double precioVenta;
 
-    public Mueble(int idMueble, double precioCosto, Ensamble ensamble, String tipoMueble, boolean devuelto) {
+    public Mueble(int idMueble, double precioCosto, Ensamble ensamble, String tipoMueble, boolean devuelto, double precioVenta) {
         this.idMueble = idMueble;
         this.precioCosto = precioCosto;
         this.ensamble = ensamble;
         this.tipoMueble = tipoMueble;
         this.devuelto = devuelto;
+        this.precioVenta = precioVenta;
     }
 
     public void seDevolvio() {
@@ -66,8 +68,12 @@ public class Mueble {
         this.devuelto = devuelto;
     }
 
-    public void imprimir() {
-        System.out.println("idMueble:" + idMueble + " TM:" + tipoMueble + " D:" + devuelto);
+    public double getPrecioVenta() {
+        return precioVenta;
+    }
+
+    public void setPrecioVenta(double precioVenta) {
+        this.precioVenta = precioVenta;
     }
 
 }

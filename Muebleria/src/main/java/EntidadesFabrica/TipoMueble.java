@@ -73,11 +73,4 @@ public class TipoMueble {
         this.piezasNecesarias = piezasNecesarias;
     }
 
-    public void imprimir() {
-        System.out.println(nombreMueble + " Cantidad:" + cantidad);
-        for (Mueble mueble : muebles) {
-            mueble.imprimir();
-        }
-        System.out.println();
-    }
 }

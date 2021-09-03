@@ -14,7 +14,6 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
     <jsp:include page="../resources/JS/RecursosJS.jsp"></jsp:include>
     <jsp:include page="../resources/JS/RecursosJS.jsp"></jsp:include>
-    <jsp:include page="../resources/CSS/RecursosCSS.jsp"></jsp:include>
     <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/CSS/barraMenu.css">
     <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
@@ -36,7 +35,7 @@
     <div id="navbarCollapse" class="collapse navbar-collapse justify-content-start">
         <div class="navbar-nav">
             <a href="${pageContext.request.contextPath}/Menus/Venta.jsp" class="nav-item nav-link">Inicio</a>
-            <a href="${pageContext.request.contextPath}/Consultas/Ventas/RegistrarVenta.jsp" class="nav-item nav-link">Venta</a>			
+            <a href="${pageContext.request.contextPath}/Venta" class="nav-item nav-link">Venta</a>			
             <div class="nav-item dropdown">
                 <a href="#" data-toggle="dropdown" class="nav-item nav-link dropdown-toggle">Consulta</a>
                 <div class="dropdown-menu">

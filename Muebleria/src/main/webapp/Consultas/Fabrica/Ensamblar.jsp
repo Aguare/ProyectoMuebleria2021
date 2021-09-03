@@ -4,6 +4,7 @@
     Author     : marco
 --%>
 
+<%@page import="ObtenerObjetos.ObtenerV"%>
 <%@page import="ObtenerObjetos.ObtenerUC"%>
 <%@page import="java.time.LocalDate"%>
 <%@page import="EntidadesFabrica.Usuario"%>
@@ -26,7 +27,7 @@
     </head>
     <body>
         <%
-            ObtenerF obtener = new ObtenerF();
+            ObtenerV obtener = new ObtenerV();
             ObtenerUC obtenerUC = new ObtenerUC();
             ArrayList<TipoMueble> tipoMueble = obtener.obtenerTipoMuebles();
             ArrayList<Usuario> usuarios = obtenerUC.obtenerUsuariosSegunDepartamento(1);
