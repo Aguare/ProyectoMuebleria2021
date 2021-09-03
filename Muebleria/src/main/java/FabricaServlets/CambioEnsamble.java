@@ -57,6 +57,7 @@ public class CambioEnsamble extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        request.setCharacterEncoding("UTF-8");
         ObtenerF obtener = new ObtenerF();
         String idEnsamble = request.getParameter("ensamble");
         if (idEnsamble == null) {
@@ -84,6 +85,7 @@ public class CambioEnsamble extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        request.setCharacterEncoding("UTF-8");
         try {
             int opcion = Integer.parseInt(request.getParameter("opcion"));
             String fecha = request.getParameter("fecha");

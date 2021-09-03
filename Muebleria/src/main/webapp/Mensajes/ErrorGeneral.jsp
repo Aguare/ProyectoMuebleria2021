@@ -10,7 +10,7 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>Error</title>
+        <title>Información</title>
     </head>
     <body>
         <style><%@include file="../resources/CSS/RecursosCSS.jsp"%></style>

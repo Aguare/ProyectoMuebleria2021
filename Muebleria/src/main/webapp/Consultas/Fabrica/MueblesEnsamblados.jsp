@@ -8,7 +8,6 @@
 <%@page import="EntidadesVenta.Mueble"%>
 <%@page import="EntidadesFabrica.Ensamble"%>
 <%@page import="java.util.ArrayList"%>
-<%@page import="SQL.ObtenerObj"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
@@ -38,19 +37,16 @@
                 <form action="${pageContext.request.contextPath}/ConsultasFabrica" method="POST">
                     <div class="form-check-inline">
                         <label class="form-check-label">
-                            Fecha Inicial: <input type="date" class="form-check-input" name="fechaInicial" value="<%=fechaInicial%>">
+                            Fecha Inicial: <input type="date" class="form-group" name="fechaInicial" value="<%=fechaInicial%>">
                         </label>
                     </div>
                     <div class="form-check-inline">
                         <label class="form-check-label">
-                            Fecha Final: <input type="date" class="form-check-input" name="fechaFinal" value="<%=fechaFinal%>">
+                            Fecha Final: <input type="date" class="form-group" name="fechaFinal" value="<%=fechaFinal%>">
                         </label>
                     </div>
                     <div class="custom-control custom-radio custom-control-inline">
                         <button type="submit" class="btn btn-outline-primary">Buscar</button>
-                    </div>
-                    <div class="custom-control custom-radio custom-control-inline">
-                        <button type="reset" class="btn btn-outline-secondary">Limpiar Fechas</button>
                     </div>
                 </form>
             </div>
@@ -73,17 +69,17 @@
                         </th>
                     </tr>
                     <%}%>
-                <%for (Ensamble ensamble : ensambles) {%>
-                <tr>
-                    <td class="text-center"><%=ensamble.getIdEnsamble()%></td>
-                    <td class="text-center"><%=ensamble.getFecha().toString()%></td>
-                    <td class="text-center"><%=ensamble.getUsuario().getNombre_usuario()%></td>
-                    <td class="text-center"><%=ensamble.getTipoMueble()%></td>
-                    <td class="text-center">
-                        <a href="${pageContext.request.contextPath}/CambioEnsamble?ensamble=<%=ensamble.getIdEnsamble()%>" class="btn btn-info" role="button">Editar</a>
-                    </td>
-                </tr>
-                <%}%>
+                    <%for (Ensamble ensamble : ensambles) {%>
+                    <tr>
+                        <td class="text-center"><%=ensamble.getIdEnsamble()%></td>
+                        <td class="text-center"><%=ensamble.getFecha().toString()%></td>
+                        <td class="text-center"><%=ensamble.getUsuario().getNombre_usuario()%></td>
+                        <td class="text-center"><%=ensamble.getTipoMueble()%></td>
+                        <td class="text-center">
+                            <a href="${pageContext.request.contextPath}/CambioEnsamble?ensamble=<%=ensamble.getIdEnsamble()%>" class="btn btn-info" role="button">Editar</a>
+                        </td>
+                    </tr>
+                    <%}%>
                 </tbody>
             </table>
             <%} else {%>

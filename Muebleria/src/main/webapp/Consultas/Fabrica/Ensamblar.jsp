@@ -4,6 +4,7 @@
     Author     : marco
 --%>
 
+<%@page import="ObtenerObjetos.ObtenerUC"%>
 <%@page import="java.time.LocalDate"%>
 <%@page import="EntidadesFabrica.Usuario"%>
 <%@page import="EntidadesFabrica.Ensamble"%>
@@ -11,7 +12,7 @@
 <%@page import="ModificarObj.FabricaCRUD"%>
 <%@page import="EntidadesFabrica.TipoPiezas"%>
 <%@page import="java.util.ArrayList"%>
-<%@page import="SQL.ObtenerObj"%>
+<%@page import="ObtenerObjetos.ObtenerF"%>
 <%@page import="EntidadesFabrica.Pieza"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
@@ -25,9 +26,10 @@
     </head>
     <body>
         <%
-            ObtenerObj obtener = new ObtenerObj();
+            ObtenerF obtener = new ObtenerF();
+            ObtenerUC obtenerUC = new ObtenerUC();
             ArrayList<TipoMueble> tipoMueble = obtener.obtenerTipoMuebles();
-            ArrayList<Usuario> usuarios = obtener.obtenerUsuariosSegunDepartamento(1);
+            ArrayList<Usuario> usuarios = obtenerUC.obtenerUsuariosSegunDepartamento(1);
         %>
         <br>
         <%

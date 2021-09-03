@@ -57,6 +57,7 @@ public class CambioPiezas extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        request.setCharacterEncoding("UTF-8");
         int id = 0;
         int opcion = 0;
         try{
@@ -111,6 +112,7 @@ public class CambioPiezas extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        request.setCharacterEncoding("UTF-8");
         int opcion = Integer.parseInt(request.getParameter("opcion"));
         ObtenerF obtener = new ObtenerF();
         String idPieza = "";

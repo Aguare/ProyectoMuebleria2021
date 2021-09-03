@@ -56,6 +56,7 @@ public class ConsultasFabrica extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        request.setCharacterEncoding("UTF-8");
         try {
             ObtenerF obtener = new ObtenerF();
             int opcion = Integer.parseInt(request.getParameter("orden"));
@@ -78,7 +79,7 @@ public class ConsultasFabrica extends HttpServlet {
                     request.getRequestDispatcher("Mensajes/ErrorGeneral.jsp").forward(request, response);
                     break;
             }
-        } catch (Exception e) {
+        } catch (IOException | NumberFormatException | ServletException e) {
             request.setAttribute("mensaje", "LA OPCIÓN NO EXISTE");
             request.getRequestDispatcher("Mensajes/ErrorGeneral.jsp").forward(request, response);
         }
@@ -95,6 +96,7 @@ public class ConsultasFabrica extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        request.setCharacterEncoding("UTF-8");
         ObtenerF obtener = new ObtenerF();
         String fechaInicial = request.getParameter("fechaInicial");
         String fechaFinal = request.getParameter("fechaFinal");

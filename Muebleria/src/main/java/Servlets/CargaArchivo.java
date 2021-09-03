@@ -52,6 +52,7 @@ public class CargaArchivo extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        request.setCharacterEncoding("UTF-8");
         Part filePart = request.getPart("archivoCarga");
         InputStream contenido = filePart.getInputStream();
         BufferedReader buffer = new BufferedReader(new InputStreamReader(contenido, StandardCharsets.UTF_8));

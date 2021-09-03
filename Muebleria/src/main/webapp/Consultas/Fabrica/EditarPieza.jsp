@@ -4,10 +4,11 @@
     Author     : marco
 --%>
 
+<%@page import="ObtenerObjetos.ObtenerF"%>
 <%@page import="ModificarObj.FabricaCRUD"%>
 <%@page import="EntidadesFabrica.TipoPiezas"%>
 <%@page import="java.util.ArrayList"%>
-<%@page import="SQL.ObtenerObj"%>
+<%@page import="ObtenerObjetos.ObtenerF"%>
 <%@page import="EntidadesFabrica.Pieza"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
@@ -23,7 +24,7 @@
     </head>
     <body>
         <%
-            ObtenerObj obtener = new ObtenerObj();
+            ObtenerF obtener = new ObtenerF();
             ArrayList<TipoPiezas> tipoPiezas = obtener.obtenerTipoPiezas(1);
         %>
         <br>
