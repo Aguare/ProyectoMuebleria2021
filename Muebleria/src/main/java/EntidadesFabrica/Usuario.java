@@ -1,5 +1,7 @@
 package EntidadesFabrica;
 
+import SQL.Encriptar;
+
 /**
  *
  * @author aguare
@@ -9,29 +11,43 @@ public class Usuario {
     private String nombre_usuario;
     private int idDepartamento;
     private String nombreDepartamento;
+    private String password = "";
     private boolean acceso;
-
-    public Usuario(String nombre_usuario, int idDepartamento, boolean acceso) {
+    
+    public Usuario(String nombre_usuario, int idDepartamento, boolean acceso, String password) {
         this.nombre_usuario = nombre_usuario;
         this.idDepartamento = idDepartamento;
         this.acceso = acceso;
+        this.password = password;
         definir();
     }
-
+    
     private void definir() {
         switch (idDepartamento) {
             case 1:
-                nombreDepartamento = "Fábrica";
+                nombreDepartamento = "FÁBRICA";
                 break;
             case 2:
-                nombreDepartamento = "Punto de Venta";
+                nombreDepartamento = "PUNTO DE VENTA";
                 break;
             case 3:
-                nombreDepartamento = "Financiero";
+                nombreDepartamento = "ADMINISTRACIÓN";
                 break;
             default:
                 break;
         }
+    }
+
+    public String getPassword() {
+        Encriptar encriptar = new Encriptar();
+        String p = encriptar.desencriptarPass(password, "ipc");
+        return p;
+    }
+
+    public void setPassword(String password) {
+        Encriptar encriptar = new Encriptar();
+        String p = encriptar.encriptarPass(password);
+        this.password = password;
     }
 
     public boolean isAcceso() {

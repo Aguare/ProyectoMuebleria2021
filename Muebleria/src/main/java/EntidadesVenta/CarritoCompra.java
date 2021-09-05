@@ -60,6 +60,14 @@ public class CarritoCompra {
         return idMueble;
     }
 
+    public Usuario getUsuario() {
+        return usuario;
+    }
+
+    public void setUsuario(Usuario usuario) {
+        this.usuario = usuario;
+    }
+
     public ArrayList<Mueble> getCarrito() {
         return carrito;
     }

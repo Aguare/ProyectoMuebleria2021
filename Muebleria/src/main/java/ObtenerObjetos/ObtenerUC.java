@@ -50,7 +50,23 @@ public class ObtenerUC {
             ResultSet resultado = prepared.executeQuery();
             while (resultado.next()) {
                 usuario = new Usuario(resultado.getString("nombre_usuario"), resultado.getInt("idDepartamento"),
-                        resultado.getBoolean("acceso"));
+                        resultado.getBoolean("acceso"), resultado.getString("password"));
+            }
+        } catch (SQLException e) {
+        }
+        return usuario;
+    }
+    
+    public Usuario obtenerUsuarioSegunNombreConPass(String nombre) {
+        Usuario usuario = null;
+        String query = "SELECT * FROM Usuario WHERE nombre_usuario = ?;";
+        try {
+            PreparedStatement prepared = Conexion.Conexion().prepareStatement(query);
+            prepared.setString(1, nombre);
+            ResultSet resultado = prepared.executeQuery();
+            while (resultado.next()) {
+                usuario = new Usuario(resultado.getString("nombre_usuario"), resultado.getInt("idDepartamento"),
+                        resultado.getBoolean("acceso"), resultado.getString("password"));
             }
         } catch (SQLException e) {
         }
@@ -83,7 +99,7 @@ public class ObtenerUC {
             ResultSet resultado = prepared.executeQuery();
             while (resultado.next()) {
                 usuarios.add(new Usuario(resultado.getString("nombre_usuario"), resultado.getInt("idDepartamento"),
-                        resultado.getBoolean("acceso")));
+                        resultado.getBoolean("acceso"), resultado.getString("password")));
             }
         } catch (SQLException e) {
         }
