@@ -39,14 +39,13 @@
             <div class="nav-item dropdown">
                 <a href="#" data-toggle="dropdown" class="nav-item nav-link dropdown-toggle">Consulta</a>
                 <div class="dropdown-menu">
-                    <a href="#" class="dropdown-item">Factura</a>
-                    <a href="#" class="dropdown-item">Compras</a>
+                    <a href="${pageContext.request.contextPath}/Consultas/Ventas/ComprasCliente.jsp" class="dropdown-item">Compras</a>
                     <a href="#" class="dropdown-item">Devoluciones</a>
-                    <a href="#" class="dropdown-item">Ventas del Día</a>
-                    <a href="#" class="dropdown-item">Muebles Disponibles</a>
+                    <a href="${pageContext.request.contextPath}/Consultas/Ventas/VentasDia.jsp" class="dropdown-item">Ventas del Día</a>
+                    <a href="${pageContext.request.contextPath}/Consultas/Ventas/MueblesDisponibles.jsp" class="dropdown-item">Muebles Disponibles</a>
                 </div>
             </div>
-            <a href="#" class="nav-item nav-link">Devoluciones</a>
+            <a href="${pageContext.request.contextPath}/Consultas/Ventas/DevolucionDisponibles.jsp" class="nav-item nav-link">Devoluciones</a>
         </div>
         <div class="navbar-nav action-buttons ml-auto">
             <a href="#" data-toggle="dropdown" class="navbar-nav mr-3"><%=usuario.getNombre_usuario()%></a>

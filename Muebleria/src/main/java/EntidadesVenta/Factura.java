@@ -12,12 +12,22 @@ public class Factura {
     private LocalDate fecha;
     private double total;
     private Cliente cliente;
+    private String usuario;
 
-    public Factura(int noFactura, LocalDate fecha, double total, Cliente cliente) {
+    public Factura(int noFactura, LocalDate fecha, double total, Cliente cliente, String usuario) {
         this.noFactura = noFactura;
         this.fecha = fecha;
         this.total = total;
         this.cliente = cliente;
+        this.usuario = usuario;
+    }
+
+    public String getUsuario() {
+        return usuario;
+    }
+
+    public void setUsuario(String usuario) {
+        this.usuario = usuario;
     }
 
     public int getNoFactura() {
@@ -51,5 +61,4 @@ public class Factura {
     public void setCliente(Cliente cliente) {
         this.cliente = cliente;
     }
-
 }

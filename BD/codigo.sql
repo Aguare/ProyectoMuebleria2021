@@ -90,22 +90,23 @@ CREATE TABLE Factura(
 	fecha DATE NOT NULL,
 	total DOUBLE NOT NULL,
 	Cliente_NIT VARCHAR(20) NOT NULL,
+	Usuario_user VARCHAR(20) NOT NULL,
 	PRIMARY KEY (no_factura),
-	FOREIGN KEY (Cliente_NIT) REFERENCES Cliente(NIT)
+	FOREIGN KEY (Cliente_NIT) REFERENCES Cliente(NIT),
+	FOREIGN KEY (Usuario_user) REFERENCES Usuario(nombre_usuario)
 );
 
 CREATE TABLE Compra(
-	no_factura INT NOT NULL,
+	Cno_factura INT NOT NULL,
 	Cliente_NIT VARCHAR(20) NOT NULL,
 	C_idMueble INT NOT NULL,
-	M_idEnsamble INT NOT NULL,
-	nombre_mueble VARCHAR(50) NOT NULL,
 	devuelto TINYINT NOT NULL,
-	FOREIGN KEY (no_factura) REFERENCES Factura(no_factura),
+	C_tipoMueble VARCHAR(50) NOT NULL,
+	Cfecha DATE NOT NULL,
+	FOREIGN KEY (Cno_factura) REFERENCES Factura(no_factura),
 	FOREIGN KEY (Cliente_NIT) REFERENCES Cliente(NIT),
 	FOREIGN KEY (C_idMueble) REFERENCES Mueble(idMueble),
-	FOREIGN KEY (M_idEnsamble) REFERENCES Mueble(E_idEnsamble),
-	FOREIGN KEY (nombre_mueble) REFERENCES Mueble(TMnombre_mueble)
+	FOREIGN KEY (C_tipoMueble) REFERENCES Mueble(TMnombre_mueble)
 );
 
 CREATE TABLE Devolucion(
@@ -123,3 +124,6 @@ INSERT INTO Departamento VALUES (1,"Fábrica");
 INSERT INTO Departamento VALUES (2,"Punto de Venta");
 INSERT INTO Departamento VALUES (3,"Financiero");
 INSERT INTO Usuario VALUES("admin","5r6gXIfIDxY=",1,3);	
+CREATE USER 'adminMuebleria'@'localhost' IDENTIFIED BY 'Aadmin_1!';
+GRANT ALL PRIVILEGES ON Muebleria.* TO 'adminMuebleria'@'localhost';
+FLUSH PRIVILEGES;

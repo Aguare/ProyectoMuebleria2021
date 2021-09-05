@@ -29,7 +29,7 @@
             Usuario usuario = (Usuario) request.getSession().getAttribute("Usuario");
     %>
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
-    <a href="${pageContext.request.contextPath}/Menus/Financiero.jsp" class="navbar-brand"><b>FINANCIERO</b></a>  		
+    <a href="${pageContext.request.contextPath}/Menus/Financiero.jsp" class="navbar-brand"><b>ADMINISTRACIÓN</b></a>  		
     <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navbarCollapse">
         <span class="navbar-toggler-icon"></span>
     </button>
@@ -39,8 +39,8 @@
             <div class="nav-item dropdown">
                 <a href="#" data-toggle="dropdown" class="nav-item nav-link dropdown-toggle">Usuarios</a>
                 <div class="dropdown-menu">					
-                    <a href="#" class="dropdown-item">Crear</a>
-                    <a href="#" class="dropdown-item">Ver Todos</a>
+                    <a href="${pageContext.request.contextPath}/CambioUsuario?accion=1" class="dropdown-item">Crear</a>
+                    <a href="${pageContext.request.contextPath}/Consultas/Admon/TodosUsuarios.jsp" class="dropdown-item">Ver Todos</a>
                 </div>
             </div>
             <div class="nav-item dropdown">
@@ -53,12 +53,13 @@
             <div class="nav-item dropdown">
                 <a href="#" data-toggle="dropdown" class="nav-item nav-link dropdown-toggle">Reportes</a>
                 <div class="dropdown-menu">					
-                    <a href="#" class="dropdown-item">Ventas</a>
-                    <a href="#" class="dropdown-item">Ganancias</a>
+                    <a href="${pageContext.request.contextPath}/Consultas/Admon/Reportes/VentasFecha.jsp" class="dropdown-item">Ventas</a>
+                    <a href="${pageContext.request.contextPath}/Consultas/Admon/Reportes/GananciasFecha.jsp" class="dropdown-item">Ganancias</a>
                     <a href="#" class="dropdown-item">Devoluciones</a>
-                    <a href="#" class="dropdown-item">Usuario con más Ventas</a>
-                    <a href="#" class="dropdown-item">Mueble con más Ventas</a>
-                    <a href="#" class="dropdown-item">Mueble con menos Ventas</a>
+                    <a href="${pageContext.request.contextPath}/Consultas/Admon/Reportes/UsuarioVentas.jsp" class="dropdown-item">Usuario con más Ventas</a>
+                    <a href="${pageContext.request.contextPath}/Consultas/Admon/Reportes/UsuarioGanancias.jsp" class="dropdown-item">Usuario con más Ganancias</a>
+                    <a href="${pageContext.request.contextPath}/Consultas/Admon/Reportes/MuebleVentas.jsp" class="dropdown-item">Mueble con más Ventas</a>
+                    <a href="${pageContext.request.contextPath}/Consultas/Admon/Reportes/MuebleMenosVentas.jsp" class="dropdown-item">Mueble con menos Ventas</a>
                 </div>
             </div>
         </div>

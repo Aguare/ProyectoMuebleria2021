@@ -1,11 +1,15 @@
 package ObtenerObjetos;
 
 import EntidadesFabrica.TipoMueble;
+import EntidadesVenta.Compra;
+import EntidadesVenta.Factura;
 import EntidadesVenta.Mueble;
 import SQL.Conexion;
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDate;
 import java.util.ArrayList;
 
 /**
@@ -15,6 +19,7 @@ import java.util.ArrayList;
 public class ObtenerV {
 
     private final ObtenerF obtenerF = new ObtenerF();
+    private final ObtenerUC obtenerUC = new ObtenerUC();
 
     /**
      * Obtiene todos los tipos de muebles como objeto, con su receta cantida,
@@ -173,6 +178,21 @@ public class ObtenerV {
         return mueble;
     }
 
+    public ArrayList<Mueble> obtenerMueblesSegunFactura(int noFactura) {
+        ArrayList<Mueble> muebles = new ArrayList<>();
+        String query = "SELECT C_idMueble FROM Compra WHERE Cno_factura = ?;";
+        try {
+            PreparedStatement prepared = Conexion.Conexion().prepareStatement(query);
+            prepared.setString(1, "" + noFactura);
+            ResultSet resultado = prepared.executeQuery();
+            while (resultado.next()) {
+                muebles.add(obtenerMuebleSegunID(resultado.getString("C_idMueble")));
+            }
+        } catch (SQLException e) {
+        }
+        return muebles;
+    }
+
     /**
      * Este método consulta en la base de datos si el mueble ha sido devuelto o
      * no
@@ -181,7 +201,7 @@ public class ObtenerV {
      * @return
      */
     public boolean consultarDevolucion(int idMueble) {
-        String query = "SELECT devuelto FROM Compra WHERE idMueble = ?;";
+        String query = "SELECT devuelto FROM Compra WHERE C_idMueble = ?;";
         try {
             PreparedStatement prepared = Conexion.Conexion().prepareStatement(query);
             prepared.setInt(1, idMueble);
@@ -192,5 +212,148 @@ public class ObtenerV {
         } catch (SQLException e) {
         }
         return false;
+    }
+
+    /**
+     * Se obtiene la factura según su número de correlativo
+     *
+     * @param noFactura
+     * @return
+     */
+    public Factura obtenerFacturaSegunNo(int noFactura) {
+        Factura factura = null;
+        String query = "SELECT * FROM Factura WHERE no_factura = ?;";
+        try {
+            PreparedStatement prepared = Conexion.Conexion().prepareStatement(query);
+            prepared.setInt(1, noFactura);
+            ResultSet resultado = prepared.executeQuery();
+            while (resultado.next()) {
+                Date fechaSQL = resultado.getDate("fecha");
+                LocalDate fecha = fechaSQL.toLocalDate();
+                factura = new Factura(resultado.getInt("no_factura"), fecha,
+                        resultado.getDouble("total"), obtenerUC.obtenerClientesSegunNIT(resultado.getString("Cliente_NIT")),
+                        resultado.getString("Usuario_user"));
+            }
+        } catch (SQLException e) {
+        }
+        return factura;
+    }
+
+    /**
+     * Devuelve las facturas que se han generado en la fecha actual
+     *
+     * @return
+     */
+    public ArrayList<Factura> obtenerFacturasDiaActual() {
+        ArrayList<Factura> facturas = new ArrayList<>();
+        String query = "SELECT * FROM Factura WHERE fecha = CURDATE();";
+        try {
+            PreparedStatement prepared = Conexion.Conexion().prepareStatement(query);
+            ResultSet resultado = prepared.executeQuery();
+            while (resultado.next()) {
+                Date fechaSQL = resultado.getDate("fecha");
+                LocalDate fecha = fechaSQL.toLocalDate();
+                facturas.add(new Factura(resultado.getInt("no_factura"), fecha,
+                        resultado.getDouble("total"), obtenerUC.obtenerClientesSegunNIT(resultado.getString("Cliente_NIT")),
+                        resultado.getString("Usuario_user")));
+            }
+        } catch (SQLException e) {
+        }
+        return facturas;
+    }
+
+    /**
+     * Obtiene las facturas generadas en un intervalo de tiempo
+     *
+     * @param fechaInicial
+     * @param fechaFinal
+     * @return
+     */
+    public ArrayList<Factura> obtenerFacturasIntervaloFecha(String fechaInicial, String fechaFinal) {
+        ArrayList<Factura> facturas = new ArrayList<>();
+        String query = "SELECT * FROM Factura WHERE fecha BETWEEN ? AND ?;";
+        try {
+            PreparedStatement prepared = Conexion.Conexion().prepareStatement(query);
+            prepared.setString(1, fechaInicial);
+            prepared.setString(2, fechaFinal);
+            ResultSet resultado = prepared.executeQuery();
+            while (resultado.next()) {
+                Date fechaSQL = resultado.getDate("fecha");
+                LocalDate fecha = fechaSQL.toLocalDate();
+                facturas.add(new Factura(resultado.getInt("no_factura"), fecha,
+                        resultado.getDouble("total"), obtenerUC.obtenerClientesSegunNIT(resultado.getString("Cliente_NIT")),
+                        resultado.getString("Usuario_user")));
+            }
+        } catch (SQLException e) {
+        }
+        return facturas;
+    }
+
+    /**
+     * Obtiene la compra según el número de factura
+     *
+     * @param noFactura número de factura
+     * @return
+     */
+    public Compra obtenerCompraSegunFactura(int noFactura) {
+        Compra compra = null;
+        Factura factura = obtenerFacturaSegunNo(noFactura);
+        ArrayList<Mueble> muebles = obtenerMueblesSegunFactura(noFactura);
+        compra = new Compra(factura, muebles);
+        return compra;
+    }
+
+    /**
+     * Se obtienen las compras realizadas por un cliente entre dos fechas
+     *
+     * @param fechaInicial
+     * @param fechaFinal
+     * @param NIT
+     * @return
+     */
+    public ArrayList<Factura> obtenerFacturasClienteSegunFecha(String fechaInicial, String fechaFinal, String NIT) {
+        ArrayList<Factura> facturas = new ArrayList<>();
+        String query = "SELECT * FROM Factura WHERE Cliente_NIT = ? AND (fecha BETWEEN ? AND ?);";
+        try {
+            PreparedStatement prepared = Conexion.Conexion().prepareStatement(query);
+            prepared.setString(1, NIT);
+            prepared.setString(2, fechaInicial);
+            prepared.setString(3, fechaFinal);
+            ResultSet resultado = prepared.executeQuery();
+            while (resultado.next()) {
+                Date fechaSQL = resultado.getDate("fecha");
+                LocalDate fecha = fechaSQL.toLocalDate();
+                facturas.add(new Factura(resultado.getInt("no_factura"), fecha,
+                        resultado.getDouble("total"), obtenerUC.obtenerClientesSegunNIT(resultado.getString("Cliente_NIT")),
+                        resultado.getString("Usuario_user")));
+            }
+        } catch (SQLException e) {
+        }
+        return facturas;
+    }
+
+    /**
+     * Se obtienen las compras realizadas por un cliente
+     *
+     * @param NIT
+     * @return
+     */
+    public ArrayList<Factura> obtenerFacturasCliente(String NIT) {
+        ArrayList<Factura> facturas = new ArrayList<>();
+        String query = "SELECT * FROM Factura WHERE Cliente_NIT = ?;";
+        try {
+            PreparedStatement prepared = Conexion.Conexion().prepareStatement(query);
+            prepared.setString(1, NIT);
+            ResultSet resultado = prepared.executeQuery();
+            while (resultado.next()) {
+                Date fechaSQL = resultado.getDate("fecha");
+                LocalDate fecha = fechaSQL.toLocalDate();
+                facturas.add(new Factura(resultado.getInt("no_factura"), fecha,
+                        resultado.getDouble("total"), obtenerUC.obtenerClientesSegunNIT(resultado.getString("Cliente_NIT")),
+                        resultado.getString("Usuario_user")));
+            }
+        } catch (SQLException e) {
+        }
+        return facturas;
     }
 }
