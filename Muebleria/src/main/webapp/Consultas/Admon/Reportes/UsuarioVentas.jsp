@@ -16,7 +16,7 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Compras del Cliente</title>
-        <script src="../../../resources/JS/Exportar.js"></script>
+        <script src="${pageContext.request.contextPath}/resources/JS/Exportar.js"></script>
     </head>
     <body>
         <jsp:include page="../../../resources/CSS/RecursosCSS.jsp"></jsp:include>
@@ -70,6 +70,11 @@
                         </tr>
                     </thead>
                     <tbody>
+                        <%if (datos.isEmpty()) {%>
+                        <tr class="table-warning">
+                            <td colspan="3">NO HAY REGISTROS</td>
+                        </tr>
+                        <%}%>
                         <%for (String[] fila : datos) {%>
                         <tr>
                             <%for (int i = 0; i < fila.length; i++) {%>

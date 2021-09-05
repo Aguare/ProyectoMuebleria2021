@@ -103,7 +103,7 @@
                                     <th>ID</th>
                                     <th>TIPO DE MUEBLE</th>
                                     <th>PRECIO</th>
-                                    <th></th>
+                                    <th>DEVOLUCIÓN</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -113,17 +113,20 @@
                                     <td><%=mueble.getIdMueble()%></td>
                                     <td><%=mueble.getTipoMueble().toUpperCase()%></td>
                                     <td>Q.<%=mueble.getPrecioVenta()%></td>
-                                    <%if (mueble.isDevuelto()) {%>
-                                    <td>DEVUELTO</td>
+                                    <%if (!mueble.isDevuelto()) {%>
+                                    <td>
+                                        <a href="${pageContext.request.contextPath}/HacerDevolucion?noFactura=<%=factura.getNoFactura()%>&idMueble=<%=mueble.getIdMueble()%>" class="btn btn-danger btn-sm" role="button">REGISTRAR</a>
+                                    </td>
+                                    <%}else{%>
+                                    <td>Devuelto</td>
                                     <%}%>
                                 </tr>
                                 <%}%>
                                 <tr class="table-dark text-dark">
                                     <td colspan="2" class="text-center">TOTAL</td>
-                                    <td >Q.<%=factura.getTotal()%></td>
+                                    <td>Q.<%=factura.getTotal()%></td>
                                     <td></td>
                                 </tr>
-                                
                             </tbody>
                         </table>
                     </div>

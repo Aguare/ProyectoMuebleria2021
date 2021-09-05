@@ -97,13 +97,16 @@ CREATE TABLE Factura(
 );
 
 CREATE TABLE Compra(
-	no_factura INT NOT NULL,
+	Cno_factura INT NOT NULL,
 	Cliente_NIT VARCHAR(20) NOT NULL,
 	C_idMueble INT NOT NULL,
 	devuelto TINYINT NOT NULL,
-	FOREIGN KEY (no_factura) REFERENCES Factura(no_factura),
+	C_tipoMueble VARCHAR(50) NOT NULL,
+	Cfecha DATE NOT NULL,
+	FOREIGN KEY (Cno_factura) REFERENCES Factura(no_factura),
 	FOREIGN KEY (Cliente_NIT) REFERENCES Cliente(NIT),
-	FOREIGN KEY (C_idMueble) REFERENCES Mueble(idMueble)
+	FOREIGN KEY (C_idMueble) REFERENCES Mueble(idMueble),
+	FOREIGN KEY (C_tipoMueble) REFERENCES Mueble(TMnombre_mueble)
 );
 
 CREATE TABLE Devolucion(
@@ -121,3 +124,6 @@ INSERT INTO Departamento VALUES (1,"Fábrica");
 INSERT INTO Departamento VALUES (2,"Punto de Venta");
 INSERT INTO Departamento VALUES (3,"Financiero");
 INSERT INTO Usuario VALUES("admin","5r6gXIfIDxY=",1,3);	
+CREATE USER 'adminMuebleria'@'localhost' IDENTIFIED BY 'Aadmin_1!';
+GRANT ALL PRIVILEGES ON Muebleria.* TO 'adminMuebleria'@'localhost';
+FLUSH PRIVILEGES;

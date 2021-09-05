@@ -16,7 +16,7 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Compras del Cliente</title>
-        <script src="../../../resources/JS/ExportarConOpciones.js"></script>
+        <script src="${pageContext.request.contextPath}/resources/JS/ExportarConOpciones.js"></script>
     </head>
     <body>
         <jsp:include page="../../../resources/CSS/RecursosCSS.jsp"></jsp:include>

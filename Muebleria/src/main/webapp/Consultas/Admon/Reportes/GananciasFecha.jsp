@@ -16,7 +16,7 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Compras del Cliente</title>
-        <script src="../../../resources/JS/ExportarConOpciones.js"></script>
+        <script src="${pageContext.request.contextPath}/resources/JS/ExportarConOpciones.js"></script>
     </head>
     <body>
         <jsp:include page="../../../resources/CSS/RecursosCSS.jsp"></jsp:include>
@@ -29,13 +29,15 @@
             ArrayList<Factura> facturas = obtener.obtenerFacturas();
             String fechaInicial = "";
             String fechaFinal = "";
-            double perdida = 0;
+            double perdida = obtener.obtenerPerdidaTotal();
+            double costoProduccion = obtener.obtenerCostoProduccionTotal();
             double ganancia = 0;
             if (request.getAttribute("facturas") != null) {
                 facturas = (ArrayList<Factura>) request.getAttribute("facturas");
                 fechaInicial = String.valueOf(request.getAttribute("fechaInicial"));
                 fechaFinal = String.valueOf(request.getAttribute("fechaFinal"));
                 perdida = (double) request.getAttribute("perdida");
+                costoProduccion = (double) request.getAttribute("costoProduccion");
             }
         %>
         <div class="container">
@@ -95,13 +97,17 @@
                             <td colspan="3">PÉRDIDA</td>
                             <td colspan="2">Q.<%=perdida%></td>
                         </tr>
-                        <tr class="table-primary">
+                        <tr class="table-danger">
+                            <td colspan="3">COSTO DE PRODUCCIÓN</td>
+                            <td colspan="2">Q.<%=costoProduccion%></td>
+                        </tr>
+                        <tr class="table-success">
                             <td colspan="3">GANANCIA</td>
                             <td colspan="2">Q.<%=ganancia%></td>
                         </tr>
-                        <tr class="table-success">
-                            <td colspan="3">TOTAL GANANCIA</td>
-                            <td colspan="2">Q.<%=(ganancia-perdida)%></td>
+                        <tr class="table-primary">
+                            <td colspan="3">TOTAL</td>
+                            <td colspan="2">Q.<%=(ganancia-perdida-costoProduccion)%></td>
                         </tr>
                         <%}%>
                     </tbody>

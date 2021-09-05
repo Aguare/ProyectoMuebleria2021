@@ -14,8 +14,8 @@ import javax.servlet.http.HttpServletResponse;
  *
  * @author aguare
  */
-@WebServlet(name = "Ganancias", urlPatterns = {"/Ganancias"})
-public class Ganancias extends HttpServlet {
+@WebServlet(name = "MuebleMenosVentas", urlPatterns = {"/MuebleMenosVentas"})
+public class MuebleMenosVentas extends HttpServlet {
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
@@ -46,23 +46,20 @@ public class Ganancias extends HttpServlet {
         String fechaInicial = request.getParameter("fechaInicial");
         String fechaFinal = request.getParameter("fechaFinal");
         ArrayList<Factura> facturas = new ArrayList<>();
-        double perdida = 0;
-        double costoProduccion = 0;
-        if (fechaInicial == null || fechaInicial.length() == 0) {
-            facturas = obtenerA.obtenerFacturas();
-            perdida = obtenerA.obtenerPerdidaTotal();
-            costoProduccion = obtenerA.obtenerCostoProduccionTotal();
+        ArrayList<String[]> datos = new ArrayList<>();
+        if (fechaInicial == null || fechaInicial.length() == 0 || fechaFinal == null || fechaFinal.length() == 0) {
+            datos = obtenerA.muebleMasVendido(2);
         } else {
-            facturas = obtenerA.obtenerFacturasSegunFecha(fechaInicial, fechaFinal);
-            perdida = obtenerA.obtenerPerdidaIntervaloTiempo(fechaInicial, fechaFinal);
-            costoProduccion = obtenerA.obtenerCostoProduccionIntervaloTiempo(fechaInicial, fechaFinal);
+            datos = obtenerA.muebleMasVendidoSegunFecha(fechaInicial, fechaFinal, 2);
+            if (datos.get(1)[0] != null) {
+                facturas = obtenerA.obtenerFacturasMueblesVendidos(fechaInicial, fechaFinal, datos.get(1)[0]);
+            }
         }
+        request.setAttribute("facturas", facturas);
         request.setAttribute("fechaInicial", fechaInicial);
         request.setAttribute("fechaFinal", fechaFinal);
-        request.setAttribute("facturas", facturas);
-        request.setAttribute("perdida", perdida);
-        request.setAttribute("costoProduccion", costoProduccion);
-        request.getRequestDispatcher("Consultas/Admon/Reportes/GananciasFecha.jsp").forward(request, response);
+        request.setAttribute("datos", datos);
+        request.getRequestDispatcher("Consultas/Admon/Reportes/MuebleMenosVentas.jsp").forward(request, response);
     }
 
 }

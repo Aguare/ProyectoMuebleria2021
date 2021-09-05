@@ -45,7 +45,7 @@
                     <a href="${pageContext.request.contextPath}/Consultas/Ventas/MueblesDisponibles.jsp" class="dropdown-item">Muebles Disponibles</a>
                 </div>
             </div>
-            <a href="#" class="nav-item nav-link">Devoluciones</a>
+            <a href="${pageContext.request.contextPath}/Consultas/Ventas/DevolucionDisponibles.jsp" class="nav-item nav-link">Devoluciones</a>
         </div>
         <div class="navbar-nav action-buttons ml-auto">
             <a href="#" data-toggle="dropdown" class="navbar-nav mr-3"><%=usuario.getNombre_usuario()%></a>

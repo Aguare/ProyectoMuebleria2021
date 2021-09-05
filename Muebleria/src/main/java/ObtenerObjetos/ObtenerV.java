@@ -180,7 +180,7 @@ public class ObtenerV {
 
     public ArrayList<Mueble> obtenerMueblesSegunFactura(int noFactura) {
         ArrayList<Mueble> muebles = new ArrayList<>();
-        String query = "SELECT C_idMueble FROM Compra WHERE no_factura = ?;";
+        String query = "SELECT C_idMueble FROM Compra WHERE Cno_factura = ?;";
         try {
             PreparedStatement prepared = Conexion.Conexion().prepareStatement(query);
             prepared.setString(1, "" + noFactura);
@@ -201,7 +201,7 @@ public class ObtenerV {
      * @return
      */
     public boolean consultarDevolucion(int idMueble) {
-        String query = "SELECT devuelto FROM Compra WHERE idMueble = ?;";
+        String query = "SELECT devuelto FROM Compra WHERE C_idMueble = ?;";
         try {
             PreparedStatement prepared = Conexion.Conexion().prepareStatement(query);
             prepared.setInt(1, idMueble);
@@ -263,6 +263,33 @@ public class ObtenerV {
     }
 
     /**
+     * Obtiene las facturas generadas en un intervalo de tiempo
+     *
+     * @param fechaInicial
+     * @param fechaFinal
+     * @return
+     */
+    public ArrayList<Factura> obtenerFacturasIntervaloFecha(String fechaInicial, String fechaFinal) {
+        ArrayList<Factura> facturas = new ArrayList<>();
+        String query = "SELECT * FROM Factura WHERE fecha BETWEEN ? AND ?;";
+        try {
+            PreparedStatement prepared = Conexion.Conexion().prepareStatement(query);
+            prepared.setString(1, fechaInicial);
+            prepared.setString(2, fechaFinal);
+            ResultSet resultado = prepared.executeQuery();
+            while (resultado.next()) {
+                Date fechaSQL = resultado.getDate("fecha");
+                LocalDate fecha = fechaSQL.toLocalDate();
+                facturas.add(new Factura(resultado.getInt("no_factura"), fecha,
+                        resultado.getDouble("total"), obtenerUC.obtenerClientesSegunNIT(resultado.getString("Cliente_NIT")),
+                        resultado.getString("Usuario_user")));
+            }
+        } catch (SQLException e) {
+        }
+        return facturas;
+    }
+
+    /**
      * Obtiene la compra según el número de factura
      *
      * @param noFactura número de factura
@@ -275,13 +302,14 @@ public class ObtenerV {
         compra = new Compra(factura, muebles);
         return compra;
     }
-    
+
     /**
      * Se obtienen las compras realizadas por un cliente entre dos fechas
+     *
      * @param fechaInicial
      * @param fechaFinal
      * @param NIT
-     * @return 
+     * @return
      */
     public ArrayList<Factura> obtenerFacturasClienteSegunFecha(String fechaInicial, String fechaFinal, String NIT) {
         ArrayList<Factura> facturas = new ArrayList<>();
@@ -303,11 +331,12 @@ public class ObtenerV {
         }
         return facturas;
     }
-    
+
     /**
      * Se obtienen las compras realizadas por un cliente
+     *
      * @param NIT
-     * @return 
+     * @return
      */
     public ArrayList<Factura> obtenerFacturasCliente(String NIT) {
         ArrayList<Factura> facturas = new ArrayList<>();

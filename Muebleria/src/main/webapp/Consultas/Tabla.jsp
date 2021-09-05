@@ -20,35 +20,11 @@
             <style><%@include file="../resources/CSS/barraMenu.css"%></style>
     </head>
     <body>
-        <% int tipo = 0;
-            if (request.getSession() != null) {
-                tipo = ((Usuario) request.getSession().getAttribute("Usuario")).getIdDepartamento();
-            }
-        %>
-        <%switch (tipo) {
-                case 1:%>
-        <jsp:include page="../Menus/Fabrica.jsp"></jsp:include>
-        <% break;
-            case 2:%>
-        <jsp:include page="../Menus/Venta.jsp"></jsp:include>
-        <%break;
-            case 3:%>
-        <jsp:include page="../Menus/Financiero.jsp"></jsp:include>
-        <%break;
-            default:%>
-        <jsp:include page="../Menus/Principal.jsp"></jsp:include>
-        <%break;
-            }
-        %>
         <%
-            String titulo = String.valueOf(request.getAttribute("titulo"));
-            String subtitulo = String.valueOf(request.getAttribute("subtitulo"));
             ArrayList<String> titulos = (ArrayList<String>) request.getAttribute("titulos");
             ArrayList<String[]> contenido = (ArrayList<String[]>) request.getAttribute("contenido");
         %>
         <div class="container">
-            <h2 class="text-center"><%=titulo%></h2>
-            <p class="text-center"><%=subtitulo%></p>
             <br>
             <button type="button" class="btn btn-primary btn-block" id="botonExportar">EXPORTAR A CSV</button>
             <br>

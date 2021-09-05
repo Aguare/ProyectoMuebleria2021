@@ -79,10 +79,11 @@ public class VentasCRUD {
         if (noFactura == -1) {
             return null;
         } else {
-            for (Mueble mueble : carrito.getCarrito()) {
-                insertarCompra(noFactura, cn.getNIT(), mueble.getIdMueble());
-            }
             Factura factura = obtenerV.obtenerFacturaSegunNo(noFactura);
+            for (Mueble mueble : carrito.getCarrito()) {
+                insertarCompra(noFactura, cn.getNIT(), mueble.getIdMueble(), mueble.getTipoMueble(), factura.getFecha().toString());
+            }
+
             return new Compra(factura, obtenerV.obtenerMueblesSegunFactura(noFactura));
         }
     }
@@ -94,14 +95,16 @@ public class VentasCRUD {
      * @param NIT NIT del cliente
      * @param idMueble Mueble que se registra
      */
-    private void insertarCompra(int noFactura, String NIT, int idMueble) {
-        String query = "INSERT INTO Compra VALUES (?,?,?,?);";
+    private void insertarCompra(int noFactura, String NIT, int idMueble, String tipoMueble, String fecha) {
+        String query = "INSERT INTO Compra VALUES (?,?,?,?,?,?);";
         try {
             PreparedStatement prepared = Conexion.Conexion().prepareStatement(query);
             prepared.setInt(1, noFactura);
             prepared.setString(2, NIT);
             prepared.setInt(3, idMueble);
             prepared.setString(4, "0");
+            prepared.setString(5, tipoMueble);
+            prepared.setString(6, fecha);
             prepared.executeUpdate();
         } catch (SQLException ex) {
         }
@@ -135,28 +138,117 @@ public class VentasCRUD {
         }
     }
 
-    public ObtenerF getObtenerF() {
-        return obtenerF;
+    public boolean registrarDevolucion(Compra compra, Mueble mueble) {
+        double perdida = verificarRegistroDevolucion(compra.getFactura());
+        if (perdida == 0) {
+            double p = mueble.getPrecioCosto() / 3;
+            p = Math.round(p * 100) / 100;
+            registrarperdida(compra.getFactura(), p);
+            registrarMuebleDevuelto(mueble);
+            actualizarFactura(compra.getFactura(), (compra.getFactura().getTotal() - mueble.getPrecioVenta()));
+            return true;
+        } else {
+            perdida += (mueble.getPrecioCosto() / 3);
+            perdida = Math.round(perdida * 100) / 100;
+            actualizarPerdida(compra.getFactura(), perdida);
+            registrarMuebleDevuelto(mueble);
+            actualizarFactura(compra.getFactura(), (compra.getFactura().getTotal() - mueble.getPrecioVenta()));
+            return true;
+        }
     }
 
-    public void setObtenerF(ObtenerF obtenerF) {
-        this.obtenerF = obtenerF;
+    /**
+     * Registra la cantidad que se perdió por el mueble devuelto si no se ha
+     * registrado
+     *
+     * @param factura
+     * @param precioMueble
+     */
+    public void registrarperdida(Factura factura, double precioMueble) {
+        String query = "INSERT INTO Devolucion (fecha, perdida, no_factura, Cliente_NIT) VALUES (?,?,?,?);";
+        LocalDate fecha = LocalDate.now();
+
+        try {
+            PreparedStatement prepared = Conexion.Conexion().prepareStatement(query);
+            prepared.setString(1, fecha.toString());
+            prepared.setDouble(2, precioMueble);
+            prepared.setInt(3, factura.getNoFactura());
+            prepared.setString(4, factura.getCliente().getNIT());
+            prepared.executeUpdate();
+        } catch (SQLException ex) {
+        }
     }
 
-    public ObtenerUC getObtenerUC() {
-        return obtenerUC;
+    /**
+     * Actualiza el valor total de la factura para que las ganancias
+     * correspondan
+     *
+     * @param factura
+     * @param perdida
+     */
+    public void actualizarFactura(Factura factura, double perdida) {
+        String query = "UPDATE Factura SET total = ? WHERE no_factura = ?;";
+        try {
+            PreparedStatement prepared = Conexion.Conexion().prepareStatement(query);
+            prepared.setDouble(1, perdida);
+            prepared.setInt(2, factura.getNoFactura());
+            prepared.executeUpdate();
+        } catch (SQLException ex) {
+        }
     }
 
-    public void setObtenerUC(ObtenerUC obtenerUC) {
-        this.obtenerUC = obtenerUC;
+    /**
+     * Si ya ha sido registrado una pérdida se actualiza para conocer la pérdida
+     *
+     * @param factura
+     * @param nuevaPerdida
+     */
+    public void actualizarPerdida(Factura factura, double nuevaPerdida) {
+        String query = "UPDATE Devolucion SET perdida = ? WHERE no_factura = ?;";
+        try {
+            PreparedStatement prepared = Conexion.Conexion().prepareStatement(query);
+            prepared.setDouble(1, nuevaPerdida);
+            prepared.setInt(2, factura.getNoFactura());
+            prepared.executeUpdate();
+        } catch (SQLException ex) {
+        }
     }
 
-    public InsertarArchivo getInsertarAr() {
-        return insertarAr;
+    /**
+     * Se actualiza el estado del mueble ya que ha sido devuelto
+     *
+     * @param mueble
+     */
+    private void registrarMuebleDevuelto(Mueble mueble) {
+        String query = "UPDATE Compra SET devuelto = 1 WHERE C_idMueble = ?";
+        try {
+            PreparedStatement prepared = Conexion.Conexion().prepareStatement(query);
+            prepared.setString(1, "" + mueble.getIdMueble());
+            prepared.executeUpdate();
+        } catch (SQLException ex) {
+        }
     }
 
-    public void setInsertarAr(InsertarArchivo insertarAr) {
-        this.insertarAr = insertarAr;
+    /**
+     * Verifica si la devolucion está previamente registrada si sí devolverá un
+     * valor mayor a 0
+     *
+     * @param factura
+     * @return
+     */
+    private double verificarRegistroDevolucion(Factura factura) {
+        double perdida = 0;
+        String query = "SELECT * FROM Devolucion WHERE no_factura = ?";
+        try {
+            PreparedStatement prepared = Conexion.Conexion().prepareStatement(query);
+            prepared.setInt(1, factura.getNoFactura());
+            ResultSet resultado = prepared.executeQuery();
+            while (resultado.next()) {
+                perdida = resultado.getDouble("perdida");
+            }
+        } catch (SQLException ex) {
+        }
+        return perdida;
     }
 
     public String getError() {

@@ -16,6 +16,7 @@ import java.util.ArrayList;
 public class ObtenerAd {
     
     private ObtenerUC obtenerUC = new ObtenerUC();
+    private ObtenerV obtenerV = new ObtenerV();
     
     /**
      * Devuelve los departamentos para uso del fronted
@@ -115,6 +116,42 @@ public class ObtenerAd {
         } catch (SQLException e) {
         }
         return perdida;
+    }
+    
+    /**
+     * Obtiene el precio costo de los muebles vendido en un intervalo de tiempo
+     * @param fechaInicial
+     * @param fechaFinal
+     * @return 
+     */
+    public double obtenerCostoProduccionIntervaloTiempo(String fechaInicial, String fechaFinal){
+        double costo = 0;
+        String query = "SELECT SUM(precio_costo) AS Costo FROM Mueble WHERE EXISTS (SELECT C_idMueble FROM Compra WHERE Compra.C_idMueble = Mueble.idMueble AND Cfecha BETWEEN ? and ?);";
+        try {
+            PreparedStatement prepared = Conexion.Conexion().prepareStatement(query);
+            prepared.setString(1, fechaInicial);
+            prepared.setString(2, fechaFinal);
+            ResultSet resultado = prepared.executeQuery();
+            while (resultado.next()) {
+                costo+= resultado.getDouble("Costo");
+            }
+        } catch (SQLException e) {
+        }
+        return costo;
+    }
+    
+    public double obtenerCostoProduccionTotal(){
+        double costo = 0;
+        String query = "SELECT SUM(precio_costo) AS Costo FROM Mueble WHERE EXISTS (SELECT C_idMueble FROM Compra WHERE Compra.C_idMueble = Mueble.idMueble);";
+        try {
+            PreparedStatement prepared = Conexion.Conexion().prepareStatement(query);
+            ResultSet resultado = prepared.executeQuery();
+            while (resultado.next()) {
+                costo+= resultado.getDouble("Costo");
+            }
+        } catch (SQLException e) {
+        }
+        return costo;
     }
     
     /**
@@ -255,5 +292,99 @@ public class ObtenerAd {
         } catch (SQLException e) {
         }
         return datos;
+    }
+
+    /**
+     * Devuelve datos para una tabla con el mueble más vendido en determinada fecha
+     * @param fechaInicial
+     * @param fechaFinal
+     * @param opcion 1 orden descendiente 2 Ascendente
+     * @return 
+     */
+    public ArrayList<String[]> muebleMasVendidoSegunFecha(String fechaInicial, String fechaFinal, int opcion){
+        ArrayList<String[]> datos = new ArrayList<>();
+        datos.add(new String[]{"TIPO DE MUEBLE", "CANTIDAD", "PRECIO", "TOTAL GENERADO", "DESDE", "A"});
+        String query = "SELECT COUNT(C_tipoMueble) AS Cantidad, C_tipoMueble FROM Compra WHERE EXISTS (SELECT no_factura FROM Factura WHERE fecha BETWEEN ? AND ?) GROUP BY C_tipoMueble ORDER BY Cantidad DESC LIMIT 1;";
+        if (opcion == 2) {
+            query = "SELECT COUNT(C_tipoMueble) AS Cantidad, C_tipoMueble FROM Compra WHERE EXISTS (SELECT no_factura FROM Factura WHERE fecha BETWEEN ? AND ?) GROUP BY C_tipoMueble ORDER BY Cantidad ASC LIMIT 1;";
+        }
+        try {
+            PreparedStatement prepared = Conexion.Conexion().prepareStatement(query);
+            prepared.setString(1, fechaInicial);
+            prepared.setString(2, fechaFinal);
+            ResultSet resultado = prepared.executeQuery();
+            while (resultado.next()) {
+                double precio = obtenerPrecioTipoMueble(resultado.getString("C_tipoMueble"));
+                int cantidad = resultado.getInt("Cantidad");
+                double total = cantidad * precio;
+                datos.add(new String[]{resultado.getString("C_tipoMueble"), "" + cantidad, "Q." + precio, "Q." + total,fechaInicial, fechaFinal});
+            }
+        } catch (SQLException e) {
+        }
+        return datos;
+    }
+    
+    /**
+     * Devuelve los muebles más vendidos de todo el tiempo
+     * @param opcion 1 orden descendiente 2 Ascendente
+     * @return 
+     */
+    public ArrayList<String[]> muebleMasVendido(int opcion){
+        ArrayList<String[]> datos = new ArrayList<>();
+        datos.add(new String[]{"TIPO DE MUEBLE", "CANTIDAD", "PRECIO", "TOTAL GENERADO"});
+        String query = "SELECT COUNT(C_tipoMueble) AS Cantidad, C_tipoMueble FROM Compra WHERE EXISTS (SELECT no_factura FROM Factura) GROUP BY C_tipoMueble ORDER BY Cantidad DESC;";
+        if (opcion == 2) {
+            query = "SELECT COUNT(C_tipoMueble) AS Cantidad, C_tipoMueble FROM Compra WHERE EXISTS (SELECT no_factura FROM Factura) GROUP BY C_tipoMueble ORDER BY Cantidad ASC;";
+        }
+        try {
+            PreparedStatement prepared = Conexion.Conexion().prepareStatement(query);
+            ResultSet resultado = prepared.executeQuery();
+            while (resultado.next()) {
+                double precio = obtenerPrecioTipoMueble(resultado.getString("C_tipoMueble"));
+                int cantidad = resultado.getInt("Cantidad");
+                double total = cantidad * precio;
+                datos.add(new String[]{resultado.getString("C_tipoMueble"), "" + cantidad, "Q." + precio, "Q." + total});
+            }
+        } catch (SQLException e) {
+        }
+        return datos;
+    }
+    
+    /**
+     * Devuelve las facturas de los muebles más vendido en un intervalo de tiempo
+     * @param fechaInicial
+     * @param fechaFinal
+     * @return 
+     */
+     public ArrayList<Factura> obtenerFacturasMueblesVendidos(String fechaInicial, String fechaFinal, String tipomueble){
+        ArrayList<Factura> facturas = new ArrayList<>();
+        String query = "SELECT Cno_factura FROM Compra WHERE Cfecha BETWEEN ? AND ? AND C_tipoMueble = ?;";
+        try {
+            PreparedStatement prepared = Conexion.Conexion().prepareStatement(query);
+            prepared.setString(1, fechaInicial);
+            prepared.setString(2, fechaFinal);
+            prepared.setString(3, tipomueble);
+            ResultSet resultado = prepared.executeQuery();
+            while (resultado.next()) {
+                facturas.add(obtenerV.obtenerFacturaSegunNo(resultado.getInt("Cno_factura")));
+            }
+        } catch (SQLException e) {
+        }
+        return facturas;
+    }
+    
+    public double obtenerPrecioTipoMueble(String tipo){
+        double precio = 0;
+        String query = "SELECT precio_venta FROM TipoMueble WHERE nombre_mueble = ?;";
+        try {
+            PreparedStatement prepared = Conexion.Conexion().prepareStatement(query);
+            prepared.setString(1, tipo);
+            ResultSet resultado = prepared.executeQuery();
+            while (resultado.next()) {
+               precio = resultado.getDouble("precio_venta");
+            }
+        } catch (SQLException e) {
+        }
+        return precio;
     }
 }
