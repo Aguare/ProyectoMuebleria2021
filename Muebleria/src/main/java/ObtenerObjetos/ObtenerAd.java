@@ -142,7 +142,7 @@ public class ObtenerAd {
     
     public double obtenerCostoProduccionTotal(){
         double costo = 0;
-        String query = "SELECT SUM(precio_costo) AS Costo FROM Mueble WHERE EXISTS (SELECT C_idMueble FROM Compra WHERE Compra.C_idMueble = Mueble.idMueble);";
+        String query = "SELECT SUM(precio_costo) AS Costo FROM Mueble WHERE EXISTS (SELECT C_idMueble FROM Compra WHERE Compra.C_idMueble = Mueble.idMueble AND devuelto = 0);";
         try {
             PreparedStatement prepared = Conexion.Conexion().prepareStatement(query);
             ResultSet resultado = prepared.executeQuery();

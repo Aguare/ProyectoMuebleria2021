@@ -28,7 +28,7 @@
             ArrayList<Usuario> usuariosV = obtenerU.obtenerUsuariosSegunDepartamento(2);
         %>
         <div class="container text-center">
-            <h1>MUEBLES DISPONIBLES</h1>
+            <h1>USUARIOS REGISTRADOS</h1>
             <input class="form-control" id="entrada" type="text" placeholder="BUSQUEDA">
             <br>
             <div class="table-responsive table-hover" style="height: 670px">

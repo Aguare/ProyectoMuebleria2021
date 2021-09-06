@@ -115,6 +115,7 @@ CREATE TABLE Devolucion(
 	perdida DOUBLE NOT NULL,
 	no_factura INT NOT NULL,
 	Cliente_NIT VARCHAR(20) NOT NULL,
+	reintegro TINYINT NOT NULL,
 	PRIMARY KEY (idDevolucion),
 	FOREIGN KEY (no_factura) REFERENCES Factura(no_factura),
 	FOREIGN KEY (Cliente_NIT) REFERENCES Cliente(NIT)
@@ -124,6 +125,8 @@ INSERT INTO Departamento VALUES (1,"Fábrica");
 INSERT INTO Departamento VALUES (2,"Punto de Venta");
 INSERT INTO Departamento VALUES (3,"Financiero");
 INSERT INTO Usuario VALUES("admin","5r6gXIfIDxY=",1,3);	
-CREATE USER 'adminMuebleria'@'localhost' IDENTIFIED BY 'Aadmin_1!';
-GRANT ALL PRIVILEGES ON Muebleria.* TO 'adminMuebleria'@'localhost';
+
+DROP USER IF EXISTS 'adminMuebleria'@'localhost';
+CREATE USER 'admin'@'localhost' identified by 'Aadmin_1!';
+GRANT ALL PRIVILEGES ON Muebleria.* TO admin@localhost;
 FLUSH PRIVILEGES;

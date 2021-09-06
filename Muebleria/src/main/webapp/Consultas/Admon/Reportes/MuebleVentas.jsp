@@ -107,7 +107,7 @@
                             <td><%=f.getNoFactura()%></td>
                             <td><%=f.getCliente().getNIT()%></td>
                             <td><%=f.getCliente().getNombre().toUpperCase()%></td>
-                            <td>Q.<%=f.getTotal()%></td>
+                            <td><%=f.getTotal()%></td>
                             <td>
                                 <a href="${pageContext.request.contextPath}/Consultas/Ventas/Factura.jsp?noFactura=<%=f.getNoFactura()%>" class="btn btn-info btn-sm" role="button">Ver</a>
                             </td>

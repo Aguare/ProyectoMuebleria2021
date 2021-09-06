@@ -165,7 +165,7 @@ public class VentasCRUD {
      * @param precioMueble
      */
     public void registrarperdida(Factura factura, double precioMueble) {
-        String query = "INSERT INTO Devolucion (fecha, perdida, no_factura, Cliente_NIT) VALUES (?,?,?,?);";
+        String query = "INSERT INTO Devolucion (fecha, perdida, no_factura, Cliente_NIT,reintegro) VALUES (?,?,?,?,?);";
         LocalDate fecha = LocalDate.now();
 
         try {
@@ -174,6 +174,7 @@ public class VentasCRUD {
             prepared.setDouble(2, precioMueble);
             prepared.setInt(3, factura.getNoFactura());
             prepared.setString(4, factura.getCliente().getNIT());
+            prepared.setString(5, "0");
             prepared.executeUpdate();
         } catch (SQLException ex) {
         }

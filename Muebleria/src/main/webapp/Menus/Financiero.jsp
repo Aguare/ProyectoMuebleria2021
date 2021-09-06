@@ -55,7 +55,7 @@
                 <div class="dropdown-menu">					
                     <a href="${pageContext.request.contextPath}/Consultas/Admon/Reportes/VentasFecha.jsp" class="dropdown-item">Ventas</a>
                     <a href="${pageContext.request.contextPath}/Consultas/Admon/Reportes/GananciasFecha.jsp" class="dropdown-item">Ganancias</a>
-                    <a href="#" class="dropdown-item">Devoluciones</a>
+                    <a href="${pageContext.request.contextPath}/Consultas/Admon/Reportes/Devoluciones.jsp" class="dropdown-item">Devoluciones</a>
                     <a href="${pageContext.request.contextPath}/Consultas/Admon/Reportes/UsuarioVentas.jsp" class="dropdown-item">Usuario con más Ventas</a>
                     <a href="${pageContext.request.contextPath}/Consultas/Admon/Reportes/UsuarioGanancias.jsp" class="dropdown-item">Usuario con más Ganancias</a>
                     <a href="${pageContext.request.contextPath}/Consultas/Admon/Reportes/MuebleVentas.jsp" class="dropdown-item">Mueble con más Ventas</a>

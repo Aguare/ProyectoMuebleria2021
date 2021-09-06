@@ -2,6 +2,7 @@ package AdmonServlets;
 
 import EntidadesVenta.Factura;
 import ObtenerObjetos.ObtenerAd;
+import ObtenerObjetos.ObtenerV;
 import java.io.IOException;
 import java.util.ArrayList;
 import javax.servlet.ServletException;
@@ -43,17 +44,22 @@ public class UsuarioVentas extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         ObtenerAd obtenerA = new ObtenerAd();
+        ObtenerV obtenerV = new ObtenerV();
         String fechaInicial = request.getParameter("fechaInicial");
         String fechaFinal = request.getParameter("fechaFinal");
         ArrayList<String[]> datos = new ArrayList<>();
+        ArrayList<Factura> facturas = new ArrayList<>();
         if (fechaInicial == null || fechaInicial.length() == 0 || fechaFinal == null || fechaFinal.length() == 0) {
             datos = obtenerA.obtenerUsuarioConMasVentas();
+            facturas = obtenerV.obtenerFacturasTodas();
         } else {
             datos = obtenerA.obtenerUsuarioConMasVentasFechas(fechaInicial, fechaFinal);
+            facturas = obtenerV.obtenerFacturasIntervaloFecha(fechaInicial, fechaFinal);
         }
         request.setAttribute("fechaInicial", fechaInicial);
         request.setAttribute("fechaFinal", fechaFinal);
         request.setAttribute("datos", datos);
+        request.setAttribute("facturas", facturas);
         request.getRequestDispatcher("Consultas/Admon/Reportes/UsuarioVentas.jsp").forward(request, response);
     }
 

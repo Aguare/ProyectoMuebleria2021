@@ -4,9 +4,9 @@
     Author     : aguare
 --%>
 
+<%@page import="EntidadesVenta.Devolucion"%>
+<%@page import="EntidadesVenta.Compra"%>
 <%@page import="EntidadesVenta.Mueble"%>
-<%@page import="EntidadesVenta.Mueble"%>
-<%@page import="ObtenerObjetos.ObtenerAd"%>
 <%@page import="EntidadesVenta.Cliente"%>
 <%@page import="ObtenerObjetos.ObtenerUC"%>
 <%@page import="EntidadesVenta.Factura"%>
@@ -17,7 +17,7 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>Compras del Cliente</title>
+        <title>Devoluciones del Cliente</title>
         <script src="${pageContext.request.contextPath}/resources/JS/Exportar.js"></script>
     </head>
     <body>
@@ -27,28 +27,24 @@
         <jsp:include page="../../../Menus/Financiero.jsp"></jsp:include>
             <br>
         <%
-            ObtenerAd obtener = new ObtenerAd();
-            ObtenerV obtenerV = new ObtenerV();
-            ArrayList<Factura> facturas = obtener.obtenerFacturas();
+            ObtenerV obtener = new ObtenerV();
+            ObtenerUC obtenerUC = new ObtenerUC();
+            ArrayList<Devolucion> devoluciones = obtener.obtenerDevolucionesTodas();
             String fechaInicial = "";
             String fechaFinal = "";
-            double perdida = obtener.obtenerPerdidaTotal();
-            double costoProduccion = obtener.obtenerCostoProduccionTotal();
-            double ganancia = 0;
-            if (request.getAttribute("facturas") != null) {
-                facturas = (ArrayList<Factura>) request.getAttribute("facturas");
+            double perdida = 0;
+            if (request.getAttribute("devoluciones") != null) {
+                devoluciones = (ArrayList<Devolucion>) request.getAttribute("devoluciones");
                 fechaInicial = String.valueOf(request.getAttribute("fechaInicial"));
                 fechaFinal = String.valueOf(request.getAttribute("fechaFinal"));
-                perdida = (double) request.getAttribute("perdida");
-                costoProduccion = (double) request.getAttribute("costoProduccion");
             }
         %>
         <div class="container">
-            <h1 class="text-center">GANANCIAS EN UN INTERVALO DE TIEMPO</h1>
+            <h1 class="text-center">DEVOLUCIONES EN UN INTERVALO DE TIEMPO</h1>
             <div class="container border text-center">
                 <br>
-                <p class="bg-info text-white"> Puede filtrar su búsqueda interactuando con las siguientes opciones. Las fechas vacías muestra las ganancias totales</p>
-                <form action="${pageContext.request.contextPath}/Ganancias" method="POST">
+                <p class="bg-info text-white"> Puede filtrar su búsqueda interactuando con las siguientes opciones. Las fechas vacías muestran todas las devoluciones</p>
+                <form action="${pageContext.request.contextPath}/Devoluciones" method="POST">
                     <div class="form-check-inline">
                         <label class="form-check-label">
                             Fecha Inicial: <input type="date" class="form-group" name="fechaInicial" value="<%=fechaInicial%>">
@@ -67,64 +63,44 @@
             <br>
             <button type="button" class="btn btn-primary btn-block" id="botonExportar">EXPORTAR A CSV</button>
             <br>
-            <div class="table-responsive-lg">
+            <div class="table-responsive-lg table-hover">
                 <table class="table text-center" id="tabla">
                     <thead class="thead-dark">
                         <tr>
-                            <th>FACTURA</th>
                             <th>NIT</th>
                             <th>CLIENTE</th>
-                            <th>FECHA</th>
-                            <th>MUEBLE</th>
-                            <th>COSTO</th>
-                            <th>VENTA</th>
-                            <th>GANANCIA</th>
-                            <th>ESTADO</th>
+                            <th>ID</th>
+                            <th>TIPO DE MUEBLE</th>
+                            <th>FECHA COMPRA</th>
+                            <th>FECHA DEVOLUCIÓN</th>
+                            <th>PÉRDIDA</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <%for (Factura f : facturas) {%>
-                        <tr class="">
-                            <% ArrayList<Mueble> muebles = obtenerV.obtenerMueblesSegunFactura(f.getNoFactura()); %>
-                            <%for (Mueble mueble : muebles) {%>
-                            <td><%=f.getNoFactura()%></td>
-                            <td><%=f.getCliente().getNIT()%></td>
-                            <td><%=f.getCliente().getNombre().toUpperCase()%></td>
-                            <td><%=f.getFecha().toString()%></td>
-                            <td><%=mueble.getTipoMueble().toUpperCase()%></td>
-                            <td><%=mueble.getPrecioCosto()%></td>
-                            <td><%=mueble.getPrecioVenta()%></td>
-                            <%double gana = Math.round((mueble.getPrecioVenta()-mueble.getPrecioCosto())*100)/100;%>
-                            <td><%=gana%></td>
-                            <%if (mueble.isDevuelto()) {%>
-                            <td>DEVUELTO</td>
-                            <%} else {%>
-                            <td>VENDIDO</td>
-                            <%ganancia+=mueble.getPrecioVenta();%>
-                            <%}%>
-                        </tr>
-                        <%}%>
-                        <%}%>
-                        <%if (facturas.isEmpty()) {%>
+                        <%if (devoluciones.isEmpty()) {%>
                         <tr class="table-warning">
-                            <td colspan="9">NO HAY REGISTROS</td>
+                            <td colspan="7">NO HAY REGISTROS</td>
                         </tr>
-                        <%} else {%>
+                        <%}else{%>
+                        <% for (Devolucion devolucion : devoluciones) {
+                            ArrayList<Mueble> muebles = devolucion.obtenerMueblesDevueltos();
+                            Factura factura = devolucion.getFactura();
+                            perdida+= devolucion.getPerdida();
+                            for (Mueble f : muebles) {%>
+                        <tr>
+                            <td><%=factura.getCliente().getNIT()%></td>
+                            <td><%=factura.getCliente().getNombre().toUpperCase()%></td>
+                            <td><%=f.getIdMueble()%></td>
+                            <td><%=f.getTipoMueble().toUpperCase()%></td>
+                            <td><%=factura.getFecha().toString()%></td>
+                            <td><%=devolucion.getFecha().toString()%></td>
+                            <td>Q.<%=devolucion.getPerdida()%></td>
+                        </tr>
+                        <%}%>
+                        <%}%>
                         <tr class="table-danger">
-                            <td colspan="7">PÉRDIDA</td>
+                            <td colspan="6">PÉRDIDA</td>
                             <td colspan="2">Q.<%=perdida%></td>
-                        </tr>
-                        <tr class="table-danger">
-                            <td colspan="7">COSTO DE PRODUCCIÓN</td>
-                            <td colspan="2">Q.<%=costoProduccion%></td>
-                        </tr>
-                        <tr class="table-success">
-                            <td colspan="7">GANANCIA</td>
-                            <td colspan="2">Q.<%=ganancia%></td>
-                        </tr>
-                        <tr class="table-primary">
-                            <td colspan="7">TOTAL</td>
-                            <td colspan="2">Q.<%=(ganancia-perdida-costoProduccion)%></td>
                         </tr>
                         <%}%>
                     </tbody>
@@ -143,7 +119,7 @@
             const anchorElement = document.createElement("a");
 
             anchorElement.href = blobUrl;
-            anchorElement.download = "GananciaEnIntervaloDeTiempo.csv";
+            anchorElement.download = "Devoluciones.csv";
             anchorElement.click();
 
             setTimeout(() => {
