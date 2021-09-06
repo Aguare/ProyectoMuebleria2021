@@ -50,6 +50,7 @@
                         <% for (Devolucion devolucion : devoluciones) {
                             ArrayList<Mueble> muebles = devolucion.obtenerMueblesDevueltos();
                             for (Mueble f : muebles) {%>
+                        <%if (!f.getEnsamble().isReintegro()) {%>
                         <tr>
                             <td><%=f.getIdMueble()%></td>
                             <td><%=f.getTipoMueble().toUpperCase()%></td>
@@ -58,6 +59,7 @@
                                 <a href="${pageContext.request.contextPath}/ReintegrarPiezas?idMueble=<%=f.getIdMueble()%>&devolucion=<%=devolucion.getIdDevolucion()%>" class="btn btn-info" role="button">REINTEGRAR</a>
                             </td>
                         </tr>
+                        <%}%>
                         <%}%>
                         <%}%>
                         <%}%>

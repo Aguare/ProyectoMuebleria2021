@@ -51,8 +51,11 @@ public class MuebleMenosVentas extends HttpServlet {
             datos = obtenerA.muebleMasVendido(2);
         } else {
             datos = obtenerA.muebleMasVendidoSegunFecha(fechaInicial, fechaFinal, 2);
-            if (datos.get(1)[0] != null) {
-                facturas = obtenerA.obtenerFacturasMueblesVendidos(fechaInicial, fechaFinal, datos.get(1)[0]);
+            try {
+                if (datos.size() > 0) {
+                    facturas = obtenerA.obtenerFacturasMueblesVendidos(fechaInicial, fechaFinal, datos.get(1)[0]);
+                }
+            } catch (IndexOutOfBoundsException e) {
             }
         }
         request.setAttribute("facturas", facturas);

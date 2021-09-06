@@ -477,7 +477,7 @@ public class ObtenerV {
 
     public ArrayList<Devolucion> obtenerDevolucionesTodasSinReintegro() {
         ArrayList<Devolucion> devoluciones = new ArrayList<>();
-        String query = "SELECT * FROM Devolucion WHERE reintegro = 0;";
+        String query = "SELECT * FROM Devolucion;";
         try {
             PreparedStatement prepared = Conexion.Conexion().prepareStatement(query);
             ResultSet resultado = prepared.executeQuery();

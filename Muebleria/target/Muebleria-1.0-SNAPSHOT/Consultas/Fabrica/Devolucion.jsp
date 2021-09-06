@@ -70,6 +70,7 @@
             <p>Seleccione las piezas que se reintegrarán a la fábrica</p>
             <form action="${pageContext.request.contextPath}/ReintegrarPiezas" method="POST">
                 <input type="hidden" class="form-control" name="idDevolucion" value="<%=dev.getIdDevolucion()%>" readonly>
+                <input type="hidden" class="form-control" name="idEnsamble" value="<%=ensamble.getIdEnsamble()%>" readonly>
                 <% int contador = 0;%>
                 <div class="table-responsive">
                     <table class="table table-bordered">
