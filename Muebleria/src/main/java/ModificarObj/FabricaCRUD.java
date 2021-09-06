@@ -1,10 +1,14 @@
 package ModificarObj;
 
 import EntidadesFabrica.Pieza;
+import EntidadesVenta.Devolucion;
+import EntidadesVenta.Factura;
+import ObtenerObjetos.ObtenerF;
 import SQL.Conexion;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 
 /**
  *
@@ -182,5 +186,28 @@ public class FabricaCRUD {
         } catch (Exception e) {
         }
         return false;
+    }
+    
+    public boolean reintegrarPiezas(ArrayList<String> piezas, Devolucion dev, double precioCosto){
+        double valorPieza = ((precioCosto/3)*2)/piezas.size();
+        ObtenerF obtenerF = new ObtenerF();
+        for (String pieza : piezas) {
+            Pieza p = obtenerF.obtenerPiezaSegunID(Integer.parseInt(pieza));
+            Pieza piezaNueva = new Pieza(0, valorPieza,false,p.getTipoPieza());
+            modificarPieza(piezaNueva, INSERTAR);
+        }
+        return actualizarPerdida(dev);
+    }
+    
+    public boolean actualizarPerdida(Devolucion dev) {
+        String query = "UPDATE Devolucion SET reintegro = 1 WHERE idDevolucion = ?;";
+        try {
+            PreparedStatement prepared = Conexion.Conexion().prepareStatement(query);
+            prepared.setInt(1, dev.getIdDevolucion());
+            prepared.executeUpdate();
+            return true;
+        } catch (SQLException ex) {
+        return false;
+        }
     }
 }

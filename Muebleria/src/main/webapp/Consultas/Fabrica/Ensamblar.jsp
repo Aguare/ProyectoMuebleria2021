@@ -20,7 +20,7 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>Editar Pieza</title>
+        <title>Ensamble</title>
         <jsp:include page="../../Menus/Fabrica.jsp"></jsp:include>
         <style><%@include file="../../resources/CSS/RecursosCSS.jsp"%></style>
         <style><%@include file="../../resources/JS/RecursosJS.jsp"%></style>

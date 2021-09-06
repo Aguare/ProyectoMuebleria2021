@@ -4,6 +4,7 @@
     Author     : aguare
 --%>
 
+<%@page import="EntidadesVenta.Mueble"%>
 <%@page import="ObtenerObjetos.ObtenerAd"%>
 <%@page import="EntidadesVenta.Cliente"%>
 <%@page import="ObtenerObjetos.ObtenerUC"%>
@@ -16,7 +17,7 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Compras del Cliente</title>
-        <script src="${pageContext.request.contextPath}/resources/JS/Exportar.js"></script>
+        <script src="${pageContext.request.contextPath}/resources/JS/ExportarDosT.js"></script>
     </head>
     <body>
         <jsp:include page="../../../resources/CSS/RecursosCSS.jsp"></jsp:include>
@@ -28,9 +29,12 @@
             ObtenerAd obtener = new ObtenerAd();
             String fechaInicial = "";
             String fechaFinal = "";
+            ObtenerV obtenerV = new ObtenerV();
             ArrayList<String[]> datos = obtener.obtenerUsuarioConMasVentas();
+            ArrayList<Factura> facturas = obtenerV.obtenerFacturasTodas();
             if (request.getAttribute("datos") != null) {
                 fechaInicial = String.valueOf(request.getAttribute("fechaInicial"));
+                facturas = (ArrayList<Factura>) request.getAttribute("facturas");
                 fechaFinal = String.valueOf(request.getAttribute("fechaFinal"));
                 datos = (ArrayList<String[]>) request.getAttribute("datos");
             }
@@ -88,26 +92,70 @@
                         <%}%>
                     </tbody>
                 </table>
+                <table class="table text-center" id="tabla2">
+                    <thead class="thead-dark">
+                        <tr>
+                            <th>FECHA</th>
+                            <th>USUARIO</th>
+                            <th>FACTURA</th>
+                            <th>MUEBLE</th>
+                            <th>PRECIO</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <%for (Factura f : facturas) {%>
+                        <%if (f.getUsuario().equalsIgnoreCase(datos.get(0)[0])) {%>
+                        <tr class="">
+                            <% ArrayList<Mueble> muebles = obtenerV.obtenerMueblesSegunFactura(f.getNoFactura()); %>
+                            <%for (Mueble mueble : muebles) {%>
+                            <td><%=f.getFecha().toString()%></td>
+                            <td><%=f.getUsuario().toString()%></td>
+                            <td><%=f.getNoFactura()%></td>
+                            <td><%=mueble.getTipoMueble().toUpperCase()%></td>
+                            <td>Q<%=mueble.getPrecioVenta()%></td>
+                        </tr>
+                        <%}%>
+                        <%}%>
+                        <%}%>
+                        <%if (facturas.isEmpty()) {%>
+                        <tr class="table-warning">
+                            <td colspan="9">NO HAY REGISTROS</td>
+                        </tr>
+                        <%}%>
+                    </tbody>
+                </table>
             </div>
         </div>
         <script>
-        const dataTable = document.getElementById("tabla");
-        const btnExportToCsv = document.getElementById("botonExportar");
+        $(document).ready(function(){
+            $("#search").on("keyup", function() {
+                    var value = $(this).val().toLowerCase();
+                    $("#tabla tbody tr").filter(function() {
+                    $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+                });
+            });
 
-        btnExportToCsv.addEventListener("click", () => {
-            const exporter = new TableCSVExporter(dataTable);
-            const csvOutput = exporter.convertToCSV();
-            const csvBlob = new Blob([csvOutput], { type: "text/csv" });
-            const blobUrl = URL.createObjectURL(csvBlob);
-            const anchorElement = document.createElement("a");
+            // descargar multiples tablas en 1
+            let dataTable = document.getElementById("tabla");
+            let dataTable1 = document.getElementById("tabla2");
 
-            anchorElement.href = blobUrl;
-            anchorElement.download = "UsuarioConMasVentas.csv";
-            anchorElement.click();
+            new TableCSVExporter(dataTable, dataTable1, true).convertToCSV();
 
-            setTimeout(() => {
-                URL.revokeObjectURL(blobUrl);
-            }, 500);
+            $("#botonExportar").on("click", function () {
+                const exporter = new TableCSVExporter(dataTable, dataTable1);
+                const csvOutput = exporter.convertToCSV();
+                const csvBlob = new Blob([csvOutput], {type: "text/csv"});
+                const blobUrl = URL.createObjectURL(csvBlob);
+                const anchorElement = document.createElement("a");
+
+                anchorElement.href = blobUrl;
+                anchorElement.download = "UsuarioMasVentas.csv";
+                anchorElement.click();
+
+                setTimeout(() => {
+                    URL.revokeObjectURL(blobUrl);
+                }, 500);
+            });
         });
         </script>
     </body>

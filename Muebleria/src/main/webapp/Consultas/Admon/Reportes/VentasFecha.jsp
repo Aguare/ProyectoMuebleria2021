@@ -4,6 +4,7 @@
     Author     : aguare
 --%>
 
+<%@page import="EntidadesVenta.Mueble"%>
 <%@page import="ObtenerObjetos.ObtenerAd"%>
 <%@page import="EntidadesVenta.Cliente"%>
 <%@page import="ObtenerObjetos.ObtenerUC"%>
@@ -16,7 +17,7 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Compras del Cliente</title>
-        <script src="${pageContext.request.contextPath}/resources/JS/ExportarConOpciones.js"></script>
+        <script src="${pageContext.request.contextPath}/resources/JS/Exportar.js"></script>
     </head>
     <body>
         <jsp:include page="../../../resources/CSS/RecursosCSS.jsp"></jsp:include>
@@ -26,6 +27,7 @@
             <br>
         <%
             ObtenerAd obtener = new ObtenerAd();
+            ObtenerV obtenerV = new ObtenerV();
             ArrayList<Factura> facturas = obtener.obtenerFacturas();
             String fechaInicial = "";
             String fechaFinal = "";
@@ -59,33 +61,46 @@
             <br>
             <button type="button" class="btn btn-primary btn-block" id="botonExportar">EXPORTAR A CSV</button>
             <br>
-            <div class="table-responsive-lg table-hover">
+            <div class="table-responsive-lg">
                 <table class="table text-center" id="tabla">
                     <thead class="thead-dark">
                         <tr>
                             <th>FACTURA</th>
                             <th>NIT</th>
                             <th>CLIENTE</th>
+                            <th>FECHA</th>
                             <th>TOTAL</th>
-                            <th></th>
+                            <th>ID</th>
+                            <th>MUEBLE</th>
+                            <th>ESTADO</th>
+                            <th>PRECIO</th>
                         </tr>
                     </thead>
                     <tbody>
                         <%if (facturas.isEmpty()) {%>
                         <tr class="table-warning">
-                            <td colspan="5">NO HAY REGISTROS</td>
+                            <td colspan="9">NO HAY REGISTROS</td>
                         </tr>
                         <%}%>
                         <%for (Factura f : facturas) {%>
                         <tr>
+                            <% ArrayList<Mueble> muebles = obtenerV.obtenerMueblesSegunFactura(f.getNoFactura()); %>
+                            <%for (Mueble mueble : muebles) {%>
                             <td><%=f.getNoFactura()%></td>
                             <td><%=f.getCliente().getNIT()%></td>
                             <td><%=f.getCliente().getNombre().toUpperCase()%></td>
+                            <td><%=f.getFecha().toString()%></td>
                             <td>Q.<%=f.getTotal()%></td>
-                            <td>
-                                <a href="${pageContext.request.contextPath}/Consultas/Ventas/Factura.jsp?noFactura=<%=f.getNoFactura()%>" class="btn btn-info" role="button">Ver</a>
-                            </td>
+                            <td><%=mueble.getIdMueble()%></td>
+                            <td><%=mueble.getTipoMueble().toUpperCase()%></td>
+                            <%if (mueble.isDevuelto()) {%>
+                            <td>DEVUELTO</td>
+                            <%} else {%>
+                            <td>VENDIDO</td>
+                            <%}%>
+                            <td><%=mueble.getPrecioVenta() %></td>
                         </tr>
+                        <%}%>
                         <%}%>
                     </tbody>
                 </table>

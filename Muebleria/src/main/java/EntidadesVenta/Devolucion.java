@@ -23,6 +23,16 @@ public class Devolucion {
         this.muebles = muebles;
     }
 
+    public ArrayList<Mueble> obtenerMueblesDevueltos() {
+        ArrayList<Mueble> m = new ArrayList<>();
+        for (Mueble mueble : muebles) {
+            if (mueble.isDevuelto()) {
+                m.add(mueble);
+            }
+        }
+        return m;
+    }
+
     public int getIdDevolucion() {
         return idDevolucion;
     }

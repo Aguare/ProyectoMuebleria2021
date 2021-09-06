@@ -40,7 +40,7 @@
                 <a href="#" data-toggle="dropdown" class="nav-item nav-link dropdown-toggle">Consulta</a>
                 <div class="dropdown-menu">
                     <a href="${pageContext.request.contextPath}/Consultas/Ventas/ComprasCliente.jsp" class="dropdown-item">Compras</a>
-                    <a href="#" class="dropdown-item">Devoluciones</a>
+                    <a href="${pageContext.request.contextPath}/Consultas/Ventas/DevolucionesCliente.jsp" class="dropdown-item">Devoluciones</a>
                     <a href="${pageContext.request.contextPath}/Consultas/Ventas/VentasDia.jsp" class="dropdown-item">Ventas del Día</a>
                     <a href="${pageContext.request.contextPath}/Consultas/Ventas/MueblesDisponibles.jsp" class="dropdown-item">Muebles Disponibles</a>
                 </div>

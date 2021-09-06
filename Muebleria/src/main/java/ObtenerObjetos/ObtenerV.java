@@ -2,6 +2,7 @@ package ObtenerObjetos;
 
 import EntidadesFabrica.TipoMueble;
 import EntidadesVenta.Compra;
+import EntidadesVenta.Devolucion;
 import EntidadesVenta.Factura;
 import EntidadesVenta.Mueble;
 import SQL.Conexion;
@@ -262,6 +263,24 @@ public class ObtenerV {
         return facturas;
     }
 
+    public ArrayList<Factura> obtenerFacturasTodas() {
+        ArrayList<Factura> facturas = new ArrayList<>();
+        String query = "SELECT * FROM Factura;";
+        try {
+            PreparedStatement prepared = Conexion.Conexion().prepareStatement(query);
+            ResultSet resultado = prepared.executeQuery();
+            while (resultado.next()) {
+                Date fechaSQL = resultado.getDate("fecha");
+                LocalDate fecha = fechaSQL.toLocalDate();
+                facturas.add(new Factura(resultado.getInt("no_factura"), fecha,
+                        resultado.getDouble("total"), obtenerUC.obtenerClientesSegunNIT(resultado.getString("Cliente_NIT")),
+                        resultado.getString("Usuario_user")));
+            }
+        } catch (SQLException e) {
+        }
+        return facturas;
+    }
+
     /**
      * Obtiene las facturas generadas en un intervalo de tiempo
      *
@@ -355,5 +374,141 @@ public class ObtenerV {
         } catch (SQLException e) {
         }
         return facturas;
+    }
+
+    /**
+     * Se obtienen las devoluciones hechas por un cliente en un intervalo de
+     * tiempo
+     *
+     * @param fechaInicial
+     * @param fechaFinal
+     * @param nit
+     * @return
+     */
+    public ArrayList<Devolucion> obtenerDevolucionesClienteSegunFechas(String fechaInicial, String fechaFinal, String nit) {
+        ArrayList<Devolucion> devoluciones = new ArrayList<>();
+        String query = "SELECT * FROM Devolucion WHERE  fecha BETWEEN ? AND ? AND Cliente_NIT = ?;";
+        try {
+            PreparedStatement prepared = Conexion.Conexion().prepareStatement(query);
+            prepared.setString(1, fechaInicial);
+            prepared.setString(2, fechaFinal);
+            prepared.setString(3, nit);
+            ResultSet resultado = prepared.executeQuery();
+            while (resultado.next()) {
+                Date fechaSQL = resultado.getDate("fecha");
+                LocalDate fecha = fechaSQL.toLocalDate();
+                Factura factura = obtenerFacturaSegunNo(resultado.getInt("no_factura"));
+                devoluciones.add(new Devolucion(resultado.getInt("idDevolucion"), fecha, resultado.getDouble("perdida"),
+                        factura, obtenerMueblesSegunFactura(factura.getNoFactura())));
+            }
+        } catch (SQLException e) {
+        }
+        return devoluciones;
+    }
+
+    /**
+     * Obtiene las devoluciones en un intervalo de tiempo de todos los clientes
+     *
+     * @param fechaInicial
+     * @param fechaFinal
+     * @return
+     */
+    public ArrayList<Devolucion> obtenerDevolucionesSegunFechas(String fechaInicial, String fechaFinal) {
+        ArrayList<Devolucion> devoluciones = new ArrayList<>();
+        String query = "SELECT * FROM Devolucion WHERE  fecha BETWEEN ? AND ?;";
+        try {
+            PreparedStatement prepared = Conexion.Conexion().prepareStatement(query);
+            prepared.setString(1, fechaInicial);
+            prepared.setString(2, fechaFinal);
+            ResultSet resultado = prepared.executeQuery();
+            while (resultado.next()) {
+                Date fechaSQL = resultado.getDate("fecha");
+                LocalDate fecha = fechaSQL.toLocalDate();
+                Factura factura = obtenerFacturaSegunNo(resultado.getInt("no_factura"));
+                devoluciones.add(new Devolucion(resultado.getInt("idDevolucion"), fecha, resultado.getDouble("perdida"),
+                        factura, obtenerMueblesSegunFactura(factura.getNoFactura())));
+            }
+        } catch (SQLException e) {
+        }
+        return devoluciones;
+    }
+
+    /**
+     * Obtiene todas las devolciones realizadas
+     *
+     * @return
+     */
+    public ArrayList<Devolucion> obtenerDevolucionesTodas() {
+        ArrayList<Devolucion> devoluciones = new ArrayList<>();
+        String query = "SELECT * FROM Devolucion;";
+        try {
+            PreparedStatement prepared = Conexion.Conexion().prepareStatement(query);
+            ResultSet resultado = prepared.executeQuery();
+            while (resultado.next()) {
+                Date fechaSQL = resultado.getDate("fecha");
+                LocalDate fecha = fechaSQL.toLocalDate();
+                Factura factura = obtenerFacturaSegunNo(resultado.getInt("no_factura"));
+                devoluciones.add(new Devolucion(resultado.getInt("idDevolucion"), fecha, resultado.getDouble("perdida"),
+                        factura, obtenerMueblesSegunFactura(factura.getNoFactura())));
+            }
+        } catch (SQLException e) {
+        }
+        return devoluciones;
+    }
+
+    public Devolucion obtenerDevolucionSegunID(String id) {
+        Devolucion devoluciones = null;
+        String query = "SELECT * FROM Devolucion WHERE idDevolucion = ?;";
+        try {
+            PreparedStatement prepared = Conexion.Conexion().prepareStatement(query);
+            prepared.setString(1, id);
+            ResultSet resultado = prepared.executeQuery();
+            while (resultado.next()) {
+                Date fechaSQL = resultado.getDate("fecha");
+                LocalDate fecha = fechaSQL.toLocalDate();
+                Factura factura = obtenerFacturaSegunNo(resultado.getInt("no_factura"));
+                devoluciones = new Devolucion(resultado.getInt("idDevolucion"), fecha, resultado.getDouble("perdida"),
+                        factura, obtenerMueblesSegunFactura(factura.getNoFactura()));
+            }
+        } catch (SQLException e) {
+        }
+        return devoluciones;
+    }
+
+    public ArrayList<Devolucion> obtenerDevolucionesTodasSinReintegro() {
+        ArrayList<Devolucion> devoluciones = new ArrayList<>();
+        String query = "SELECT * FROM Devolucion WHERE reintegro = 0;";
+        try {
+            PreparedStatement prepared = Conexion.Conexion().prepareStatement(query);
+            ResultSet resultado = prepared.executeQuery();
+            while (resultado.next()) {
+                Date fechaSQL = resultado.getDate("fecha");
+                LocalDate fecha = fechaSQL.toLocalDate();
+                Factura factura = obtenerFacturaSegunNo(resultado.getInt("no_factura"));
+                devoluciones.add(new Devolucion(resultado.getInt("idDevolucion"), fecha, resultado.getDouble("perdida"),
+                        factura, obtenerMueblesSegunFactura(factura.getNoFactura())));
+            }
+        } catch (SQLException e) {
+        }
+        return devoluciones;
+    }
+
+    public ArrayList<Devolucion> obtenerDevolucionesTodasCliente(String nit) {
+        ArrayList<Devolucion> devoluciones = new ArrayList<>();
+        String query = "SELECT * FROM Devolucion WHERE Cliente_NIT = ?;";
+        try {
+            PreparedStatement prepared = Conexion.Conexion().prepareStatement(query);
+            prepared.setString(1, nit);
+            ResultSet resultado = prepared.executeQuery();
+            while (resultado.next()) {
+                Date fechaSQL = resultado.getDate("fecha");
+                LocalDate fecha = fechaSQL.toLocalDate();
+                Factura factura = obtenerFacturaSegunNo(resultado.getInt("no_factura"));
+                devoluciones.add(new Devolucion(resultado.getInt("idDevolucion"), fecha, resultado.getDouble("perdida"),
+                        factura, obtenerMueblesSegunFactura(factura.getNoFactura())));
+            }
+        } catch (SQLException e) {
+        }
+        return devoluciones;
     }
 }

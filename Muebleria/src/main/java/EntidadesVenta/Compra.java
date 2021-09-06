@@ -15,14 +15,24 @@ public class Compra {
         this.factura = factura;
         this.muebles = muebles;
     }
-    
-    public Mueble obtenerMuebleDevuelto(int idMueble){
+
+    public Mueble obtenerMuebleDevuelto(int idMueble) {
         for (Mueble mueble : muebles) {
             if (mueble.getIdMueble() == idMueble) {
                 return mueble;
             }
         }
         return null;
+    }
+
+    public ArrayList<Mueble> obtenerMueblesDevueltos() {
+        ArrayList<Mueble> m = new ArrayList<>();
+        for (Mueble mueble : muebles) {
+            if (mueble.isDevuelto()) {
+                m.add(mueble);
+            }
+        }
+        return m;
     }
 
     public Factura getFactura() {

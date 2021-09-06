@@ -1,7 +1,6 @@
-package AdmonServlets;
+package VentasServlets;
 
-import EntidadesVenta.Factura;
-import ObtenerObjetos.ObtenerAd;
+import EntidadesVenta.Devolucion;
 import ObtenerObjetos.ObtenerV;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -15,8 +14,8 @@ import javax.servlet.http.HttpServletResponse;
  *
  * @author aguare
  */
-@WebServlet(name = "UsuarioGanancias", urlPatterns = {"/UsuarioGanancias"})
-public class UsuarioGanancias extends HttpServlet {
+@WebServlet(name = "DevolucionesCliente", urlPatterns = {"/DevolucionesCliente"})
+public class DevolucionesCliente extends HttpServlet {
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
@@ -43,24 +42,22 @@ public class UsuarioGanancias extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        ObtenerAd obtenerA = new ObtenerAd();
         ObtenerV obtenerV = new ObtenerV();
         String fechaInicial = request.getParameter("fechaInicial");
         String fechaFinal = request.getParameter("fechaFinal");
-        ArrayList<String[]> datos = new ArrayList<>();
-        ArrayList<Factura> facturas = new ArrayList<>();
-        if (fechaInicial == null || fechaInicial.length() == 0 || fechaFinal == null || fechaFinal.length() == 0) {
-            datos = obtenerA.obtenerUsuarioConMasGanancia();
-            facturas = obtenerV.obtenerFacturasTodas();
+        ArrayList<Devolucion> devoluciones = new ArrayList<>();
+        String cliente = request.getParameter("clienteSeleccionado");
+        String[] partes = cliente.split(",");
+        if (fechaInicial == null || fechaInicial.length() == 0) {
+            devoluciones = obtenerV.obtenerDevolucionesTodasCliente(partes[0]);
         } else {
-            datos = obtenerA.obtenerUsuarioConMasGananciaFechas(fechaInicial, fechaFinal);
-            facturas = obtenerV.obtenerFacturasIntervaloFecha(fechaInicial, fechaFinal);
+            devoluciones = obtenerV.obtenerDevolucionesClienteSegunFechas(fechaInicial, fechaFinal, partes[0]);
         }
         request.setAttribute("fechaInicial", fechaInicial);
         request.setAttribute("fechaFinal", fechaFinal);
-        request.setAttribute("facturas", facturas);
-        request.setAttribute("datos", datos);
-        request.getRequestDispatcher("Consultas/Admon/Reportes/UsuarioGanancias.jsp").forward(request, response);
+        request.setAttribute("devoluciones", devoluciones);
+        request.setAttribute("cliente", cliente);
+        request.getRequestDispatcher("Consultas/Ventas/DevolucionesCliente.jsp").forward(request, response);
     }
-
+    
 }
