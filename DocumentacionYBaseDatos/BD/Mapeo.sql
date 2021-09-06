@@ -46,6 +46,7 @@ CREATE TABLE Ensamble(
 	fecha DATE NOT NULL,
 	nombre_usuario VARCHAR(20) NOT NULL,
 	TipoMueble VARCHAR(50) NOT NULL,
+	reintegro TINYINT NOT NULL,
 	PRIMARY KEY (idEnsamble),
 	FOREIGN KEY (nombre_usuario) REFERENCES Usuario(nombre_usuario),
 	FOREIGN KEY (TipoMueble) REFERENCES TipoMueble(nombre_mueble)
@@ -115,7 +116,6 @@ CREATE TABLE Devolucion(
 	perdida DOUBLE NOT NULL,
 	no_factura INT NOT NULL,
 	Cliente_NIT VARCHAR(20) NOT NULL,
-	reintegro TINYINT NOT NULL,
 	PRIMARY KEY (idDevolucion),
 	FOREIGN KEY (no_factura) REFERENCES Factura(no_factura),
 	FOREIGN KEY (Cliente_NIT) REFERENCES Cliente(NIT)
