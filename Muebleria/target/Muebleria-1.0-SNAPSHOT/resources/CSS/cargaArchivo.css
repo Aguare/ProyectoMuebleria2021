@@ -1,0 +1,25 @@
+h1{
+    text-align: center;
+    color: green;
+    margin: 0;
+    padding: 20px 0;
+    text-shadow: 1px 1px 1px black;
+}
+
+label{
+    text-shadow: 1px 1px 1px black;
+}
+
+input{
+    align-self: center;
+}
+
+.seleccion{
+    border: 2px solid black;
+}
+
+body{
+    text-align: center;
+    background-color: #E6F9FD;
+}
+
