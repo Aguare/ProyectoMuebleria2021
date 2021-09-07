@@ -12,7 +12,6 @@ import java.util.ArrayList;
  */
 public class EnsamblarLogica {
 
-    private final ObtenerF obtener = new ObtenerF();
     private final ObtenerV obtenerV = new ObtenerV();
     private ArrayList<String> erroresArchivo = new ArrayList<>();
     private String error;

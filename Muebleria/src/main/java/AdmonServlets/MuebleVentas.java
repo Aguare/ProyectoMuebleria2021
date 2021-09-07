@@ -1,9 +1,7 @@
 package AdmonServlets;
 
-import EntidadesVenta.Compra;
 import EntidadesVenta.Factura;
 import ObtenerObjetos.ObtenerAd;
-import ObtenerObjetos.ObtenerV;
 import java.io.IOException;
 import java.util.ArrayList;
 import javax.servlet.ServletException;
@@ -53,8 +51,11 @@ public class MuebleVentas extends HttpServlet {
             datos = obtenerA.muebleMasVendido(1);
         } else {
             datos = obtenerA.muebleMasVendidoSegunFecha(fechaInicial, fechaFinal, 1);
-            if (datos.get(1)[0] != null) {
-                facturas = obtenerA.obtenerFacturasMueblesVendidos(fechaInicial, fechaFinal, datos.get(1)[0]);
+            try {
+                if (datos.size() > 0) {
+                    facturas = obtenerA.obtenerFacturasMueblesVendidos(fechaInicial, fechaFinal, datos.get(1)[0]);
+                }
+            } catch (IndexOutOfBoundsException e) {
             }
         }
         request.setAttribute("facturas", facturas);

@@ -160,7 +160,7 @@ public class ObtenerF {
                 LocalDate fecha = fechaBD.toLocalDate();
                 ensamble = new Ensamble(resultado.getInt("idEnsamble"), fecha,
                         obtenerUC.obtenerUsuarioSegunNombre(resultado.getString("nombre_usuario")),
-                        resultado.getString("TipoMueble"), obtenerPiezasDeEnsamble(id));
+                        resultado.getString("TipoMueble"), obtenerPiezasDeEnsamble(id), resultado.getBoolean("reintegro"));
             }
         } catch (SQLException e) {
         }
@@ -182,7 +182,7 @@ public class ObtenerF {
                 LocalDate fecha = fechaBD.toLocalDate();
                 ensambles.add(new Ensamble(resultado.getInt("idEnsamble"), fecha,
                         obtenerUC.obtenerUsuarioSegunNombre(resultado.getString("nombre_usuario")),
-                        resultado.getString("TipoMueble"), obtenerPiezasDeEnsamble("" + resultado.getInt("idEnsamble"))));
+                        resultado.getString("TipoMueble"), obtenerPiezasDeEnsamble("" + resultado.getInt("idEnsamble")),resultado.getBoolean("reintegro")));
             }
         } catch (SQLException e) {
         }
@@ -208,7 +208,7 @@ public class ObtenerF {
                 LocalDate fecha = fechaBD.toLocalDate();
                 ensambles.add(new Ensamble(resultado.getInt("idEnsamble"), fecha,
                         obtenerUC.obtenerUsuarioSegunNombre(resultado.getString("nombre_usuario")),
-                        resultado.getString("TipoMueble"), obtenerPiezasDeEnsamble("" + resultado.getInt("idEnsamble"))));
+                        resultado.getString("TipoMueble"), obtenerPiezasDeEnsamble("" + resultado.getInt("idEnsamble")),resultado.getBoolean("reintegro")));
             }
         } catch (SQLException e) {
         }

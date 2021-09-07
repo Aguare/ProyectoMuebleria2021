@@ -7,7 +7,6 @@ import ObtenerObjetos.ObtenerF;
 import ObtenerObjetos.ObtenerV;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Iterator;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -68,8 +67,11 @@ public class ReintegrarPiezas extends HttpServlet {
             throws ServletException, IOException {
         request.setCharacterEncoding("UTF-8");
         ObtenerV obtener = new ObtenerV();
+        ObtenerF obtenerf = new ObtenerF();
         FabricaCRUD registrar = new FabricaCRUD();
         String idDevolucion = request.getParameter("idDevolucion");
+        String idEnsamble = request.getParameter("idEnsamble");
+        Ensamble ensamble = obtenerf.obtenerEnsambleSegunID(idEnsamble);
         int cantidad = Integer.parseInt(request.getParameter("cantidadPiezas"));
         double precioCosto = Double.parseDouble(request.getParameter("precioCosto"));
         ArrayList<String> piezas = new ArrayList<>();
@@ -85,8 +87,7 @@ public class ReintegrarPiezas extends HttpServlet {
                 }
             }
         }
-        System.out.println("");
-        if (registrar.reintegrarPiezas(piezas, dev, precioCosto)) {
+        if (registrar.reintegrarPiezas(piezas, dev, precioCosto, ensamble)) {
             enviarMensaje(request, response, "¡ÉXITO!", "LAS PIEZAS SE REINTEGRARON CORRECTAMENTE", 1, "Mensajes/MensajeGeneral.jsp");
         } else {
             enviarMensaje(request, response, "¡EROR!", "LAS PIEZAS NO REINTEGRARON CORRECTAMENTE", 2, "Mensajes/MensajeGeneral.jsp");

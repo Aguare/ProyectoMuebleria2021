@@ -157,15 +157,16 @@ public class InsertarArchivo {
      * viene de archivo enviar ""
      */
     public int insertarEnsambleMueble(String mueble, String usuario, String fecha, String precioCosto, String noLinea) {
-        String query = "INSERT INTO Ensamble (fecha, nombre_usuario, TipoMueble) VALUES (STR_TO_DATE(REPLACE(?,\"/\",\".\") ,GET_FORMAT(date,'EUR')),?,?);";
+        String query = "INSERT INTO Ensamble (fecha, nombre_usuario, TipoMueble,reintegro) VALUES (STR_TO_DATE(REPLACE(?,\"/\",\".\") ,GET_FORMAT(date,'EUR')),?,?,?);";
         if (noLinea.equalsIgnoreCase("")) {
-            query = "INSERT INTO Ensamble (fecha, nombre_usuario, TipoMueble) VALUES (?,?,?);";
+            query = "INSERT INTO Ensamble (fecha, nombre_usuario, TipoMueble,reintegro) VALUES (?,?,?,?);";
         }
         try {
             PreparedStatement prepared = Conexion.Conexion().prepareStatement(query, PreparedStatement.RETURN_GENERATED_KEYS);
             prepared.setString(1, fecha);
             prepared.setString(2, usuario.trim());
             prepared.setString(3, mueble);
+            prepared.setString(4, "0");
             prepared.executeUpdate();
             ResultSet resultado = prepared.getGeneratedKeys();
             int num = -1;

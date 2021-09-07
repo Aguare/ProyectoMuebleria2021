@@ -14,13 +14,15 @@ public class Ensamble {
     private Usuario usuario;
     private String tipoMueble;
     private ArrayList<Pieza> piezas;
+    private boolean reintegro;
 
-    public Ensamble(int idEnsamble, LocalDate fecha, Usuario usuario, String tipoMueble, ArrayList<Pieza> piezas) {
+    public Ensamble(int idEnsamble, LocalDate fecha, Usuario usuario, String tipoMueble, ArrayList<Pieza> piezas, boolean reintegro) {
         this.idEnsamble = idEnsamble;
         this.fecha = fecha;
         this.usuario = usuario;
         this.tipoMueble = tipoMueble;
         this.piezas = piezas;
+        this.reintegro = reintegro;
     }
 
     public int getIdEnsamble() {
@@ -63,4 +65,11 @@ public class Ensamble {
         this.piezas = piezas;
     }
 
+    public boolean isReintegro() {
+        return reintegro;
+    }
+
+    public void setReintegro(boolean reintegro) {
+        this.reintegro = reintegro;
+    }
 }
