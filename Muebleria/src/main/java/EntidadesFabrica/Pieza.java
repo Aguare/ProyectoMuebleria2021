@@ -6,7 +6,7 @@ package EntidadesFabrica;
  */
 public class Pieza {
 
-    //private int idPieza;
+    private int idPieza;
     private double precio;
     private boolean usada;
     private String tipoPieza;
